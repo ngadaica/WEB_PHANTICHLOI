@@ -1,0 +1,351 @@
+﻿@{
+    ViewBag.Title = "Thêm mới lỗi 追加";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@{
+    ViewBag.Title = "Thêm mới lỗi 追加";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; Quay lại danh sách
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a; margin-left:10px;">Thêm mới lỗi </span>
+    <span style="font-size:13px; color:#64748b; margin-left:10px;">Nhập thông tin phân tích lỗi theo bố cục rõ ràng, chuyên nghiệp và dễ theo dõi.</span>
+</div>
+
+@using (Html.BeginForm("Create", "ErrorAnalysis", FormMethod.Post, new { enctype = "multipart/form-data", @class = "iss-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="iss-card">
+        <div class="iss-card-header blue">
+            <span>&#128203;</span> Thông tin cơ bản &nbsp;<span style="font-weight:400;">基本情報</span>
+        </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Hiện tượng <span class="label-jp">現象</span></label>
+                        @Html.DropDownListFor(m => m.Phenomenon, (List<SelectListItem>)ViewBag.PhenomenonOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Nội dung vấn đề <span class="label-jp">問題内容</span></label>
+                        @Html.TextAreaFor(m => m.ProblemContent, new { @class = "form-control", rows = 3, placeholder = "Mô tả chi tiết vấn đề..." })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Chủng loại</label>
+                        @Html.DropDownListFor(m => m.Category, (List<SelectListItem>)ViewBag.CategoryOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Model</label>
+                        @Html.DropDownListFor(m => m.Model, (List<SelectListItem>)ViewBag.ModelOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Dừng xuất xưởng <span class="label-jp">出荷停止</span></label>
+                        @Html.DropDownListFor(m => m.ShipmentStop, (List<SelectListItem>)ViewBag.ShipmentStopOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Người điều tra <span class="label-jp">調査担当</span></label>
+                        @Html.TextBoxFor(m => m.Investigator, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                        <div class="form-hint">Tự động lấy theo user đang đăng nhập.</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Đảm nhiệm <span class="label-jp">担当者</span></label>
+                        @Html.TextBoxFor(m => m.PersonInCharge, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                        <div class="form-hint">Tự động điền theo user đang đăng nhập.</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Phân loại giai đoạn <span class="label-jp">ステージ種別</span></label>
+                        @Html.DropDownListFor(m => m.StageClassification, (List<SelectListItem>)ViewBag.StageOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Công đoạn phát sinh <span class="label-jp">発生工程</span></label>
+                        @Html.DropDownListFor(m => m.OccurrenceProcess, (List<SelectListItem>)ViewBag.ProcessOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>B-action</label>
+                        @Html.DropDownListFor(m => m.BAction, (List<SelectListItem>)ViewBag.BActionOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Nhà máy <span class="label-jp">工場</span></label>
+                        @Html.DropDownListFor(m => m.Factory, (List<SelectListItem>)ViewBag.FactoryOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Chuyền <span class="label-jp">ライン</span></label>
+                        @Html.TextBoxFor(m => m.Line, new { @class = "form-control", placeholder = "Số chuyền..." })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Số máy phát sinh <span class="label-jp">発生台数</span></label>
+                        @Html.TextBoxFor(m => m.OccurrenceCount, new { @class = "form-control", type = "number", placeholder = "0" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Ngày giờ phát sinh <span class="label-jp">発生日</span></label>
+                        @Html.TextBoxFor(m => m.OccurrenceDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Lỗi mãn tính <span class="label-jp">慢性不良</span></label>
+                        @Html.DropDownListFor(m => m.ChronicDefect, (List<SelectListItem>)ViewBag.ChronicDefectOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Thời gian dừng chuyền <span class="label-jp">ライン停止時間</span> <span class="manual-input-badge">Nhập tay</span></label>
+                        @Html.TextBoxFor(m => m.LineStopTime, new { @class = "form-control", placeholder = "Nhập thời gian dừng chuyền..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header green">
+                <span>&#128270;</span> Nội dung điều tra <span style="font-weight:400; margin-left:4px;">調査内容</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Nội dung điều tra <span class="label-jp">調査内容</span></label>
+                        @Html.TextAreaFor(m => m.InvestigationContent, new { @class = "form-control", rows = 3, placeholder = "Nhập nội dung điều tra..." })
+                    </div>
+                </div>
+
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:15px;">
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Mã linh kiện 1 <span class="label-jp">部品コード1</span> <span class="manual-input-badge">Nhập tay</span></label>
+                            @Html.TextBoxFor(m => m.PartCode1, new { @class = "form-control", placeholder = "Nhập mã linh kiện..." })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Tên linh kiện <span class="label-jp">部品名前</span></label>
+                            @Html.TextBoxFor(m => m.PartName1, new { @class = "form-control form-control-readonly", placeholder = "Tự động hiển thị tên", @readonly = "readonly" })
+                            <div class="auto-fill-hint">Tự động hiển thị tên theo mã đã nhập.</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Mã linh kiện 2 <span class="label-jp">部品コード2</span> <span class="manual-input-badge">Nhập tay</span></label>
+                            @Html.TextBoxFor(m => m.PartCode2, new { @class = "form-control", placeholder = "Nhập mã linh kiện..." })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Tên linh kiện <span class="label-jp">部品名前</span></label>
+                            @Html.TextBoxFor(m => m.PartName2, new { @class = "form-control form-control-readonly", placeholder = "Tự động hiển thị tên", @readonly = "readonly" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 form-group">
+                            <label>Mã linh kiện 3 <span class="label-jp">部品コード3</span></label>
+                            @Html.TextBoxFor(m => m.PartCode3, new { @class = "form-control", placeholder = "Nhập mã linh kiện..." })
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Tên linh kiện <span class="label-jp">部品名前</span></label>
+                            @Html.TextBoxFor(m => m.PartName3, new { @class = "form-control form-control-readonly", placeholder = "Tự động hiển thị tên", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Tiến độ điều tra <span class="label-jp">調査進捗</span></label>
+                        @Html.DropDownListFor(m => m.InvestigationProgress, (List<SelectListItem>)ViewBag.ProgressOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Phân loại nguyên nhân <span class="label-jp">原因分離</span></label>
+                        @Html.DropDownListFor(m => m.CauseClassification, (List<SelectListItem>)ViewBag.CauseOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header orange">
+                <span>&#128269;</span> Chi tiết nguyên nhân <span style="font-weight:400; margin-left:4px;">詳細原因</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Chi tiết nguyên nhân <span class="label-jp">詳細原因</span></label>
+                        @Html.TextAreaFor(m => m.DetailedCause, new { @class = "form-control", rows = 3, placeholder = "Mô tả chi tiết nguyên nhân..." })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Thời gian bắt đầu điều tra <span class="label-jp">調査開始時間</span></label>
+                        @Html.TextBoxFor(m => m.InvestigationStartTime, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Thời gian kết thúc điều tra <span class="label-jp">原因決定時間</span></label>
+                        @Html.TextBoxFor(m => m.InvestigationEndTime, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>Số ngày nghỉ</label>
+                        @Html.TextBoxFor(m => m.DaysOff, new { @class = "form-control", type = "number", placeholder = "0", id = "daysOff" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Số ngày ca đêm</label>
+                        @Html.TextBoxFor(m => m.NightShiftDays, new { @class = "form-control", type = "number", placeholder = "0", id = "nightShift" })
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Thời gian điều tra <span class="label-jp">調査時間 (h)</span></label>
+                        @Html.TextBoxFor(m => m.InvestigationHours, new { @class = "form-control form-control-readonly", @readonly = "readonly", id = "investigationHours" })
+                        <div class="formula-display" style="margin-top:6px;">
+                            = (Số ngày điều tra - Số ngày nghỉ) x 24 - (Số ngày ca đêm - Số ngày nghỉ) x 15.4
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header purple">
+                <span>&#128300;</span> Nội dung phân tích &amp; Hành động tiếp theo
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Nội dung phân tích <span class="label-jp">解析内容</span></label>
+                        @Html.TextAreaFor(m => m.AnalysisContent, new { @class = "form-control", rows = 3, placeholder = "Nhập nội dung phân tích..." })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Hành động tiếp theo <span class="label-jp">次のACTION</span></label>
+                        @Html.TextAreaFor(m => m.NextAction, new { @class = "form-control", rows = 2, placeholder = "Mô tả hành động tiếp theo..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header teal">
+                <span>&#128736;</span> Đối sách tạm thời <span style="font-weight:400; margin-left:4px;">暫定対策</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Phân loại đối sách tạm thời <span class="label-jp">暫定対策分類</span></label>
+                        @Html.DropDownListFor(m => m.TemporaryMeasureClassification, (List<SelectListItem>)ViewBag.TempMeasureOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Thời gian thực hiện ĐSTT <span class="label-jp">暫定対策実施時</span></label>
+                        @Html.TextBoxFor(m => m.TemporaryMeasureDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Chi tiết đối sách tạm thời <span class="label-jp">暫定対策内容</span></label>
+                        @Html.TextAreaFor(m => m.TemporaryMeasureDetail, new { @class = "form-control", rows = 3, placeholder = "Nhập chi tiết đối sách tạm thời..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header red">
+                <span>&#128681;</span> Đối sách cố hữu <span style="font-weight:400; margin-left:4px;">恒久対策</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Phân loại đối sách cố hữu <span class="label-jp">恒久対策分類</span></label>
+                        @Html.DropDownListFor(m => m.PermanentMeasureClassification, (List<SelectListItem>)ViewBag.PermMeasureOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Thời gian thực hiện ĐSCH <span class="label-jp">恒久対策実施時</span></label>
+                        @Html.TextBoxFor(m => m.PermanentMeasureDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Chi tiết đối sách cố hữu <span class="label-jp">恒久対策内容</span></label>
+                        @Html.TextAreaFor(m => m.PermanentMeasureDetail, new { @class = "form-control", rows = 3, placeholder = "Nhập chi tiết đối sách cố hữu..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header brown">
+                <span>&#128206;</span> Báo cáo đính kèm <span style="font-weight:400; margin-left:4px;">添付レポート</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Chọn file đính kèm</label>
+                        <input type="file" name="attachment" class="form-control ea-file-input" />
+                        <div class="ea-inline-note">Hỗ trợ: PDF, Excel, Word, hình ảnh.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group-iss">
+            <button type="submit" class="btn-iss btn-iss-primary">
+                Lưu <span style="font-size:12px;">保存</span>
+            </button>
+            <button type="submit" name="action" value="edit" class="btn-iss btn-iss-warning">
+                Biên soạn <span style="font-size:12px;">編集</span>
+            </button>
+            <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary">
+                Hủy biên soạn
+            </a>
+        </div>
+
+        <div style="text-align:center; margin-top:16px; margin-bottom:20px;">
+            <div class="note-bubble">
+                Các thông tin sẽ tự động cập nhật lên danh sách lỗi.
+            </div>
+        </div>
+    }
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            function calcHours() {
+                var startEl = $('input[name="InvestigationStartTime"]');
+                var endEl = $('input[name="InvestigationEndTime"]');
+                var daysOff = parseInt($('#daysOff').val()) || 0;
+                var nightShift = parseInt($('#nightShift').val()) || 0;
+
+                if (startEl.val() && endEl.val()) {
+                    var start = new Date(startEl.val());
+                    var end = new Date(endEl.val());
+                    var diffDays = (end - start) / (1000 * 60 * 60 * 24);
+                    var hours = (diffDays - daysOff) * 24 - (nightShift - daysOff) * 15.4;
+                    $('#investigationHours').val(hours.toFixed(1));
+                } else {
+                    $('#investigationHours').val('');
+                }
+            }
+
+            $('input[name="InvestigationStartTime"], input[name="InvestigationEndTime"], #daysOff, #nightShift').on('change keyup', calcHours);
+            calcHours();
+        });
+    </script>
+}

@@ -1,0 +1,118 @@
+﻿@model List<WEB_PHANTICHLOI.Models.ErrorAnalysis>
+@{
+    ViewBag.Title = "Danh sách lỗi 問題一覧";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<div class="iss-card">
+    <div class="iss-card-header">
+        <span>&#128203;</span> Danh sách lỗi — 問題一覧 &nbsp;
+        <span style="font-weight:400; font-size:12px; opacity:0.8;">| Tổng: @Model.Count bản ghi</span>
+        <div style="margin-left:auto;">
+            <a href="@Url.Action("Create")" class="btn-iss btn-iss-success" style="font-size:12px; padding:5px 14px;">
+                &#10010; Thêm mới 追加
+            </a>
+        </div>
+    </div>
+    <div class="iss-card-body" style="padding:0;">
+        <div class="iss-table-wrapper" style="max-height:70vh; overflow-y:auto;">
+            <table class="iss-table">
+                <thead>
+                    <tr>
+                        <th style="min-width:40px;">Số quản lý<span class="th-jp">管理No</span></th>
+                        <th style="min-width:80px;">Nhà máy<span class="th-jp">工場</span></th>
+                        <th style="min-width:90px;">Tiến độ điều tra<span class="th-jp">調査進捗</span></th>
+                        <th style="min-width:90px;">Thời gian phát sinh<span class="th-jp">発生日</span></th>
+                        <th style="min-width:90px;">Nhóm<span class="th-jp">チーム</span></th>
+                        <th style="min-width:70px;">Đảm nhiệm<span class="th-jp">担当者</span></th>
+                        <th style="min-width:60px;">Model</th>
+                        <th style="min-width:90px;">Công đoạn phát sinh<span class="th-jp">発生工程</span></th>
+                        <th style="min-width:80px;">Phân loại<span class="th-jp">分類</span></th>
+                        <th style="min-width:120px;">Hình trang<span class="th-jp">現象</span></th>
+                        <th style="min-width:100px;">Nguyên nhân<span class="th-jp">原因</span></th>
+                        <th style="min-width:120px;">Hành động tiếp theo<span class="th-jp">次のACTION</span></th>
+                        <th style="min-width:100px;">Phân loại lỗi<span class="th-jp">不良分類</span></th>
+                        <th style="min-width:120px;">Đối sách tạm thời<span class="th-jp">暫定対策</span></th>
+                        <th style="min-width:120px;">Đối sách cố hữu<span class="th-jp">恒久対策</span></th>
+                        <th style="min-width:90px;">Thời gian hoàn thành điều tra</th>
+                        <th style="min-width:90px;">Thời gian hoàn thành đối sách</th>
+                        <th style="min-width:70px;">B-action<span class="th-jp">B-action</span></th>
+                        <th style="min-width:60px;">Trạng thái<span class="th-jp">状態</span></th>
+                        <th style="min-width:60px;">Chia sẻ<span class="th-jp">共有</span></th>
+                        <th style="min-width:80px;">レポート</th>
+                        <th style="min-width:90px;">Ngày, giờ cập nhật</th>
+                        <th style="min-width:70px;">Người cập nhật</th>
+                        <th style="min-width:80px;">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        string badgeClass = "badge-open";
+                        if (item.Status != null)
+                        {
+                            if (item.Status.Contains("Close")) badgeClass = "badge-close";
+                            else if (item.Status.Contains("調査中") || item.Status.Contains("Đang")) badgeClass = "badge-investigating";
+                            else if (item.Status.Contains("対策")) badgeClass = "badge-countermeasure";
+                        }
+
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Details", new { id = item.Id })" style="color:#1565c0; font-weight:700; text-decoration:none;">
+                                    @item.Id
+                                </a>
+                            </td>
+                            <td>@item.Factory</td>
+                            <td><span class="badge-status @badgeClass">@item.Status</span></td>
+                            <td>@item.OccurrencePeriod</td>
+                            <td>@item.Team</td>
+                            <td>@item.PersonInCharge</td>
+                            <td><strong>@item.Model</strong></td>
+                            <td>@item.OccurrenceProcess</td>
+                            <td>@item.Category</td>
+                            <td>@item.ImageStatus</td>
+                            <td>@item.CauseClassification</td>
+                            <td>@item.NextActionSummary</td>
+                            <td style="font-size:11px;">@item.DefectClassification</td>
+                            <td style="font-size:11px;">@item.TemporaryMeasureSummary</td>
+                            <td style="font-size:11px;">@item.PermanentMeasureSummary</td>
+                            <td>@item.InvestigationCompletionTime</td>
+                            <td>@item.MeasureCompletionTime</td>
+                            <td>@item.BActionStatus</td>
+                            <td>
+                                @if (item.Sharing == "CLOSE")
+                                {
+                                    <span class="badge-status badge-close">CLOSE</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-open">OPEN</span>
+                                }
+                            </td>
+                            <td>@item.Sharing</td>
+                            <td style="font-size:10px;">@item.Report</td>
+                            <td style="font-size:11px;">
+                                @if (item.UpdatedDate.HasValue)
+                                {
+                                    @item.UpdatedDate.Value.ToString("M/d/yyyy")
+                                }
+                            </td>
+                            <td>@item.UpdatedBy</td>
+                            <td style="text-align:center; white-space:nowrap;">
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn-iss btn-iss-warning" style="padding:3px 8px; font-size:11px;">
+                                    &#9998; Sửa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+    <div class="note-bubble">
+        &#128161; Các thông tin sẽ tự động cập nhật lên danh sách lỗi khi thêm mới hoặc chỉnh sửa.
+    </div>
+</div>

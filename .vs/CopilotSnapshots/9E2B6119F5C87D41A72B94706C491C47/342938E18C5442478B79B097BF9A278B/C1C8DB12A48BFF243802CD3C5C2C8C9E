@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class ErrorAnalysisChartViewModel
+    {
+        public int TotalCount { get; set; }
+
+        public List<string> ProgressLabels { get; set; }
+        public List<int> ProgressData { get; set; }
+
+        public List<string> CauseLabels { get; set; }
+        public List<int> CauseData { get; set; }
+
+        public List<string> InvestigatorLabels { get; set; }
+        public List<int> InvestigatorData { get; set; }
+
+        public List<string> FactoryLabels { get; set; }
+        public List<int> FactoryData { get; set; }
+
+        public List<string> ModelLabels { get; set; }
+        public List<int> ModelData { get; set; }
+
+        public List<string> MonthlyLabels { get; set; }
+        public List<int> MonthlyData { get; set; }
+    }
+}

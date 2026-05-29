@@ -1,0 +1,227 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WEB_PHANTICHLOI.Models;
+
+namespace WEB_PHANTICHLOI.Controllers
+{
+    public class ErrorAnalysisController : Controller
+    {
+        // GET: ErrorAnalysis - Danh sách lỗi 問題一覧
+        public ActionResult Index()
+        {
+            var errors = ErrorAnalysisData.GetAll();
+            return View(errors);
+        }
+
+        // GET: ErrorAnalysis/Create - Thêm mới 追加
+        public ActionResult Create()
+        {
+            ViewBag.StageOptions = GetStageOptions();
+            ViewBag.ProcessOptions = GetProcessOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+            ViewBag.CauseOptions = GetCauseOptions();
+            ViewBag.TempMeasureOptions = GetTempMeasureOptions();
+            ViewBag.PermMeasureOptions = GetPermMeasureOptions();
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.BActionOptions = GetBActionOptions();
+            ViewBag.ShipmentStopOptions = GetShipmentStopOptions();
+            ViewBag.InvestigatorOptions = GetInvestigatorOptions();
+            ViewBag.CategoryOptions = GetCategoryOptions();
+            ViewBag.ModelOptions = GetModelOptions();
+            ViewBag.PhenomenonOptions = GetPhenomenonOptions();
+            ViewBag.ChronicDefectOptions = GetChronicDefectOptions();
+            return View(new ErrorAnalysis());
+        }
+
+        // POST: ErrorAnalysis/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(ErrorAnalysis model, HttpPostedFileBase attachment)
+        {
+            if (attachment != null && attachment.ContentLength > 0)
+            {
+                var fileName = System.IO.Path.GetFileName(attachment.FileName);
+                var path = System.IO.Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                if (!System.IO.Directory.Exists(Server.MapPath("~/Uploads")))
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads"));
+                attachment.SaveAs(path);
+                model.AttachmentPath = "~/Uploads/" + fileName;
+            }
+
+            model.UpdatedBy = "User";
+            model.UpdatedDate = DateTime.Now;
+            ErrorAnalysisData.Add(model);
+            return RedirectToAction("Index");
+        }
+
+        // GET: ErrorAnalysis/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var error = ErrorAnalysisData.GetById(id);
+            if (error == null)
+                return HttpNotFound();
+
+            ViewBag.StageOptions = GetStageOptions();
+            ViewBag.ProcessOptions = GetProcessOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+            ViewBag.CauseOptions = GetCauseOptions();
+            ViewBag.TempMeasureOptions = GetTempMeasureOptions();
+            ViewBag.PermMeasureOptions = GetPermMeasureOptions();
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.BActionOptions = GetBActionOptions();
+            ViewBag.ShipmentStopOptions = GetShipmentStopOptions();
+            ViewBag.InvestigatorOptions = GetInvestigatorOptions();
+            ViewBag.CategoryOptions = GetCategoryOptions();
+            ViewBag.ModelOptions = GetModelOptions();
+            ViewBag.PhenomenonOptions = GetPhenomenonOptions();
+            ViewBag.ChronicDefectOptions = GetChronicDefectOptions();
+            return View(error);
+        }
+
+        // POST: ErrorAnalysis/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ErrorAnalysis model, HttpPostedFileBase attachment)
+        {
+            if (attachment != null && attachment.ContentLength > 0)
+            {
+                var fileName = System.IO.Path.GetFileName(attachment.FileName);
+                var path = System.IO.Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                if (!System.IO.Directory.Exists(Server.MapPath("~/Uploads")))
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads"));
+                attachment.SaveAs(path);
+                model.AttachmentPath = "~/Uploads/" + fileName;
+            }
+
+            model.UpdatedBy = "User";
+            ErrorAnalysisData.Update(model);
+            return RedirectToAction("Index");
+        }
+
+        // POST: ErrorAnalysis/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            ErrorAnalysisData.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        // GET: ErrorAnalysis/Details/5
+        public ActionResult Details(int id)
+        {
+            var error = ErrorAnalysisData.GetById(id);
+            if (error == null)
+                return HttpNotFound();
+            return View(error);
+        }
+
+        // GET: ErrorAnalysis/Search - Tìm kiếm 検索
+        public ActionResult Search(string keyword, string factory, string status, string model)
+        {
+            var errors = ErrorAnalysisData.GetAll().AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.ToLower();
+                errors = errors.Where(e =>
+                    (e.ProblemContent ?? "").ToLower().Contains(keyword) ||
+                    (e.Phenomenon ?? "").ToLower().Contains(keyword) ||
+                    (e.PersonInCharge ?? "").ToLower().Contains(keyword) ||
+                    (e.Team ?? "").ToLower().Contains(keyword) ||
+                    (e.CauseClassification ?? "").ToLower().Contains(keyword));
+            }
+
+            if (!string.IsNullOrWhiteSpace(factory))
+                errors = errors.Where(e => e.Factory == factory);
+
+            if (!string.IsNullOrWhiteSpace(status))
+                errors = errors.Where(e => e.Status == status);
+
+            if (!string.IsNullOrWhiteSpace(model))
+                errors = errors.Where(e => (e.Model ?? "").Contains(model));
+
+            ViewBag.Keyword = keyword;
+            ViewBag.FactoryFilter = factory;
+            ViewBag.StatusFilter = status;
+            ViewBag.ModelFilter = model;
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+
+            return View("Search", errors.ToList());
+        }
+
+        private List<SelectListItem> GetStageOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.StageClassification, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetProcessOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.OccurrenceProcess, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetProgressOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.InvestigationProgress, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetCauseOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.CauseClassification, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetTempMeasureOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.TemporaryMeasureClassification, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetPermMeasureOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.PermanentMeasureClassification, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetFactoryOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Factory, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetBActionOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.BAction, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetShipmentStopOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ShipmentStop, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetInvestigatorOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Investigator, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetCategoryOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Category, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetModelOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Model, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetPhenomenonOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Phenomenon, "-- Chọn --");
+        }
+
+        private List<SelectListItem> GetChronicDefectOptions()
+        {
+            return ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ChronicDefect, "-- Chọn --");
+        }
+    }
+}

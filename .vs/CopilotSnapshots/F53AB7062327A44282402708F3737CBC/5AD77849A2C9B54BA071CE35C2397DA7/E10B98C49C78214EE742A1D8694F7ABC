@@ -1,0 +1,284 @@
+﻿@using WEB_PHANTICHLOI.Models
+@model WEB_PHANTICHLOI.Models.ErrorAnalysisIndexViewModel
+@{
+    ViewBag.Title = "Danh sách lỗi 問題一覧";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<style>
+    .clickable-row:hover {
+        background-color: #f5f5f5 !important;
+    }
+
+    .index-filter-row th {
+        background: #dbeafe !important;
+        padding: 4px !important;
+        border: 1px solid #93c5fd !important;
+        position: sticky;
+        top: 42px;
+        z-index: 9;
+    }
+
+    .index-filter-row .form-control {
+        padding: 6px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+        min-width: 100%;
+        background: #fff;
+    }
+</style>
+
+<div class="iss-card">
+    <div class="iss-card-header">
+        <span>&#128203;</span> <span class="lang-vi">Danh sách lỗi</span><span class="lang-jp">問題一覧</span> &nbsp;
+        <span style="font-weight:400; font-size:12px; opacity:0.8;">| <span class="lang-vi">Tổng:</span><span class="lang-jp">合計:</span> @Model.TotalCount <span class="lang-vi">bản ghi</span><span class="lang-jp">件</span></span>
+        <div style="margin-left:auto;">
+            <a href="@Url.Action("Create")" class="btn-iss btn-iss-success" style="font-size:12px; padding:5px 14px;">
+                &#10010; <span class="lang-vi">Thêm mới</span><span class="lang-jp">追加</span>
+            </a>
+        </div>
+    </div>
+    <div class="iss-card-body" style="padding:0;">
+        <div style="padding: 10px 15px;">
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: yellow; border: 1px solid black;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Đang điều tra</span><span class="lang-jp">調査中</span></span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: #00b0f0; border: 1px solid black; border-top: none;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Đang thảo luận đối sách cố hữu</span><span class="lang-jp">恒久対策検討中</span></span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: #00b050; border: 1px solid black; border-top: none;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Close</span><span class="lang-jp">クローズ</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="iss-table-wrapper" style="max-height:70vh; overflow-y:auto;">
+            @using (Html.BeginForm("Index", "ErrorAnalysis", FormMethod.Get, new { id = "indexFilterForm" }))
+            {
+                @Html.HiddenFor(m => m.CurrentPage, new { id = "currentPage" })
+                @Html.HiddenFor(m => m.PageSize)
+            <table class="iss-table">
+                <thead>
+                    <tr>
+                        <th style="min-width:70px;"><span class="lang-vi">Số quản lý</span><span class="lang-jp">番号</span></th>
+                        <th style="min-width:160px;"><span class="lang-vi">Nội dung vấn đề</span><span class="lang-jp">問題内容</span></th>
+                        <th style="min-width:100px;"><span class="lang-vi">Phân loại nguyên nhân</span><span class="lang-jp">原因分離</span></th>
+                        <th style="min-width:110px;"><span class="lang-vi">Thời gian phát sinh</span><span class="lang-jp">発生日</span></th>
+                        <th style="min-width:110px;"><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Model</span><span class="lang-jp">機種</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Phân loại lỗi</span><span class="lang-jp">不良分類</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></th>
+                        <th style="min-width:170px;"><span class="lang-vi">Nguyên nhân, nội dung điều tra</span><span class="lang-jp">解析内容原因</span></th>
+                        <th style="min-width:140px;"><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のアクション</span></th>
+                        <th style="min-width:140px;"><span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span></th>
+                        <th style="min-width:140px;"><span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span></th>
+                        <th style="min-width:120px;"><span class="lang-vi">Xác nhận hiệu quả</span><span class="lang-jp">効果確認</span></th>
+                        <th style="min-width:110px;"><span class="lang-vi">Thời gian điều tra</span><span class="lang-jp">調査時間(hour)</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">B-act</span><span class="lang-jp">B-act</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Trạng thái B-action</span><span class="lang-jp">状態 B-action</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">Dừng xuất hàng</span><span class="lang-jp">出荷停止</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">レポート</span><span class="lang-jp">レポート</span></th>
+                        <th style="min-width:150px;"><span class="lang-vi">Tài liệu</span><span class="lang-jp">添付ファイル</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Lỗi mãn tính</span><span class="lang-jp">慢性不良</span></th>
+                        <th style="min-width:130px;"><span class="lang-vi">Thao tác</span><span class="lang-jp">操作</span></th>
+                    </tr>
+                    <tr class="index-filter-row">
+                        <th>@Html.TextBoxFor(m => m.FilterManagementNumber, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterProblemContent, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterCauseClassification, Model.CauseOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterOccurrencePeriod, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterOccurrenceProcess, Model.ProcessOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterModel, Model.ModelOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterDefectClassification, Model.DefectOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterPersonInCharge, Model.PersonInChargeOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterDetailedCause, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterNextAction, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterTemporaryMeasure, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterPermanentMeasure, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterEffectConfirmation, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterInvestigationHours, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterBAction, Model.BActionOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterBActionStatus, Model.BActionStatusOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterShipmentStop, Model.ShipmentStopOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterReport, Model.ReportOptions, new { @class = "form-control index-filter" })</th>
+                        <th>@Html.TextBoxFor(m => m.FilterAttachments, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                        <th>@Html.DropDownListFor(m => m.FilterChronicDefect, Model.ChronicDefectOptions, new { @class = "form-control index-filter" })</th>
+                        <th><button type="button" id="clearIndexFilters" class="btn-iss btn-iss-secondary" style="padding:6px 10px; font-size:11px; white-space:nowrap;">Xóa lọc</button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        string badgeClass = "badge-open";
+                        string mgmtColor = "";
+                        if (item.Status != null)
+                        {
+                            if (item.Status.Contains("Close"))
+                            {
+                                badgeClass = "badge-close";
+                                mgmtColor = "#00b050";
+                            }
+                            else if (item.Status.Contains("Đang thảo luận") || item.Status.Contains("対策") || item.Status.Contains("cố hữu"))
+                            {
+                                badgeClass = "badge-countermeasure";
+                                mgmtColor = "#00b0f0";
+                            }
+                            else if (item.Status.Contains("調査中") || item.Status.Contains("Đang") || item.Status.Contains("điều tra"))
+                            {
+                                badgeClass = "badge-investigating";
+                                mgmtColor = "yellow";
+                            }
+                        }
+
+                        <tr data-details-url="@Url.Action("Details", new { id = item.Id })" style="cursor: pointer;" class="clickable-row">
+                            <td style="@(!string.IsNullOrEmpty(mgmtColor) ? "background-color:" + mgmtColor + ";" : "")">
+                                <span style="color:#000; font-weight:700;">
+                                    @(string.IsNullOrWhiteSpace(item.ManagementNumber) ? item.Id.ToString() : item.ManagementNumber)
+                                </span>
+                            </td>
+                            <td>@item.ProblemContent</td>
+                            <td>@item.CauseClassification</td>
+                            <td>@item.OccurrencePeriod</td>
+                            <td>@item.OccurrenceProcess</td>
+                            <td><strong>@item.Model</strong></td>
+                            <td>@(string.IsNullOrWhiteSpace(item.DefectClassification) ? item.Category : item.DefectClassification)</td>
+                            <td>@item.PersonInCharge</td>
+                            <td>@item.DetailedCause</td>
+                            <td>@item.NextActionSummary</td>
+                            <td style="font-size:11px;">@item.TemporaryMeasureSummary</td>
+                            <td style="font-size:11px;">@item.PermanentMeasureSummary</td>
+                            <td>@(string.IsNullOrWhiteSpace(item.MeasureCompletionTime) ? item.Sharing : item.MeasureCompletionTime)</td>
+                            <td>@item.InvestigationHours</td>
+                            <td>
+                                @if (ErrorAnalysisDisplayHelper.IsAbsoluteUrl(item.BAction))
+                                {
+                                    <a href="@item.BAction" target="_blank" style="color:#1565c0; text-decoration:underline; word-break:break-all;" onclick="event.stopPropagation();">@item.BAction</a>
+                                }
+                                else
+                                {
+                                    @item.BAction
+                                }
+                            </td>
+                            <td>@item.BActionStatus</td>
+                            <td>@item.ShipmentStop</td>
+                            <td style="font-size:10px;">@item.Report</td>
+                            <td style="font-size:10px;">
+                                @foreach (var attachmentPath in ErrorAnalysisDisplayHelper.GetAttachmentPaths(item.AttachmentPath))
+                                {
+                                    <div>
+                                        <a href="@Url.Content(attachmentPath)" target="_blank" title="@ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath, 200)" style="color:#1565c0; text-decoration:none;" onclick="event.stopPropagation();">
+                                            &#128206; @ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath)
+                                        </a>
+                                    </div>
+                                }
+                            </td>
+                            <td>@item.ChronicDefect</td>
+                            <td style="text-align:center; white-space:nowrap;" class="action-cell">
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn-iss btn-iss-warning" style="padding:3px 8px; font-size:11px;" onclick="event.stopPropagation();">
+                                    &#9998; <span class="lang-vi">Sửa</span><span class="lang-jp">編集</span>
+                                </a>
+                                <button type="button" class="btn-iss btn-iss-danger delete-error-btn" data-id="@item.Id" style="padding:3px 8px; font-size:11px; margin-left:4px;" onclick="event.stopPropagation();">
+                                    &#128465; <span class="lang-vi">Xóa</span><span class="lang-jp">削除</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            }
+        </div>
+
+        @using (Html.BeginForm("Delete", "ErrorAnalysis", FormMethod.Post, new { id = "deleteErrorForm", style = "display:none;" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("id", string.Empty, new { id = "deleteErrorId" })
+        }
+
+        @if (Model.TotalPages > 1)
+        {
+            <div style="background:#2f67bd; padding:8px 10px; overflow-x:auto; white-space:nowrap;">
+                @for (var page = 1; page <= Model.TotalPages; page++)
+                {
+                    if (page <= 10 || page == Model.CurrentPage || page == Model.TotalPages)
+                    {
+                        <a href="#" class="index-page-link" data-page="@page" style="display:inline-block; margin-right:10px; color:red; font-size:18px; font-weight:700; text-decoration:underline;">@page</a>
+                    }
+                    else if (page == 11)
+                    {
+                        <span style="display:inline-block; margin-right:10px; color:red; font-size:18px; font-weight:700;">...</span>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+    <div class="note-bubble">
+        &#128161; <span class="lang-vi">Các thông tin sẽ tự động cập nhật lên danh sách lỗi khi thêm mới hoặc chỉnh sửa.</span><span class="lang-jp">追加や編集を行うと、問題一覧に自動的に更新されます。</span>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var filterSubmitTimer;
+
+            function submitIndexFilterForm(page) {
+                if (page) {
+                    $('#currentPage').val(page);
+                }
+                $('#indexFilterForm').submit();
+            }
+
+            $('.index-filter').on('change', function () {
+                submitIndexFilterForm(1);
+            });
+
+            $('.index-filter').on('keyup', function () {
+                clearTimeout(filterSubmitTimer);
+                filterSubmitTimer = setTimeout(function () {
+                    submitIndexFilterForm(1);
+                }, 400);
+            });
+
+            $('.index-page-link').on('click', function (e) {
+                e.preventDefault();
+                submitIndexFilterForm($(this).data('page'));
+            });
+
+            $('.clickable-row').on('click', function (e) {
+                if ($(e.target).closest('.action-cell, a, button, form').length) {
+                    return;
+                }
+
+                var detailsUrl = $(this).data('details-url');
+                if (detailsUrl) {
+                    window.location.href = detailsUrl;
+                }
+            });
+
+            $('.delete-error-btn').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (!confirm('Bạn có chắc muốn xóa bản ghi này?')) {
+                    return;
+                }
+
+                $('#deleteErrorId').val($(this).data('id'));
+                $('#deleteErrorForm').submit();
+            });
+
+            $('#clearIndexFilters').on('click', function () {
+                $('.index-filter').each(function () {
+                    $(this).val('');
+                });
+                submitIndexFilterForm(1);
+            });
+        });
+    </script>
+}

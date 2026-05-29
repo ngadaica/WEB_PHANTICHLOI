@@ -1,0 +1,18 @@
+﻿namespace WEB_PHANTICHLOI.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class AddImagePath : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.ErrorAnalyses", "ImagePath", c => c.String());
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.ErrorAnalyses", "ImagePath");
+        }
+    }
+}

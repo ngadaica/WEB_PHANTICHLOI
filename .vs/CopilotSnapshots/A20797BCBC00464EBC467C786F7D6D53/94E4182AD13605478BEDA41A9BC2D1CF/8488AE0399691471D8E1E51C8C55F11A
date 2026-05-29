@@ -1,0 +1,215 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@{
+    ViewBag.Title = "Chi tiết lỗi #" + (string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber);
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; Quay lại danh sách
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a;">Chi tiết lỗi #@(string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber)</span>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn-iss btn-iss-warning" style="font-size:12px; padding:5px 14px; text-decoration:none; margin-left:auto;">
+        &#9998; Chỉnh sửa
+    </a>
+</div>
+
+<!-- Thông tin cơ bản -->
+<div class="iss-card">
+    <div class="iss-card-header blue">
+        <span>&#128203;</span> Thông tin cơ bản &nbsp;<span style="font-weight:400;">基本情報</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Số quản lý 管理No</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber)</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Đảm nhiệm 担当者</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PersonInCharge</td>
+            </tr>
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Hiện tượng 現象</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.Phenomenon</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Nội dung vấn đề 問題内容</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.ProblemContent</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Chủng loại</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; width:32%;">@Model.Category</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0; width:18%;">Model</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Model</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Nhà máy 工場</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Factory</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Chuyền ライン</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Line</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Phân loại giai đoạn</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.StageClassification</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Công đoạn phát sinh</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.OccurrenceProcess</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Ngày phát sinh 発生日</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.OccurrenceDate.HasValue ? Model.OccurrenceDate.Value.ToString("dd/MM/yyyy") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Số máy phát sinh</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.OccurrenceCount</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Người điều tra</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Investigator</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">B-action</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.BAction</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Dừng xuất xưởng</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.ShipmentStop</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Thời gian dừng chuyền</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.LineStopTime</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Nội dung điều tra -->
+<div class="iss-card">
+    <div class="iss-card-header green">
+        <span>&#128270;</span> Nội dung điều tra &nbsp;<span style="font-weight:400;">調査内容</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Nội dung điều tra</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.InvestigationContent</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Mã LK 1</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; width:32%;">@Model.PartCode1 @(string.IsNullOrEmpty(Model.PartName1) ? "" : " - " + Model.PartName1)</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0; width:18%;">Mã LK 2</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PartCode2 @(string.IsNullOrEmpty(Model.PartName2) ? "" : " - " + Model.PartName2)</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Mã LK 3</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.PartCode3 @(string.IsNullOrEmpty(Model.PartName3) ? "" : " - " + Model.PartName3)</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Tiến độ điều tra</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.InvestigationProgress</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Phân loại nguyên nhân</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.CauseClassification</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Chi tiết nguyên nhân -->
+<div class="iss-card">
+    <div class="iss-card-header orange">
+        <span>&#128269;</span> Chi tiết nguyên nhân &nbsp;<span style="font-weight:400;">詳細原因</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Chi tiết nguyên nhân</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.DetailedCause</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Bắt đầu điều tra</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; width:32%;">@(Model.InvestigationStartTime.HasValue ? Model.InvestigationStartTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0; width:18%;">Kết thúc điều tra</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.InvestigationEndTime.HasValue ? Model.InvestigationEndTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Thời gian điều tra (h)</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.InvestigationHours</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Phân tích & Hành động -->
+<div class="iss-card">
+    <div class="iss-card-header purple">
+        <span>&#128300;</span> Phân tích &amp; Hành động
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Nội dung phân tích</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.AnalysisContent</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Hành động tiếp theo</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.NextAction</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Đối sách -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="iss-card">
+            <div class="iss-card-header teal">
+                <span>&#128736;</span> Đối sách tạm thời <span style="font-weight:400; margin-left:4px;">暫定対策</span>
+            </div>
+            <div class="iss-card-body">
+                <table style="width:100%; font-size:13px;">
+                    <tr>
+                        <td style="width:40%; padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Phân loại</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.TemporaryMeasureClassification</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Thời gian thực hiện</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.TemporaryMeasureDate.HasValue ? Model.TemporaryMeasureDate.Value.ToString("dd/MM/yyyy") : "-")</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Chi tiết</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.TemporaryMeasureDetail</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="iss-card">
+            <div class="iss-card-header red">
+                <span>&#128681;</span> Đối sách cố hữu <span style="font-weight:400; margin-left:4px;">恒久対策</span>
+            </div>
+            <div class="iss-card-body">
+                <table style="width:100%; font-size:13px;">
+                    <tr>
+                        <td style="width:40%; padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Phân loại</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PermanentMeasureClassification</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Thời gian thực hiện</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.PermanentMeasureDate.HasValue ? Model.PermanentMeasureDate.Value.ToString("dd/MM/yyyy") : "-")</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Chi tiết</td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PermanentMeasureDetail</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.AttachmentPath))
+{
+    <div class="iss-card">
+        <div class="iss-card-header brown">
+            <span>&#128206;</span> Báo cáo đính kèm
+        </div>
+        <div class="iss-card-body">
+            <a href="@Url.Content(Model.AttachmentPath)" target="_blank">&#128196; @System.IO.Path.GetFileName(Model.AttachmentPath)</a>
+        </div>
+    </div>
+}
+
+<div style="margin-bottom:20px;"></div>

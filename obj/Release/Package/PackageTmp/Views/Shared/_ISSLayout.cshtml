@@ -1,0 +1,895 @@
+﻿@{
+    var rawCurrentUser = User != null && User.Identity != null && User.Identity.IsAuthenticated
+        ? User.Identity.Name
+        : Request != null && Request.LogonUserIdentity != null
+            ? Request.LogonUserIdentity.Name
+            : null;
+    var currentUser = string.IsNullOrWhiteSpace(rawCurrentUser)
+        ? "Unknown"
+        : (rawCurrentUser.Contains("\\") ? rawCurrentUser.Substring(rawCurrentUser.LastIndexOf("\\", StringComparison.Ordinal) + 1) : rawCurrentUser);
+    var currentController = ViewContext.RouteData.Values["controller"] != null ? ViewContext.RouteData.Values["controller"].ToString() : "";
+    var currentAction = ViewContext.RouteData.Values["action"] != null ? ViewContext.RouteData.Values["action"].ToString() : "";
+    var isErrorListPage = string.Equals(currentController, "ErrorAnalysis", StringComparison.OrdinalIgnoreCase)
+        && string.Equals(currentAction, "Index", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ISS | BIVN Brother</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/fontawesome/css/all.min.css")" rel="stylesheet" />
+    <style>
+        /* === Design tokens === */
+        :root {
+            --iss-bg: #f3f7ff;
+            --iss-bg-accent: #e7efff;
+            --iss-surface: #ffffff;
+            --iss-text: #0f172a;
+            --iss-muted: #64748b;
+            --iss-header-deep: #102b96;
+            --iss-header-mid: #1437b0;
+            --iss-header-bright: #2457d6;
+            --iss-accent-gold: #fbbf24;
+            --iss-accent-sky: #60a5fa;
+            --iss-nav-dark: #0d256f;
+            --iss-nav-pill: rgba(255, 255, 255, 0.13);
+            --iss-border: #d7e3f7;
+            --iss-shadow-sm: 0 1px 2px rgba(16, 43, 150, 0.07);
+            --iss-shadow-md: 0 10px 28px rgba(16, 43, 150, 0.11);
+            --iss-shadow-lg: 0 18px 42px rgba(16, 43, 150, 0.16);
+            --iss-radius: 12px;
+            --iss-radius-lg: 16px;
+        }
+
+        /* === ISS Global Styles === */
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', 'Meiryo', 'Yu Gothic UI', system-ui, -apple-system, sans-serif;
+            background-color: #f3f7ff;
+            background-image:
+                linear-gradient(115deg, rgba(16, 43, 150, 0.065) 0%, rgba(16, 43, 150, 0.065) 25%, transparent 25%, transparent 100%),
+                linear-gradient(295deg, rgba(36, 87, 214, 0.07) 0%, rgba(36, 87, 214, 0.07) 18%, transparent 18%, transparent 100%),
+                radial-gradient(ellipse 90% 70% at 100% -10%, rgba(36, 87, 214, 0.16), transparent 52%),
+                radial-gradient(ellipse 85% 60% at 0% 100%, rgba(96, 165, 250, 0.12), transparent 48%),
+                linear-gradient(180deg, var(--iss-bg) 0%, #ffffff 46%, var(--iss-bg-accent) 100%);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            color: var(--iss-text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === Header === */
+        .iss-header {
+            background: linear-gradient(120deg, var(--iss-header-deep) 0%, var(--iss-header-mid) 48%, var(--iss-header-bright) 100%);
+            color: white;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 36px rgba(16, 43, 150, 0.22);
+        }
+        .iss-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                linear-gradient(100deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.12) 12%, transparent 12%, transparent 100%),
+                linear-gradient(280deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.10) 18%, transparent 18%, transparent 100%),
+                radial-gradient(ellipse 60% 100% at 90% 0%, rgba(186, 230, 253, 0.18), transparent 55%);
+            pointer-events: none;
+        }
+        .iss-header::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--iss-accent-gold), var(--iss-accent-sky), transparent);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+        .iss-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 28px 14px;
+            gap: 28px;
+            position: relative;
+            z-index: 1;
+            max-width: none;
+            margin: 0 auto;
+        }
+        .iss-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 0 0 auto;
+        }
+
+        .iss-header-center {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+
+        .iss-title-block h1 {
+            margin: 0;
+            font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+            text-align: right;
+            line-height: 1.2;
+        }
+        .iss-title-block h2 {
+            margin: 6px 0 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(186, 230, 253, 0.92);
+            font-style: normal;
+            text-align: right;
+            letter-spacing: 0.02em;
+        }
+        .iss-title-block h1::before {
+            content: '\f0eb';
+            font-family: 'Font Awesome 7 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            color: #fde68a;
+            font-size: 0.86em;
+        }
+        .iss-header-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+        .iss-header-logo {
+            display: block;
+            max-width: 220px;
+            width: 100%;
+            height: auto;
+            margin-right: auto;
+            filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.22));
+            transition: transform 0.25s ease;
+        }
+        .iss-header-logo:hover {
+            transform: scale(1.02);
+        }
+        .iss-brother-text {
+            font-family: 'Arial Black', 'Helvetica Black', Impact, sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            text-transform: lowercase;
+            margin-bottom: -2px;
+        }
+        .iss-brother-sub {
+            font-size: 11px;
+            color: #bbdefb;
+            letter-spacing: 2px;
+        }
+        .iss-lang-toggle {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+        .iss-lang-toggle i,
+        .iss-user-info i {
+            margin-right: 6px;
+        }
+        .iss-lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.55);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+        .iss-lang-toggle:active {
+            transform: translateY(0);
+        }
+        .iss-user-info {
+            margin-top: 0;
+            font-size: 12px;
+            color: rgba(226, 232, 240, 0.95);
+            letter-spacing: 0.01em;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .iss-user-info strong {
+            color: #fde68a;
+            font-weight: 700;
+        }
+
+        /* === Main Navigation Tabs === */
+        .iss-main-nav {
+            background: linear-gradient(180deg, #153aa9 0%, var(--iss-nav-dark) 100%);
+            padding: 9px 20px 11px;
+            box-shadow: var(--iss-shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 2;
+        }
+        .iss-main-nav-inner {
+            max-width: none;
+            margin: 0 auto;
+        }
+        .iss-main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            align-items: center;
+        }
+        .iss-main-nav li a {
+            display: block;
+            padding: 9px 15px;
+            color: #c7d7ff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 999px;
+            border-bottom: none;
+            transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+        .iss-main-nav li a .nav-icon {
+            margin-right: 7px;
+            font-size: 12px;
+            color: inherit;
+            opacity: 0.92;
+        }
+        .iss-main-nav li a:hover {
+            color: #fff;
+            background: var(--iss-nav-pill);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+        .iss-main-nav li a.active {
+            color: #102b96;
+            background: linear-gradient(180deg, #ffffff 0%, #dbeafe 100%);
+            box-shadow: 0 5px 18px rgba(15, 23, 42, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.78);
+            transform: translateY(-1px);
+        }
+        .iss-main-nav li a .nav-jp {
+            display: block;
+            font-size: 10px;
+            font-weight: 500;
+            color: #64748b;
+            margin-top: 2px;
+            letter-spacing: 0.02em;
+        }
+        .iss-main-nav li a.active .nav-jp,
+        .iss-main-nav li a:hover .nav-jp {
+            color: #3156b8;
+        }
+
+        /* === Sub Navigation === */
+        .iss-sub-nav {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px 12px;
+            box-shadow: 0 6px 22px rgba(16, 43, 150, 0.08), inset 0 -1px 0 var(--iss-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .iss-sub-nav-inner {
+            max-width: none;
+            margin: 0 auto;
+        }
+        .iss-sub-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .iss-sub-nav li a {
+            display: block;
+            padding: 9px 18px;
+            color: #3156b8;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            border-radius: 999px;
+            border: 1px solid #dbeafe;
+            transition: color 0.2s ease, background 0.2s ease;
+        }
+        .iss-sub-nav li a .nav-icon {
+            margin-right: 7px;
+            font-size: 12px;
+            color: inherit;
+            opacity: 0.92;
+        }
+        .iss-sub-nav li a:hover {
+            color: #102b96;
+            background: #eff6ff;
+        }
+        .iss-sub-nav li a.active {
+            color: #ffffff;
+            background: linear-gradient(180deg, #2457d6 0%, #1437b0 100%);
+            box-shadow: 0 5px 14px rgba(20, 55, 176, 0.28);
+            border-color: #1437b0;
+        }
+        .iss-sub-nav li a .sub-jp {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-left: 4px;
+            font-weight: 500;
+        }
+        .iss-sub-nav li a.active .sub-jp {
+            color: #dbeafe;
+        }
+
+        /* === Content Area === */
+        .iss-content {
+            padding: 22px 24px 32px;
+            min-height: calc(100vh - 200px);
+            max-width: 1680px;
+            margin: 0 auto;
+        }
+
+        /* === Card Styles === */
+        .iss-card {
+            background: var(--iss-surface);
+            border-radius: 14px;
+            box-shadow: var(--iss-shadow-sm), 0 0 0 1px rgba(16, 43, 150, 0.04);
+            margin-bottom: 24px;
+            border: 1px solid var(--iss-border);
+            overflow: hidden;
+            transition: box-shadow 0.25s ease;
+        }
+        .iss-card:hover {
+            box-shadow: var(--iss-shadow-md), 0 0 0 1px rgba(36, 87, 214, 0.08);
+        }
+        .iss-card-header {
+            background: linear-gradient(180deg, #ffffff 0%, #f3f7ff 100%);
+            color: var(--iss-text);
+            padding: 16px 20px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--iss-border);
+            border-left: 4px solid #2457d6;
+            letter-spacing: -0.01em;
+        }
+        .iss-card-header.green { border-left-color: #10b981; }
+        .iss-card-header.orange { border-left-color: #f59e0b; }
+        .iss-card-header.purple { border-left-color: #8b5cf6; }
+        .iss-card-header.red { border-left-color: #ef4444; }
+        .iss-card-header.teal { border-left-color: #14b8a6; }
+        .iss-card-header.brown { border-left-color: #8b4513; }
+        .iss-card-body {
+            padding: 20px 22px;
+        }
+
+        /* === Table Styles === */
+        .iss-table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            border: 1px solid var(--iss-border);
+            background: #ffffff;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        .iss-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 1800px;
+        }
+        .iss-table thead th {
+            background: linear-gradient(180deg, #173db3 0%, #102b96 100%);
+            color: white;
+            padding: 11px 9px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+            border: 1px solid rgba(15, 23, 42, 0.2);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 0 rgba(251, 191, 36, 0.35);
+        }
+        .iss-table thead th .th-jp {
+            display: block;
+            font-size: 9px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        .iss-table tbody td {
+            padding: 9px 8px;
+            border: 1px solid #e6eefb;
+            vertical-align: top;
+        }
+        .iss-table tbody tr:nth-child(even) {
+            background: #f8fbff;
+        }
+        .iss-table tbody tr:hover {
+            background: linear-gradient(90deg, #eaf2ff 0%, #f6fbff 100%);
+        }
+        .iss-table tbody tr td:first-child {
+            text-align: center;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        /* === Status Badges === */
+        .badge-status {
+            display: inline-block;
+            padding: 4px 11px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+        }
+        .badge-close { background: linear-gradient(180deg, #d1fae5, #a7f3d0); color: #065f46; }
+        .badge-open { background: linear-gradient(180deg, #ffedd5, #fed7aa); color: #9a3412; }
+        .badge-investigating { background: linear-gradient(180deg, #dbeafe, #bfdbfe); color: #1e40af; }
+        .badge-countermeasure { background: linear-gradient(180deg, #f3e8ff, #e9d5ff); color: #6b21a8; }
+
+        /* === Form Styles === */
+        .iss-form .form-group {
+            margin-bottom: 16px;
+        }
+        .iss-form label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .iss-form label .label-jp {
+            font-weight: 400;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        .iss-form .form-control {
+            max-width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 11px 15px;
+            font-size: 14px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            background: #ffffff;
+            width: 100%;
+        }
+        .iss-form .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+            outline: none;
+            background: #ffffff;
+        }
+        .iss-form textarea.form-control {
+            min-height: 80px;
+            resize: vertical;
+            background: #ffffff;
+        }
+        .iss-form select.form-control {
+            background: #ffffff;
+        }
+        .iss-form .form-control-readonly {
+            background: #f8fafc;
+            color: #64748b;
+            border-color: #e2e8f0;
+        }
+        .iss-form .required-marker {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        .iss-form .form-hint {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* === Buttons === */
+        .btn-iss {
+            padding: 10px 22px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            letter-spacing: 0.01em;
+        }
+        .btn-iss-primary { background: linear-gradient(180deg, #3b82f6, #2563eb); color: white; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
+        .btn-iss-primary:hover { background: linear-gradient(180deg, #2563eb, #1d4ed8); color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+        .btn-iss-success { background: linear-gradient(180deg, #10b981, #059669); color: white; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3); }
+        .btn-iss-success:hover { background: linear-gradient(180deg, #059669, #047857); color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35); }
+        .btn-iss-warning { background: linear-gradient(180deg, #f59e0b, #d97706); color: white; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3); }
+        .btn-iss-warning:hover { background: linear-gradient(180deg, #d97706, #b45309); color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35); }
+        .btn-iss-danger { background: linear-gradient(180deg, #ef4444, #dc2626); color: white; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3); }
+        .btn-iss-danger:hover { background: linear-gradient(180deg, #dc2626, #b91c1c); color: white; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35); }
+        .btn-iss-secondary { background: #ffffff; color: #475569; border-color: #cbd5e1; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05); }
+        .btn-iss-secondary:hover { background: #f8fafc; color: #0f172a; text-decoration: none; border-color: #94a3b8; transform: translateY(-1px); }
+
+        .btn-group-iss {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            justify-content: center;
+        }
+
+        /* === Section Checkbox Header === */
+        .section-check-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: #1d4ed8;
+            font-size: 13px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #bfdbfe;
+        }
+        .section-check-header input[type="checkbox"] {
+            accent-color: #1565c0;
+            width: 16px;
+            height: 16px;
+        }
+
+        /* === Formula Display === */
+        .formula-display {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #b45309;
+            font-style: italic;
+            box-shadow: 0 1px 2px rgba(180, 83, 9, 0.06);
+        }
+
+        /* === Auto-fill hint === */
+        .auto-fill-hint {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid #fdba74;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 12px;
+            color: #c2410c;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 4px 0;
+            box-shadow: 0 1px 2px rgba(194, 65, 12, 0.06);
+        }
+
+        /* === Pagination === */
+        .iss-pagination {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 20px;
+        }
+        .iss-pagination a, .iss-pagination span {
+            padding: 8px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 500;
+            background: #fff;
+            transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+        }
+        .iss-pagination a:hover { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; transform: translateY(-1px); }
+        .iss-pagination .active { background: linear-gradient(180deg, #2563eb, #1d4ed8); color: white; border-color: #1d4ed8; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35); }
+
+        /* === Footer === */
+        .iss-footer {
+            background: linear-gradient(180deg, #153aa9 0%, #102b96 100%);
+            color: #dbeafe;
+            text-align: center;
+            padding: 16px 20px;
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            letter-spacing: 0.02em;
+        }
+        .iss-footer strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .iss-footer a {
+            color: #7dd3fc;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .iss-footer a:hover {
+            color: #bae6fd;
+        }
+
+        /* === Responsive === */
+        @@media (max-width: 768px) {
+            .iss-header-content { flex-direction: column; text-align: center; gap: 16px; padding: 16px 18px 20px; }
+            .iss-header-center { justify-content: center; width: 100%; }
+            .iss-title-block h1, .iss-title-block h2 { text-align: center; }
+            .iss-header-right { align-items: center; min-width: 0; width: 100%; }
+            .iss-header-logo { margin: 0 auto; max-width: 200px; }
+            .iss-main-nav { padding: 8px 12px 12px; }
+            .iss-main-nav ul { flex-wrap: wrap; justify-content: center; }
+            .iss-main-nav li a { padding: 8px 14px; font-size: 12px; }
+            .iss-content { padding: 16px 14px 24px; }
+        }
+
+        /* === Tooltip-like notes === */
+        .note-bubble {
+            background: linear-gradient(180deg, #fffbeb 0%, #fef9c3 100%);
+            border: 1px solid #fde047;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: #713f12;
+            position: relative;
+            display: inline-block;
+            margin-top: 6px;
+            box-shadow: 0 2px 8px rgba(113, 63, 18, 0.08);
+        }
+        .note-bubble::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid #fde047;
+        }
+
+        /* === Enter manually badge === */
+        .manual-input-badge {
+            background: linear-gradient(180deg, #fed7aa, #fdba74);
+            color: #9a3412;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+            box-shadow: 0 1px 2px rgba(154, 52, 18, 0.12);
+        }
+
+        /* === Global Language Toggle === */
+        body:not(.lang-jp-active) .lang-jp { display: none !important; }
+        body.lang-jp-active .lang-vi { display: none !important; }
+        body.lang-jp-active .iss-main-nav li a .nav-jp {
+            display: inline;
+            margin-top: 0;
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            letter-spacing: 0;
+        }
+        body.lang-jp-active .iss-sub-nav li a .sub-jp {
+            margin-left: 0;
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            letter-spacing: 0;
+        }
+
+        /* === Error list priority view === */
+        body.iss-error-list-page .iss-content {
+            max-width: none;
+            width: 100%;
+            padding: 16px 14px 28px;
+        }
+        body.iss-error-list-page .iss-card {
+            border-radius: 10px;
+            box-shadow: 0 12px 34px rgba(16, 43, 150, 0.12), 0 0 0 1px rgba(20, 55, 176, 0.08);
+        }
+        body.iss-error-list-page .iss-card-header {
+            padding: 14px 18px;
+            background: linear-gradient(180deg, #ffffff 0%, #edf4ff 100%);
+            border-left-width: 6px;
+        }
+        body.iss-error-list-page .iss-card-body {
+            padding: 0;
+        }
+        body.iss-error-list-page .iss-table-wrapper {
+            max-height: calc(100vh - 250px) !important;
+            border-radius: 0 0 10px 10px;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 0;
+        }
+        body.iss-error-list-page .iss-table {
+            font-size: 14px;
+        }
+        body.iss-error-list-page .iss-table thead th {
+            padding: 12px 9px;
+            font-size: 12px;
+            line-height: 1.25;
+            background: linear-gradient(180deg, #1f58dc 0%, #102b96 100%);
+        }
+        body.iss-error-list-page .iss-table tbody td {
+            padding: 11px 9px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #102033;
+        }
+        body.iss-error-list-page .iss-table tbody tr {
+            transition: background 0.15s ease, box-shadow 0.15s ease;
+        }
+        body.iss-error-list-page .iss-table tbody tr:hover {
+            box-shadow: inset 4px 0 0 #2457d6;
+        }
+        body.iss-error-list-page .note-bubble {
+            margin-bottom: 10px;
+        }
+
+        @@media (max-width: 768px) {
+            body.iss-error-list-page .iss-content { padding: 12px 8px 22px; }
+        }
+
+        .iss-main-nav li a:focus-visible,
+        .iss-sub-nav li a:focus-visible {
+            outline: 2px solid #7dd3fc;
+            outline-offset: 2px;
+        }
+        .iss-lang-toggle:focus-visible {
+            outline: 2px solid #fde68a;
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+<body class="@(isErrorListPage ? "iss-error-list-page" : "")">
+    <!-- Header -->
+    <div class="iss-header">
+        <div class="iss-header-content">
+            <div class="iss-header-left">
+                <img src="@Url.Content("~/Content/download.png")" alt="Brother" class="iss-header-logo" />
+            </div>
+
+            <div class="iss-header-center">
+                <div class="iss-title-block">
+                    <h1>Intelligent Support System</h1>
+                    <h2>R&amp;D Dept. DE section</h2>
+                </div>
+            </div>
+
+            <div class="iss-header-right">
+                <button type="button" id="globalBtnToggleLang" class="iss-lang-toggle" onclick="toggleGlobalLang()">
+                    <i class="fa-solid fa-language"></i>日本語
+                </button>
+                <div class="iss-user-info"><i class="fa-solid fa-user"></i><span class="lang-vi">Người dùng:</span><span class="lang-jp">ユーザー:</span> <strong>@currentUser</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="iss-main-nav">
+        <div class="iss-main-nav-inner">
+        <ul>
+            <li>
+                <a href="@Url.Action("Index", "ErrorAnalysis")" class="@(ViewContext.RouteData.Values["controller"].ToString() == "ErrorAnalysis" ? "active" : "")">
+                    <i class="fa-solid fa-magnifying-glass-chart nav-icon"></i><span class="lang-vi">Phân tích lỗi</span> <span class="lang-jp nav-jp">故障分析</span>
+                </a>
+            </li>
+            <li><a href="#"><i class="fa-solid fa-volume-high nav-icon"></i><span class="lang-vi">Phân tích tiếng kêu</span> <span class="lang-jp nav-jp">異音分析</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-image nav-icon"></i><span class="lang-vi">Phân tích hình ảnh</span> <span class="lang-jp nav-jp">画像解析</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-triangle-exclamation nav-icon"></i><span class="lang-vi">Mã lỗi</span> <span class="lang-jp nav-jp">エラーコード</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-map-location-dot nav-icon"></i><span class="lang-vi">RIP MAP</span> <span class="lang-jp nav-jp">RIP MAP</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-route nav-icon"></i><span class="lang-vi">ROLLER MAP</span> <span class="lang-jp nav-jp">ROLLER MAP</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-gears nav-icon"></i><span class="lang-vi">Thông tin linh kiện</span> <span class="lang-jp nav-jp">部品情報</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-cube nav-icon"></i><span class="lang-vi">Thông tin sản phẩm</span> <span class="lang-jp nav-jp">製品情報</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-clipboard-question nav-icon"></i><span class="lang-vi">Thông tin điều tra</span> <span class="lang-jp nav-jp">調査情報</span></a></li>
+            <li><a href="#"><i class="fa-solid fa-screwdriver-wrench nav-icon"></i><span class="lang-vi">Chức năng</span> <span class="lang-jp nav-jp">機能</span></a></li>
+        </ul>
+        </div>
+    </nav>
+
+    <!-- Sub Navigation - context specific -->
+    @if (ViewContext.RouteData.Values["controller"].ToString() == "ErrorAnalysis")
+    {
+        <nav class="iss-sub-nav">
+            <div class="iss-sub-nav-inner">
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "ErrorAnalysis")"
+                       class="@(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">
+                        <i class="fa-solid fa-table-list nav-icon"></i><span class="lang-vi">Danh sách lỗi</span> <span class="lang-jp sub-jp">エラー一覧</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Create", "ErrorAnalysis")"
+                       class="@(ViewContext.RouteData.Values["action"].ToString() == "Create" ? "active" : "")">
+                        <i class="fa-solid fa-plus nav-icon"></i><span class="lang-vi">Thêm mới</span> <span class="lang-jp sub-jp">新規登録</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Search", "ErrorAnalysis")"
+                       class="@(ViewContext.RouteData.Values["action"].ToString() == "Search" ? "active" : "")">
+                        <i class="fa-solid fa-magnifying-glass nav-icon"></i><span class="lang-vi">Tìm kiếm</span> <span class="lang-jp sub-jp">検索</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Chart", "ErrorAnalysis")"
+                       class="@(ViewContext.RouteData.Values["action"].ToString() == "Chart" ? "active" : "")">
+                        <i class="fa-solid fa-chart-column nav-icon"></i><span class="lang-vi">Biểu đồ</span> <span class="lang-jp sub-jp">統計グラフ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("LookupManagement", "ErrorAnalysis")"
+                       class="@(ViewContext.RouteData.Values["action"].ToString() == "LookupManagement" ? "active" : "")">
+                        <i class="fa-solid fa-sliders nav-icon"></i><span class="lang-vi">Quản lý danh mục</span> <span class="lang-jp sub-jp">マスタ管理</span>
+                    </a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+    }
+
+    <!-- Content -->
+    <div class="iss-content">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <div class="iss-footer">
+        &copy; @DateTime.Now.Year <strong>BIVN Brother</strong> | R&amp;D Dept. DE section | Intelligent Support System v1.0
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
+    <script>
+        function toggleGlobalLang() {
+            var isJp = document.body.classList.toggle('lang-jp-active');
+            localStorage.setItem('isJp', isJp);
+            updateToggleBtnLabel(isJp);
+        }
+        function updateToggleBtnLabel(isJp) {
+            var btn = document.getElementById('globalBtnToggleLang');
+            if (btn) btn.innerHTML = isJp
+                ? '<i class="fa-solid fa-language"></i>Tiếng Việt'
+                : '<i class="fa-solid fa-language"></i>日本語';
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem('isJp') === 'true') {
+                document.body.classList.add('lang-jp-active');
+                updateToggleBtnLabel(true);
+            }
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,170 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class PartMasterLookupResult
+    {
+        public string Material { get; set; }
+        public string Description { get; set; }
+        public List<string> Vendors { get; set; }
+    }
+
+    public static class PartMasterLookupService
+    {
+        private const string ExcelPath = @"\\apbivnsh15\COMMON\90_Temporary\R&D-DE\Phan tich tieng keu_異音解析\TOTAL LIST PART 08.04.2026.xls";
+        private const string ExcelReaderDllPath = @"packages\ExcelDataReader.3.7.0\lib\net462\ExcelDataReader.dll";
+        private static readonly object SyncRoot = new object();
+        private static List<PartMasterRow> _cachedRows;
+        private static DateTime _cacheExpiresAt = DateTime.MinValue;
+
+        public static PartMasterLookupResult GetPartInfo(string material)
+        {
+            var code = (material ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(code) || !File.Exists(ExcelPath))
+            {
+                return new PartMasterLookupResult
+                {
+                    Material = code,
+                    Description = string.Empty,
+                    Vendors = new List<string>()
+                };
+            }
+
+            var rows = GetCachedPartRows()
+                .Where(x => string.Equals(x.Material, code, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return new PartMasterLookupResult
+            {
+                Material = code,
+                Description = rows.Select(x => x.Description).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x)) ?? string.Empty,
+                Vendors = rows.Select(x => x.Vendor)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(x => x)
+                    .ToList()
+            };
+        }
+
+        private static List<PartMasterRow> GetCachedPartRows()
+        {
+            if (_cachedRows != null && DateTime.Now <= _cacheExpiresAt)
+            {
+                return _cachedRows;
+            }
+
+            lock (SyncRoot)
+            {
+                if (_cachedRows != null && DateTime.Now <= _cacheExpiresAt)
+                {
+                    return _cachedRows;
+                }
+
+                _cachedRows = ReadPartRows();
+                _cacheExpiresAt = DateTime.Now.AddMinutes(10);
+                return _cachedRows;
+            }
+        }
+
+        private static List<PartMasterRow> ReadPartRows()
+        {
+            var rows = new List<PartMasterRow>();
+            var dllPhysicalPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ExcelReaderDllPath);
+            if (!File.Exists(dllPhysicalPath))
+            {
+                return rows;
+            }
+
+            var assembly = Assembly.LoadFrom(dllPhysicalPath);
+            var factoryType = assembly.GetType("ExcelDataReader.ExcelReaderFactory", throwOnError: false);
+            if (factoryType == null)
+            {
+                return rows;
+            }
+
+            var createReaderMethod = factoryType.GetMethod("CreateReader", new[] { typeof(Stream) });
+            if (createReaderMethod == null)
+            {
+                return rows;
+            }
+
+            using (var stream = File.Open(ExcelPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var reader = createReaderMethod.Invoke(null, new object[] { stream }) as IDisposable)
+            {
+                if (reader == null)
+                {
+                    return rows;
+                }
+
+                var readerType = reader.GetType();
+                var readMethod = readerType.GetMethod("Read");
+                var getValueMethod = readerType.GetMethod("GetValue");
+                var fieldCountProperty = readerType.GetProperty("FieldCount");
+
+                var isHeaderRow = true;
+                var materialIndex = -1;
+                var descriptionIndex = -1;
+                var vendorIndex = -1;
+
+                while ((bool)readMethod.Invoke(reader, null))
+                {
+                    var fieldCount = (int)fieldCountProperty.GetValue(reader, null);
+
+                    if (isHeaderRow)
+                    {
+                        for (var i = 0; i < fieldCount; i++)
+                        {
+                            var header = Convert.ToString(getValueMethod.Invoke(reader, new object[] { i })).Trim();
+                            if (string.Equals(header, "MATERIAL", StringComparison.OrdinalIgnoreCase))
+                            {
+                                materialIndex = i;
+                            }
+                            else if (string.Equals(header, "DESCRIPTION (EN)", StringComparison.OrdinalIgnoreCase))
+                            {
+                                descriptionIndex = i;
+                            }
+                            else if (string.Equals(header, "VENDOR NAME", StringComparison.OrdinalIgnoreCase))
+                            {
+                                vendorIndex = i;
+                            }
+                        }
+
+                        isHeaderRow = false;
+                        continue;
+                    }
+
+                    if (materialIndex < 0 || descriptionIndex < 0 || vendorIndex < 0)
+                    {
+                        continue;
+                    }
+
+                    var material = Convert.ToString(getValueMethod.Invoke(reader, new object[] { materialIndex })).Trim();
+                    if (string.IsNullOrWhiteSpace(material))
+                    {
+                        continue;
+                    }
+
+                    rows.Add(new PartMasterRow
+                    {
+                        Material = material,
+                        Description = Convert.ToString(getValueMethod.Invoke(reader, new object[] { descriptionIndex })).Trim(),
+                        Vendor = Convert.ToString(getValueMethod.Invoke(reader, new object[] { vendorIndex })).Trim()
+                    });
+                }
+            }
+
+            return rows;
+        }
+
+        private class PartMasterRow
+        {
+            public string Material { get; set; }
+            public string Description { get; set; }
+            public string Vendor { get; set; }
+        }
+    }
+}

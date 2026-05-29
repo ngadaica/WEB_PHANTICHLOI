@@ -1,0 +1,301 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@using WEB_PHANTICHLOI.Models
+@using System
+@{
+    ViewBag.Title = "Chi tiết lỗi #" + (string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber);
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+    var hasInvestigationRange = Model.InvestigationStartTime.HasValue && Model.InvestigationEndTime.HasValue && Model.InvestigationEndTime.Value >= Model.InvestigationStartTime.Value;
+    double? investigationDays = null;
+    double? nightBreakHours = null;
+    double? dayBreakHours = null;
+    int? nightShiftDays = Model.NightShiftDays;
+
+    if (hasInvestigationRange)
+    {
+        var start = Model.InvestigationStartTime.Value;
+        var end = Model.InvestigationEndTime.Value;
+        investigationDays = (end - start).TotalDays;
+
+        var dayDiff = (end.Date - start.Date).Days;
+        var nightShiftValue = start.TimeOfDay > new TimeSpan(19, 30, 0)
+            ? dayDiff - 1
+            : dayDiff - (end < start.Date.AddDays(1).Add(new TimeSpan(7, 30, 0)) ? 1 : 0);
+        nightShiftDays = Math.Max(0, nightShiftValue);
+
+        nightBreakHours = start.TimeOfDay > new TimeSpan(17, 30, 0)
+            ? (TimeSpan.FromDays(1) - start.TimeOfDay + new TimeSpan(7, 50, 0)).TotalHours
+            : (TimeSpan.FromDays(1) - new TimeSpan(17, 30, 0) + new TimeSpan(7, 50, 0)).TotalHours;
+
+        var breaks = new[]
+        {
+            new { Start = new TimeSpan(10, 0, 0), End = new TimeSpan(10, 10, 0) },
+            new { Start = new TimeSpan(12, 0, 0), End = new TimeSpan(12, 40, 0) },
+            new { Start = new TimeSpan(15, 0, 0), End = new TimeSpan(15, 10, 0) }
+        };
+        var totalBreakTime = TimeSpan.FromHours(dayDiff + 1);
+        foreach (var breakTime in breaks)
+        {
+            totalBreakTime -= TimeSpan.FromTicks(Math.Max(0, (start.TimeOfDay < breakTime.End ? start.TimeOfDay : breakTime.End).Ticks - breakTime.Start.Ticks));
+            totalBreakTime -= TimeSpan.FromTicks(Math.Max(0, breakTime.End.Ticks - (end.TimeOfDay > breakTime.Start ? end.TimeOfDay : breakTime.Start).Ticks));
+        }
+        dayBreakHours = Math.Max(0, totalBreakTime.TotalHours);
+    }
+}
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; <span class="lang-vi">Quay lại danh sách</span><span class="lang-jp">一覧に戻る</span>
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a;"><span class="lang-vi">Chi tiết lỗi</span><span class="lang-jp">不良詳細</span> #@(string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber)</span>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn-iss btn-iss-warning" style="font-size:12px; padding:5px 14px; text-decoration:none; margin-left:auto;">
+        &#9998; <span class="lang-vi">Chỉnh sửa</span><span class="lang-jp">編集</span>
+    </a>
+</div>
+
+<!-- Thông tin cơ bản -->
+<div class="iss-card">
+    <div class="iss-card-header blue">
+        <span>&#128203;</span> <span class="lang-vi">Thông tin cơ bản</span><span class="lang-jp">基本情報</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Số quản lý</span><span class="lang-jp">管理No</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber)</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PersonInCharge</td>
+            </tr>
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Hiện tượng</span><span class="lang-jp">現象</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.Phenomenon</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Nội dung vấn đề</span><span class="lang-jp">問題内容</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.ProblemContent</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Chủng loại</span><span class="lang-jp">種類</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; width:32%;">@WEB_PHANTICHLOI.Controllers.ErrorAnalysisController.GetCategoryDisplayValue(Model.Category)</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0; width:18%;"><span class="lang-vi">Model</span><span class="lang-jp">機種</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Model</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Nhà máy</span><span class="lang-jp">工場</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Factory</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Chuyền</span><span class="lang-jp">ライン</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Line</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Phân loại giai đoạn</span><span class="lang-jp">ステージ種別</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.StageClassification</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.OccurrenceProcess</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Ngày phát sinh</span><span class="lang-jp">発生日</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.OccurrenceDate.HasValue ? Model.OccurrenceDate.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Số máy phát sinh</span><span class="lang-jp">発生台数</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.OccurrenceCount</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Người điều tra</span><span class="lang-jp">調査担当</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.Investigator</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">B-action</td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; word-break:break-all;">
+                    @if (ErrorAnalysisDisplayHelper.IsAbsoluteUrl(Model.BAction))
+                    {
+                        <a href="@Model.BAction" target="_blank" style="color:#1565c0; text-decoration:underline;">@Model.BAction</a>
+                    }
+                    else
+                    {
+                        @Model.BAction
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Dừng xuất xưởng</span><span class="lang-jp">出荷停止</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.ShipmentStop</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian dừng chuyền</span><span class="lang-jp">ライン停止時間</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.LineStopTime</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Thông tin linh kiện liên quan -->
+<div class="iss-card">
+    <div class="iss-card-header green">
+        <span>&#128270;</span> <span class="lang-vi">Thông tin linh kiện liên quan</span><span class="lang-jp">関係部品の情報</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            @for (var i = 1; i <= 5; i++)
+            {
+                var code = Convert.ToString(ViewData.Eval("PartCode" + i));
+                var name = Convert.ToString(ViewData.Eval("PartName" + i));
+                var supplier = Convert.ToString(ViewData.Eval("PartSupplier" + i));
+                var cav = Convert.ToString(ViewData.Eval("PartCav" + i));
+                var lot = Convert.ToString(ViewData.Eval("PartLot" + i));
+
+                if (!string.IsNullOrWhiteSpace(code) || !string.IsNullOrWhiteSpace(name) || !string.IsNullOrWhiteSpace(supplier) || !string.IsNullOrWhiteSpace(cav) || !string.IsNullOrWhiteSpace(lot))
+                {
+                    <tr>
+                        <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Linh kiện @i</span><span class="lang-jp">部品@i</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">
+                            <div><strong>Code:</strong> @code</div>
+                            <div><strong>Name:</strong> @name</div>
+                            <div><strong>Supplier:</strong> @supplier</div>
+                            <div><strong>CAV:</strong> @cav</div>
+                            <div><strong>Lot:</strong> @lot</div>
+                        </td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Tiến độ điều tra</span><span class="lang-jp">調査進捗</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.InvestigationProgress</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Phân loại nguyên nhân</span><span class="lang-jp">原因分離</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.CauseClassification</td>
+            </tr>
+            @if (!string.IsNullOrWhiteSpace(Model.CauseDescription))
+            {
+                <tr>
+                    <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;">Note</td>
+                    <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.CauseDescription</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<!-- Nguyên nhân -->
+<div class="iss-card">
+    <div class="iss-card-header orange">
+        <span>&#128269;</span> <span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="width:18%; padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.DetailedCause</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Bắt đầu điều tra</span><span class="lang-jp">調査開始</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0; width:32%;">@(Model.InvestigationStartTime.HasValue ? Model.InvestigationStartTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0; width:18%;"><span class="lang-vi">Kết thúc điều tra</span><span class="lang-jp">原因決定時間</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.InvestigationEndTime.HasValue ? Model.InvestigationEndTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian điều tra (h)</span><span class="lang-jp">調査時間 (h)</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;" colspan="3">@Model.InvestigationHours</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Số ngày điều tra</span><span class="lang-jp">調査日数</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(investigationDays.HasValue ? investigationDays.Value.ToString("0.##") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Số ngày nghỉ</span><span class="lang-jp">休日数</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.DaysOff</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Số ngày ca đêm</span><span class="lang-jp">夜勤日数</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">
+                    <div>@(nightShiftDays.HasValue ? nightShiftDays.Value.ToString() : "-")</div>
+                    <div class="formula-display" style="margin-top:6px;">(Bao gồm cả ca đêm ngày nghỉ)</div>
+                </td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian nghỉ ca đêm (h)</span><span class="lang-jp">夜勤休憩時間 (h)</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(nightBreakHours.HasValue ? nightBreakHours.Value.ToString("0.##") : "-")</td>
+            </tr>
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian nghỉ giải lao ca ngày (h)</span><span class="lang-jp">昼勤休憩時間 (h)</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(dayBreakHours.HasValue ? dayBreakHours.Value.ToString("0.##") : "-")</td>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian chờ đo, đánh giá bổ sung (h)</span><span class="lang-jp">測定・追加評価待ち時間 (h)</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.MeasurementWaitHours</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Hành động -->
+<div class="iss-card">
+    <div class="iss-card-header purple">
+        <span>&#128300;</span> <span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span>
+    </div>
+    <div class="iss-card-body">
+        <table style="width:100%; font-size:13px;">
+            <tr>
+                <td style="padding:6px; font-weight:600; color:#37474f; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span></td>
+                <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.NextAction</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Đối sách -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="iss-card">
+            <div class="iss-card-header teal">
+                <span>&#128736;</span> <span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span>
+            </div>
+            <div class="iss-card-body">
+                <table style="width:100%; font-size:13px;">
+                    <tr>
+                        <td style="width:40%; padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Phân loại</span><span class="lang-jp">分類</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.TemporaryMeasureClassification</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian thực hiện</span><span class="lang-jp">実施時期</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.TemporaryMeasureDate.HasValue ? Model.TemporaryMeasureDate.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Chi tiết</span><span class="lang-jp">詳細</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.TemporaryMeasureDetail</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="iss-card">
+            <div class="iss-card-header red">
+                <span>&#128681;</span> <span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span>
+            </div>
+            <div class="iss-card-body">
+                <table style="width:100%; font-size:13px;">
+                    <tr>
+                        <td style="width:40%; padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Phân loại</span><span class="lang-jp">分類</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PermanentMeasureClassification</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Thời gian thực hiện</span><span class="lang-jp">実施時期</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@(Model.PermanentMeasureDate.HasValue ? Model.PermanentMeasureDate.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:6px; font-weight:600; background:#f5f7fa; border-bottom:1px solid #e0e0e0;"><span class="lang-vi">Chi tiết</span><span class="lang-jp">詳細</span></td>
+                        <td style="padding:6px; border-bottom:1px solid #e0e0e0;">@Model.PermanentMeasureDetail</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.AttachmentPath))
+{
+    <div class="iss-card">
+        <div class="iss-card-header brown">
+            <span>&#128206;</span> <span class="lang-vi">Báo cáo đính kèm</span><span class="lang-jp">添付レポート</span>
+        </div>
+        <div class="iss-card-body">
+            @foreach (var attachmentPath in ErrorAnalysisDisplayHelper.GetAttachmentPaths(Model.AttachmentPath))
+            {
+                <div>
+                    <a href="@Url.Content(attachmentPath)" target="_blank" title="@ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath, 200)">
+                        &#128196; @ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath)
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div style="margin-bottom:20px;"></div>

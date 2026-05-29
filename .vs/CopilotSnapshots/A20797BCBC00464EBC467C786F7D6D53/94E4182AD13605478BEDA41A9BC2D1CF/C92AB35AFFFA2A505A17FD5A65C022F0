@@ -1,0 +1,268 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WEB_PHANTICHLOI.Models;
+
+namespace WEB_PHANTICHLOI.Controllers
+{
+    public class ErrorAnalysisController : Controller
+    {
+        private readonly ErrorAnalysisSqlRepository _repository = new ErrorAnalysisSqlRepository();
+
+        public ActionResult Index()
+        {
+            var errors = _repository.GetAll();
+            return View(errors);
+        }
+
+        public ActionResult Create()
+        {
+            PopulateLookupData();
+            return View(new ErrorAnalysis());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(ErrorAnalysis errorAnalysis, HttpPostedFileBase attachment)
+        {
+            PopulateLookupData();
+
+            if (errorAnalysis == null)
+            {
+                ModelState.AddModelError(string.Empty, "Không đọc được dữ liệu từ form gửi lên.");
+                return View(new ErrorAnalysis());
+            }
+
+            SaveAttachment(errorAnalysis, attachment);
+            PrepareDerivedFields(errorAnalysis);
+
+            errorAnalysis.UpdatedBy = "User";
+            errorAnalysis.UpdatedDate = DateTime.Now;
+
+            _repository.Add(errorAnalysis);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var errorAnalysis = _repository.GetById(id);
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            PopulateLookupData();
+            return View(errorAnalysis);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ErrorAnalysis errorAnalysis, HttpPostedFileBase attachment)
+        {
+            PopulateLookupData();
+
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            var existing = _repository.GetById(errorAnalysis.Id);
+            if (existing == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (attachment != null && attachment.ContentLength > 0)
+            {
+                SaveAttachment(errorAnalysis, attachment);
+            }
+            else
+            {
+                errorAnalysis.AttachmentPath = existing.AttachmentPath;
+            }
+
+            PrepareDerivedFields(errorAnalysis);
+
+            errorAnalysis.UpdatedBy = "User";
+            errorAnalysis.UpdatedDate = DateTime.Now;
+
+            _repository.Update(errorAnalysis);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            _repository.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Details(int id)
+        {
+            var errorAnalysis = _repository.GetById(id);
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(errorAnalysis);
+        }
+
+        public ActionResult Search(string keyword, string factory, string status, string model)
+        {
+            var errors = _repository.Search(keyword, factory, status, model);
+
+            ViewBag.Keyword = keyword;
+            ViewBag.FactoryFilter = factory;
+            ViewBag.StatusFilter = status;
+            ViewBag.ModelFilter = model;
+            ViewBag.FactoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Factory, "-- Tất cả --");
+            ViewBag.ProgressOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.InvestigationProgress, "-- Tất cả --");
+
+            return View("Search", errors);
+        }
+
+        public ActionResult Chart()
+        {
+            var errors = _repository.GetAll() ?? new List<ErrorAnalysis>();
+
+            var progressItems = BuildChartItems(errors, x => x.InvestigationProgress);
+            var causeItems = BuildChartItems(errors, x => x.CauseClassification);
+            var investigatorItems = BuildChartItems(errors, x => x.Investigator, 10);
+            var factoryItems = BuildChartItems(errors, x => x.Factory);
+            var modelItems = BuildChartItems(errors, x => x.Model, 10);
+            var monthlyItems = BuildMonthlyItems(errors);
+
+            var viewModel = new ErrorAnalysisChartViewModel
+            {
+                TotalCount = errors.Count,
+
+                ProgressLabels = progressItems.Select(x => x.Label).ToList(),
+                ProgressData = progressItems.Select(x => x.Value).ToList(),
+
+                CauseLabels = causeItems.Select(x => x.Label).ToList(),
+                CauseData = causeItems.Select(x => x.Value).ToList(),
+
+                InvestigatorLabels = investigatorItems.Select(x => x.Label).ToList(),
+                InvestigatorData = investigatorItems.Select(x => x.Value).ToList(),
+
+                FactoryLabels = factoryItems.Select(x => x.Label).ToList(),
+                FactoryData = factoryItems.Select(x => x.Value).ToList(),
+
+                ModelLabels = modelItems.Select(x => x.Label).ToList(),
+                ModelData = modelItems.Select(x => x.Value).ToList(),
+
+                MonthlyLabels = monthlyItems.Select(x => x.Label).ToList(),
+                MonthlyData = monthlyItems.Select(x => x.Value).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        private void PopulateLookupData()
+        {
+            ViewBag.StageOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.StageClassification, "-- Chọn --");
+            ViewBag.ProcessOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.OccurrenceProcess, "-- Chọn --");
+            ViewBag.ProgressOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.InvestigationProgress, "-- Chọn --");
+            ViewBag.CauseOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.CauseClassification, "-- Chọn --");
+            ViewBag.TempMeasureOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.TemporaryMeasureClassification, "-- Chọn --");
+            ViewBag.PermMeasureOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.PermanentMeasureClassification, "-- Chọn --");
+            ViewBag.FactoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Factory, "-- Chọn --");
+            ViewBag.BActionOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.BAction, "-- Chọn --");
+            ViewBag.ShipmentStopOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ShipmentStop, "-- Chọn --");
+            ViewBag.InvestigatorOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Investigator, "-- Chọn --");
+            ViewBag.CategoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Category, "-- Chọn --");
+            ViewBag.ModelOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Model, "-- Chọn --");
+            ViewBag.PhenomenonOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Phenomenon, "-- Chọn --");
+            ViewBag.ChronicDefectOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ChronicDefect, "-- Chọn --");
+        }
+
+        private void SaveAttachment(ErrorAnalysis errorAnalysis, HttpPostedFileBase attachment)
+        {
+            if (attachment == null || attachment.ContentLength <= 0)
+            {
+                return;
+            }
+
+            var fileName = System.IO.Path.GetFileName(attachment.FileName);
+            var uploadFolder = Server.MapPath("~/Uploads");
+            var path = System.IO.Path.Combine(uploadFolder, fileName);
+
+            if (!System.IO.Directory.Exists(uploadFolder))
+            {
+                System.IO.Directory.CreateDirectory(uploadFolder);
+            }
+
+            attachment.SaveAs(path);
+            errorAnalysis.AttachmentPath = "~/Uploads/" + fileName;
+        }
+
+        private void PrepareDerivedFields(ErrorAnalysis errorAnalysis)
+        {
+            errorAnalysis.Status = errorAnalysis.InvestigationProgress;
+            errorAnalysis.OccurrencePeriod = errorAnalysis.OccurrenceDate.HasValue
+                ? errorAnalysis.OccurrenceDate.Value.ToString("dd/MM/yyyy")
+                : null;
+
+            errorAnalysis.PersonInCharge = errorAnalysis.Investigator;
+            errorAnalysis.ImageStatus = errorAnalysis.Phenomenon;
+            errorAnalysis.NextActionSummary = errorAnalysis.NextAction;
+            errorAnalysis.TemporaryMeasureSummary = errorAnalysis.TemporaryMeasureDetail;
+            errorAnalysis.PermanentMeasureSummary = errorAnalysis.PermanentMeasureDetail;
+            errorAnalysis.BActionStatus = errorAnalysis.BAction;
+        }
+
+        private static List<ChartItem> BuildChartItems(IEnumerable<ErrorAnalysis> errors, Func<ErrorAnalysis, string> selector, int take = 0)
+        {
+            IEnumerable<ChartItem> query = errors
+                .GroupBy(x => NormalizeLabel(selector(x)))
+                .Select(x => new ChartItem
+                {
+                    Label = x.Key,
+                    Value = x.Count()
+                })
+                .OrderByDescending(x => x.Value)
+                .ThenBy(x => x.Label);
+
+            if (take > 0)
+            {
+                query = query.Take(take);
+            }
+
+            return query.ToList();
+        }
+
+        private static List<ChartItem> BuildMonthlyItems(IEnumerable<ErrorAnalysis> errors)
+        {
+            return errors
+                .Where(x => x.OccurrenceDate.HasValue)
+                .GroupBy(x => new
+                {
+                    x.OccurrenceDate.Value.Year,
+                    x.OccurrenceDate.Value.Month
+                })
+                .OrderBy(x => x.Key.Year)
+                .ThenBy(x => x.Key.Month)
+                .Select(x => new ChartItem
+                {
+                    Label = x.Key.Month.ToString("00") + "/" + x.Key.Year,
+                    Value = x.Count()
+                })
+                .ToList();
+        }
+
+        private static string NormalizeLabel(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? "Chưa cập nhật" : value;
+        }
+
+        private class ChartItem
+        {
+            public string Label { get; set; }
+            public int Value { get; set; }
+        }
+    }
+}

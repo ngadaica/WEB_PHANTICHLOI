@@ -1,0 +1,241 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    [Table("ErrorAnalyses")]
+    public class ErrorAnalysis
+    {
+        public int Id { get; set; }
+
+        // Thông tin cơ bản 基本情報
+        [Display(Name = "Hiện tượng 現象")]
+        public string Phenomenon { get; set; }
+
+        [Display(Name = "Nội dung vấn đề 問題内容")]
+        public string ProblemContent { get; set; }
+
+        [Display(Name = "Chủng loại")]
+        public string Category { get; set; }
+
+        [Display(Name = "Model")]
+        public string Model { get; set; }
+
+        [Display(Name = "Phân loại giai đoạn ステージ種別")]
+        public string StageClassification { get; set; }
+
+        [Display(Name = "Công đoạn phát sinh 発生工程")]
+        public string OccurrenceProcess { get; set; }
+
+        [Display(Name = "Chuyền ライン")]
+        public string Line { get; set; }
+
+        [Display(Name = "Số máy phát sinh 発生台数")]
+        public int? OccurrenceCount { get; set; }
+
+        [Display(Name = "Ngày giờ phát sinh 発生日")]
+        [DataType(DataType.Date)]
+        public DateTime? OccurrenceDate { get; set; }
+
+        [Display(Name = "Dừng xuất xưởng 出荷停止")]
+        public string ShipmentStop { get; set; }
+
+        [Display(Name = "Người điều tra 調査担当")]
+        public string Investigator { get; set; }
+
+        [Display(Name = "B-action")]
+        public string BAction { get; set; }
+
+        [Display(Name = "Lỗi mãn tính 慢性不良")]
+        public string ChronicDefect { get; set; }
+
+        [Display(Name = "Thời gian dừng chuyền ライン停止時間")]
+        public string LineStopTime { get; set; }
+
+        // Nội dung điều tra 調査内容
+        [Display(Name = "Nội dung điều tra 調査内容")]
+        public string InvestigationContent { get; set; }
+
+        [Display(Name = "Mã linh kiện 1 部品コード1")]
+        public string PartCode1 { get; set; }
+
+        [Display(Name = "Tên linh kiện 1 部品名前")]
+        public string PartName1 { get; set; }
+
+        [Display(Name = "Mã linh kiện 2 部品コード2")]
+        public string PartCode2 { get; set; }
+
+        [Display(Name = "Tên linh kiện 2 部品名前")]
+        public string PartName2 { get; set; }
+
+        [Display(Name = "Mã linh kiện 3 部品コード3")]
+        public string PartCode3 { get; set; }
+
+        [Display(Name = "Tên linh kiện 3 部品名前")]
+        public string PartName3 { get; set; }
+
+        [Display(Name = "Tiến độ điều tra 調査進捗")]
+        public string InvestigationProgress { get; set; }
+
+        [Display(Name = "Phân loại nguyên nhân 原因分離")]
+        public string CauseClassification { get; set; }
+
+        // Chi tiết nguyên nhân 詳細原因
+        [Display(Name = "Chi tiết nguyên nhân 詳細原因")]
+        public string DetailedCause { get; set; }
+
+        [Display(Name = "Thời gian bắt đầu điều tra 調査開始時間")]
+        [DataType(DataType.DateTime)]
+        public DateTime? InvestigationStartTime { get; set; }
+
+        [Display(Name = "Thời gian kết thúc điều tra 原因決定時間")]
+        [DataType(DataType.DateTime)]
+        public DateTime? InvestigationEndTime { get; set; }
+
+        [Display(Name = "Số ngày nghỉ")]
+        public int? DaysOff { get; set; }
+
+        [Display(Name = "Số ngày ca đêm")]
+        public int? NightShiftDays { get; set; }
+
+        [Display(Name = "Thời gian điều tra 調査時間 (h)")]
+        public double? InvestigationHours { get; set; }
+
+        // Nội dung phân tích 解析内容
+        [Display(Name = "Nội dung phân tích 解析内容")]
+        public string AnalysisContent { get; set; }
+
+        // Hành động tiếp theo 次のACTION
+        [Display(Name = "Hành động tiếp theo 次のACTION")]
+        public string NextAction { get; set; }
+
+        // Đối sách tạm thời 暫定対策
+        [Display(Name = "Phân loại đối sách tạm thời 暫定対策分類")]
+        public string TemporaryMeasureClassification { get; set; }
+
+        [Display(Name = "Thời gian thực hiện ĐSTT 暫定対策実施時")]
+        [DataType(DataType.Date)]
+        public DateTime? TemporaryMeasureDate { get; set; }
+
+        [Display(Name = "Chi tiết đối sách tạm thời 暫定対策内容")]
+        public string TemporaryMeasureDetail { get; set; }
+
+        // Đối sách cố hữu 恒久対策
+        [Display(Name = "Phân loại đối sách cố hữu 恒久対策分類")]
+        public string PermanentMeasureClassification { get; set; }
+
+        [Display(Name = "Thời gian thực hiện ĐSCH 恒久対策実施時")]
+        [DataType(DataType.Date)]
+        public DateTime? PermanentMeasureDate { get; set; }
+
+        [Display(Name = "Chi tiết đối sách cố hữu 恒久対策内容")]
+        public string PermanentMeasureDetail { get; set; }
+
+        // Báo cáo đính kèm 添付レポート
+        [Display(Name = "Báo cáo đính kèm 添付レポート")]
+        public string AttachmentPath { get; set; }
+
+        // Additional list columns
+        [Display(Name = "Nhà máy 工場")]
+        public string Factory { get; set; }
+
+        [Display(Name = "Tiến độ điều tra")]
+        public string Status { get; set; }
+
+        [Display(Name = "Thời gian phát sinh")]
+        public string OccurrencePeriod { get; set; }
+
+        [Display(Name = "Nhóm チーム")]
+        public string Team { get; set; }
+
+        [Display(Name = "Đảm nhiệm 担当者")]
+        public string PersonInCharge { get; set; }
+
+        [Display(Name = "Hình trang 形象")]
+        public string ImageStatus { get; set; }
+
+        [Display(Name = "Nguyên nhân 原因")]
+        public string CauseDescription { get; set; }
+
+        [Display(Name = "Hành động tiếp theo")]
+        public string NextActionSummary { get; set; }
+
+        [Display(Name = "Phân loại lỗi 不良分類")]
+        public string DefectClassification { get; set; }
+
+        [Display(Name = "Đối sách tạm thời 暫定対策")]
+        public string TemporaryMeasureSummary { get; set; }
+
+        [Display(Name = "Đối sách cố hữu 恒久対策")]
+        public string PermanentMeasureSummary { get; set; }
+
+        [Display(Name = "Thời gian hoàn thành điều tra")]
+        public string InvestigationCompletionTime { get; set; }
+
+        [Display(Name = "Thời gian hoàn thành đối sách")]
+        public string MeasureCompletionTime { get; set; }
+
+        [Display(Name = "Trang thái B-action")]
+        public string BActionStatus { get; set; }
+
+        [Display(Name = "Chia sẻ 共有")]
+        public string Sharing { get; set; }
+
+        [Display(Name = "レポート")]
+        public string Report { get; set; }
+
+        [Display(Name = "Ngày, giờ cập nhật")]
+        [DataType(DataType.DateTime)]
+        public DateTime? UpdatedDate { get; set; }
+
+        [Display(Name = "Người cập nhật")]
+        public string UpdatedBy { get; set; }
+    }
+
+    public static class ErrorAnalysisData
+    {
+        private static List<ErrorAnalysis> _errors;
+
+        public static List<ErrorAnalysis> GetAll()
+        {
+            if (_errors == null)
+            {
+                _errors = new List<ErrorAnalysis>();
+            }
+            return _errors;
+        }
+
+        public static ErrorAnalysis GetById(int id)
+        {
+            return GetAll().Find(e => e.Id == id);
+        }
+
+        public static void Add(ErrorAnalysis error)
+        {
+            var list = GetAll();
+            error.Id = list.Count > 0 ? list.Max(e => e.Id) + 1 : 1;
+            error.UpdatedDate = DateTime.Now;
+            list.Insert(0, error);
+        }
+
+        public static void Update(ErrorAnalysis error)
+        {
+            var list = GetAll();
+            var index = list.FindIndex(e => e.Id == error.Id);
+            if (index >= 0)
+            {
+                error.UpdatedDate = DateTime.Now;
+                list[index] = error;
+            }
+        }
+
+        public static void Delete(int id)
+        {
+            var list = GetAll();
+            list.RemoveAll(e => e.Id == id);
+        }
+    }
+}

@@ -1,0 +1,559 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@using System
+@{
+    ViewBag.Title = "Thêm mới lỗi 追加";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+    var canEditPersonInCharge = ViewBag.CanEditPersonInCharge is bool && (bool)ViewBag.CanEditPersonInCharge;
+}
+
+@helper RenderDateTimePicker(string fieldName, DateTime? value)
+{
+    var displayHour = value.HasValue
+        ? (value.Value.Hour == 0 ? "00" : (value.Value.Hour > 12 ? (value.Value.Hour - 12).ToString("00") : value.Value.Hour.ToString("00")))
+        : "00";
+    var minuteValue = value.HasValue ? value.Value.Minute.ToString("00") : "00";
+    var meridiem = value.HasValue && value.Value.Hour >= 12 ? "PM" : "AM";
+
+    <div class="iss-datetime-picker" data-target-field="@fieldName">
+        <input type="hidden" name="@fieldName" value="@(value.HasValue ? value.Value.ToString("yyyy-MM-ddTHH:mm") : string.Empty)" class="js-datetime-hidden" data-datetime-field="@fieldName" />
+        <div class="iss-datetime-picker-row">
+            <input type="date" class="form-control js-datetime-date" value="@(value.HasValue ? value.Value.ToString("yyyy-MM-dd") : string.Empty)" />
+            <select class="form-control js-datetime-hour">
+                @for (var hour = 0; hour <= 12; hour++)
+                {
+                    var hourText = hour.ToString("00");
+                    <option value="@hourText" @(string.Equals(displayHour, hourText, StringComparison.Ordinal) ? "selected" : null)>@hourText</option>
+                }
+            </select>
+            <span class="iss-datetime-separator">:</span>
+            <select class="form-control js-datetime-minute">
+                @for (var minute = 0; minute < 60; minute++)
+                {
+                    var minuteText = minute.ToString("00");
+                    <option value="@minuteText" @(string.Equals(minuteValue, minuteText, StringComparison.Ordinal) ? "selected" : null)>@minuteText</option>
+                }
+            </select>
+            <select class="form-control js-datetime-meridiem">
+                <option value="AM" @(string.Equals(meridiem, "AM", StringComparison.Ordinal) ? "selected" : null)>AM</option>
+                <option value="PM" @(string.Equals(meridiem, "PM", StringComparison.Ordinal) ? "selected" : null)>PM</option>
+            </select>
+        </div>
+    </div>
+}
+
+<style>
+    .cause-textarea-large {
+        min-height: 180px;
+    }
+
+    .iss-datetime-picker-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .iss-datetime-picker-row .js-datetime-date {
+        flex: 1 1 auto;
+    }
+
+    .iss-datetime-picker-row .js-datetime-hour,
+    .iss-datetime-picker-row .js-datetime-minute,
+    .iss-datetime-picker-row .js-datetime-meridiem {
+        width: 88px;
+        flex: 0 0 auto;
+    }
+
+    .iss-datetime-separator {
+        font-weight: 700;
+        color: #475569;
+    }
+</style>
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; <span class="lang-vi">Quay lại danh sách</span><span class="lang-jp">一覧に戻る</span>
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a; margin-left:10px;"><span class="lang-vi">Thêm mới lỗi</span><span class="lang-jp">新規登録</span></span>
+    <span style="font-size:13px; color:#64748b; margin-left:10px;"><span class="lang-vi">Nhập thông tin phân tích lỗi theo bố cục rõ ràng, chuyên nghiệp và dễ theo dõi.</span><span class="lang-jp">明確でプロフェッショナルなレイアウトで不良分析情報を入力してください。</span></span>
+</div>
+
+@using (Html.BeginForm("Create", "ErrorAnalysis", FormMethod.Post, new { enctype = "multipart/form-data", @class = "iss-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="iss-card">
+        <div class="iss-card-header blue">
+            <span>&#128203;</span> <span class="lang-vi">Thông tin cơ bản</span><span class="lang-jp">基本情報</span>
+        </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Hiện tượng</span><span class="lang-jp">現象</span></label>
+                        @Html.DropDownListFor(m => m.Phenomenon, (List<SelectListItem>)ViewBag.PhenomenonOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Nội dung vấn đề</span><span class="lang-jp">問題内容</span></label>
+                        @Html.TextAreaFor(m => m.ProblemContent, new { @class = "form-control", rows = 3, placeholder = "Mô tả chi tiết vấn đề..." })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Chủng loại</span><span class="lang-jp">種類</span></label>
+                        @Html.DropDownListFor(m => m.Category, (List<SelectListItem>)ViewBag.CategoryOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Model</span><span class="lang-jp">機種</span></label>
+                        @Html.DropDownListFor(m => m.Model, (List<SelectListItem>)ViewBag.ModelOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Dừng xuất xưởng</span><span class="lang-jp">出荷停止</span></label>
+                        @Html.DropDownListFor(m => m.ShipmentStop, (List<SelectListItem>)ViewBag.ShipmentStopOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Người điều tra</span><span class="lang-jp">調査担当</span></label>
+                        @Html.TextBoxFor(m => m.Investigator, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                        <div class="form-hint"><span class="lang-vi">Tự động lấy theo user đang đăng nhập.</span><span class="lang-jp">ログインユーザーから自動取得。</span></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></label>
+                        @if (canEditPersonInCharge)
+                        {
+                            @Html.TextBoxFor(m => m.PersonInCharge, new { @class = "form-control", placeholder = "Nhập người đảm nhiệm..." })
+                            <div class="form-hint"><span class="lang-vi">Bạn có quyền chỉnh sửa người đảm nhiệm bằng nhập tay.</span><span class="lang-jp">担当者を手入力で編集できます。</span></div>
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.PersonInCharge, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                            <div class="form-hint"><span class="lang-vi">Tự động điền theo user đang đăng nhập.</span><span class="lang-jp">ログインユーザーから自動入力。</span></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Phân loại giai đoạn</span><span class="lang-jp">ステージ種別</span></label>
+                        @Html.DropDownListFor(m => m.StageClassification, (List<SelectListItem>)ViewBag.StageOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></label>
+                        @Html.DropDownListFor(m => m.OccurrenceProcess, (List<SelectListItem>)ViewBag.ProcessOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>B-action</label>
+                        @Html.TextBoxFor(m => m.BAction, new { @class = "form-control", placeholder = "Nhập B-action..." })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Trạng thái B-action</span><span class="lang-jp">状態 B-action</span></label>
+                        @Html.DropDownListFor(m => m.BActionStatus, (List<SelectListItem>)ViewBag.BActionStatusOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Nhà máy</span><span class="lang-jp">工場</span></label>
+                        @Html.DropDownListFor(m => m.Factory, (List<SelectListItem>)ViewBag.FactoryOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Chuyền</span><span class="lang-jp">ライン</span></label>
+                        @Html.TextBoxFor(m => m.Line, new { @class = "form-control", placeholder = "Số chuyền..." })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Số máy phát sinh</span><span class="lang-jp">発生台数</span></label>
+                        @Html.TextBoxFor(m => m.OccurrenceCount, new { @class = "form-control", type = "number", placeholder = "0" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Ngày giờ phát sinh</span><span class="lang-jp">発生日</span></label>
+                        @RenderDateTimePicker("OccurrenceDate", Model.OccurrenceDate)
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Lỗi mãn tính</span><span class="lang-jp">慢性不良</span></label>
+                        @Html.DropDownListFor(m => m.ChronicDefect, (List<SelectListItem>)ViewBag.ChronicDefectOptions, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label><span class="lang-vi">Thời gian dừng chuyền</span><span class="lang-jp">ライン停止時間</span> <span class="manual-input-badge"><span class="lang-vi">Nhập tay</span><span class="lang-jp">手入力</span></span></label>
+                        @Html.TextBoxFor(m => m.LineStopTime, new { @class = "form-control", placeholder = "Nhập thời gian dừng chuyền..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header green">
+                <span>&#128270;</span> <span class="lang-vi">Thông tin linh kiện liên quan</span><span class="lang-jp">関係部品の情報</span>
+            </div>
+            <div class="iss-card-body">
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:15px;">
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        var rowStyle = i == 1 ? string.Empty : "display:none;";
+                        <div class="part-row" data-part-row="@i" style="@rowStyle">
+                            <div class="row">
+                                <div class="col-md-2 form-group">
+                                    <label><span class="lang-vi">Mã linh kiện @i</span><span class="lang-jp">部品コード@i</span> <span class="manual-input-badge"><span class="lang-vi">Nhập tay</span><span class="lang-jp">手入力</span></span></label>
+                                    @Html.TextBox("PartCode" + i, ViewData.Eval("PartCode" + i), new { @class = "form-control part-code", placeholder = "Nhập mã linh kiện...", data_part_index = i })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label><span class="lang-vi">Tên linh kiện</span><span class="lang-jp">部品名前</span></label>
+                                    @Html.TextBox("PartName" + i, ViewData.Eval("PartName" + i), new { @class = "form-control form-control-readonly part-name", placeholder = "Tự động hiển thị tên", @readonly = "readonly", data_part_index = i })
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label><span class="lang-vi">Nhà cung cấp</span><span class="lang-jp">仕入先</span></label>
+                                    @Html.DropDownList(
+                                            "PartSupplier" + i,
+                                            new SelectList((IEnumerable<SelectListItem>)ViewBag.SupplierOptions, "Value", "Text", ViewData.Eval("PartSupplier" + i)),
+                                            new { @class = "form-control part-supplier", data_part_index = i, data_selected_value = ViewData.Eval("PartSupplier" + i) })
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label>CAV</label>
+                                    @Html.TextBox("PartCav" + i, ViewData.Eval("PartCav" + i), new { @class = "form-control", placeholder = "Nhập CAV..." })
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <label><span class="lang-vi">Lot linh kiện</span><span class="lang-jp">部品ロット</span></label>
+                                    @Html.TextBox("PartLot" + i, ViewData.Eval("PartLot" + i), new { @class = "form-control", placeholder = "Nhập lot..." })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Tiến độ điều tra</span><span class="lang-jp">調査進捗</span></label>
+                        @Html.DropDownListFor(m => m.InvestigationProgress, (List<SelectListItem>)ViewBag.ProgressOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Phân loại nguyên nhân</span><span class="lang-jp">原因分離</span></label>
+                        @Html.DropDownListFor(m => m.CauseClassification, (List<SelectListItem>)ViewBag.CauseOptions, new { @class = "form-control", id = "causeClassification" })
+                    </div>
+                    <div class="col-md-4 form-group" id="causeNoteGroup" style="display:none;">
+                        <label>Note</label>
+                        @Html.TextBoxFor(m => m.CauseDescription, new { @class = "form-control", placeholder = "Nhập ghi chú..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header orange">
+                <span>&#128269;</span> <span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span></label>
+                        @Html.TextAreaFor(m => m.DetailedCause, new { @class = "form-control cause-textarea-large", rows = 6, placeholder = "Mô tả chi tiết nguyên nhân..." })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Thời gian bắt đầu điều tra</span><span class="lang-jp">調査開始時間</span></label>
+                        @RenderDateTimePicker("InvestigationStartTime", Model.InvestigationStartTime)
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Thời gian kết thúc điều tra</span><span class="lang-jp">原因決定時間</span></label>
+                        @RenderDateTimePicker("InvestigationEndTime", Model.InvestigationEndTime)
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Thời gian chờ đo, đánh giá bổ sung</span><span class="lang-jp">測定・追加評価待ち時間</span> (h)</label>
+                        @Html.TextBoxFor(m => m.MeasurementWaitHours, new { @class = "form-control", type = "number", step = "0.1", min = "0", placeholder = "Nhập số giờ chờ đo...", id = "measurementWaitHours" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Số ngày nghỉ</span><span class="lang-jp">休日数</span></label>
+                        @Html.TextBoxFor(m => m.DaysOff, new { @class = "form-control", type = "number", placeholder = "0", id = "daysOff" })
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label><span class="lang-vi">Số ngày ca đêm</span><span class="lang-jp">夜勤日数</span></label>
+                        @Html.TextBoxFor(m => m.NightShiftDays, new { @class = "form-control", type = "number", placeholder = "0", id = "nightShift" })
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label><span class="lang-vi">Thời gian điều tra</span><span class="lang-jp">調査時間</span> (h)</label>
+                        @Html.TextBoxFor(m => m.InvestigationHours, new { @class = "form-control form-control-readonly", @readonly = "readonly", id = "investigationHours" })
+                        <div class="formula-display" style="margin-top:6px;">
+                            = (Số ngày điều tra - Số ngày nghỉ) x 24 - (Số ngày ca đêm - Số ngày nghỉ) x 15.4 - Thời gian chờ đo, đánh giá bổ sung
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header purple">
+                <span>&#128300;</span> <span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span></label>
+                        @Html.TextAreaFor(m => m.NextAction, new { @class = "form-control", rows = 2, placeholder = "Mô tả hành động tiếp theo..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header teal">
+                <span>&#128736;</span> <span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Phân loại đối sách tạm thời</span><span class="lang-jp">暫定対策分類</span></label>
+                        @Html.DropDownListFor(m => m.TemporaryMeasureClassification, (List<SelectListItem>)ViewBag.TempMeasureOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Thời gian thực hiện ĐSTT</span><span class="lang-jp">暫定対策実施時</span></label>
+                        @RenderDateTimePicker("TemporaryMeasureDate", Model.TemporaryMeasureDate)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Chi tiết đối sách tạm thời</span><span class="lang-jp">暫定対策内容</span></label>
+                        @Html.TextAreaFor(m => m.TemporaryMeasureDetail, new { @class = "form-control", rows = 3, placeholder = "Nhập chi tiết đối sách tạm thời..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header red">
+                <span>&#128681;</span> <span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Phân loại đối sách cố hữu</span><span class="lang-jp">恒久対策分類</span></label>
+                        @Html.DropDownListFor(m => m.PermanentMeasureClassification, (List<SelectListItem>)ViewBag.PermMeasureOptions, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label><span class="lang-vi">Thời gian thực hiện ĐSCH</span><span class="lang-jp">恒久対策実施時</span></label>
+                        @RenderDateTimePicker("PermanentMeasureDate", Model.PermanentMeasureDate)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label><span class="lang-vi">Chi tiết đối sách cố hữu</span><span class="lang-jp">恒久対策内容</span></label>
+                        @Html.TextAreaFor(m => m.PermanentMeasureDetail, new { @class = "form-control", rows = 3, placeholder = "Nhập chi tiết đối sách cố hữu..." })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="iss-card">
+            <div class="iss-card-header brown">
+                <span>&#128206;</span> <span class="lang-vi">Báo cáo đính kèm</span><span class="lang-jp">添付レポート</span>
+            </div>
+            <div class="iss-card-body">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label><span class="lang-vi">Chọn file đính kèm</span><span class="lang-jp">添付ファイル選択</span></label>
+                        <input type="file" name="attachments" class="form-control ea-file-input" multiple />
+                        <div class="ea-inline-note"><span class="lang-vi">Hỗ trợ: PDF, Excel, Word, hình ảnh.</span><span class="lang-jp">対応: PDF, Excel, Word, 画像。</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group-iss">
+            <button type="submit" class="btn-iss btn-iss-primary">
+                <span class="lang-vi">Lưu</span><span class="lang-jp">保存</span>
+            </button>
+            <button type="submit" name="action" value="edit" class="btn-iss btn-iss-warning">
+                <span class="lang-vi">Biên soạn</span><span class="lang-jp">編集</span>
+            </button>
+            <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary">
+                <span class="lang-vi">Hủy biên soạn</span><span class="lang-jp">キャンセル</span>
+            </a>
+        </div>
+
+        <div style="text-align:center; margin-top:16px; margin-bottom:20px;">
+            <div class="note-bubble">
+                <span class="lang-vi">Các thông tin sẽ tự động cập nhật lên danh sách lỗi.</span><span class="lang-jp">情報は自動的に不良一覧に更新されます。</span>
+            </div>
+        </div>
+    }
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var partLookupTimer;
+
+            function syncDateTimeValue(container) {
+                var targetField = container.data('target-field');
+                var hiddenInput = container.find('.js-datetime-hidden');
+                var dateValue = $.trim(container.find('.js-datetime-date').val() || '');
+                var hourValue = parseInt(container.find('.js-datetime-hour').val(), 10);
+                var minuteValue = parseInt(container.find('.js-datetime-minute').val(), 10);
+                var meridiemValue = container.find('.js-datetime-meridiem').val();
+
+                if (!dateValue) {
+                    hiddenInput.val('');
+                    return;
+                }
+
+                if (isNaN(hourValue)) {
+                    hourValue = 0;
+                }
+
+                if (isNaN(minuteValue)) {
+                    minuteValue = 0;
+                }
+
+                var normalizedHour = hourValue;
+                if (meridiemValue === 'AM') {
+                    normalizedHour = hourValue === 12 ? 0 : hourValue;
+                } else {
+                    normalizedHour = hourValue === 0 ? 12 : (hourValue < 12 ? hourValue + 12 : 12);
+                }
+
+                var hiddenValue = dateValue
+                    + 'T'
+                    + ('0' + normalizedHour).slice(-2)
+                    + ':'
+                    + ('0' + minuteValue).slice(-2);
+
+                hiddenInput.val(hiddenValue);
+            }
+
+            function syncAllDateTimeValues() {
+                $('.iss-datetime-picker').each(function () {
+                    syncDateTimeValue($(this));
+                });
+            }
+
+            function calcHours() {
+                syncAllDateTimeValues();
+                var startEl = $('input[name="InvestigationStartTime"]');
+                var endEl = $('input[name="InvestigationEndTime"]');
+                var daysOff = parseInt($('#daysOff').val()) || 0;
+                var nightShift = parseInt($('#nightShift').val()) || 0;
+                var measurementWaitHours = parseFloat($('#measurementWaitHours').val());
+                if (isNaN(measurementWaitHours)) {
+                    measurementWaitHours = 0;
+                }
+
+                if (startEl.val() && endEl.val()) {
+                    var start = new Date(startEl.val());
+                    var end = new Date(endEl.val());
+                    var diffDays = (end - start) / (1000 * 60 * 60 * 24);
+                    var hours = (diffDays - daysOff) * 24 - (nightShift - daysOff) * 15.4 - measurementWaitHours;
+                    $('#investigationHours').val(hours.toFixed(1));
+                } else {
+                    $('#investigationHours').val('');
+                }
+            }
+
+            function updatePartRows() {
+                $('.part-row').each(function () {
+                    var index = parseInt($(this).data('part-row'));
+                    if (index === 1) {
+                        $(this).show();
+                        return;
+                    }
+
+                    var previousCode = $.trim($('input[name="PartCode' + (index - 1) + '"]').val());
+                    if (previousCode) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                        $(this).find('input[type="text"]').val('');
+                        $(this).find('select').val('');
+                    }
+                });
+            }
+
+            function updateCauseNote() {
+                var value = ($('#causeClassification').val() || '').toLowerCase();
+                if (value.indexOf('khác') >= 0 || value.indexOf('その他') >= 0) {
+                    $('#causeNoteGroup').show();
+                } else {
+                    $('#causeNoteGroup').hide();
+                    $('input[name="CauseDescription"]').val('');
+                }
+            }
+
+            function populateSupplierSelect(index, vendors, selectedValue) {
+                var select = $('select[name="PartSupplier' + index + '"]');
+                var storedValue = $.trim(select.attr('data-selected-value') || '');
+                var currentValue = $.trim(select.val() || '');
+                var targetValue = $.trim(selectedValue || currentValue || storedValue);
+                var options = '<option value="">-- Chọn --</option>';
+
+                for (var i = 0; i < vendors.length; i++) {
+                    var vendor = vendors[i] || '';
+                    var escapedVendor = $('<div/>').text(vendor).html();
+                    var isSelected = targetValue && vendor.toLowerCase() === targetValue.toLowerCase();
+                    options += '<option value="' + escapedVendor + '"' + (isSelected ? ' selected="selected"' : '') + '>' + escapedVendor + '</option>';
+                }
+
+                select.html(options);
+                select.attr('data-selected-value', targetValue);
+            }
+
+            function loadPartMasterInfo(index, preserveSelectedSupplier) {
+                var code = $.trim($('input[name="PartCode' + index + '"]').val());
+                var supplierSelect = $('select[name="PartSupplier' + index + '"]');
+                var selectedSupplier = preserveSelectedSupplier ? $.trim(supplierSelect.val() || supplierSelect.attr('data-selected-value') || '') : '';
+
+                if (!code) {
+                    $('input[name="PartName' + index + '"]').val('');
+                    populateSupplierSelect(index, [], '');
+                    return;
+                }
+
+                $.getJSON('@Url.Action("GetPartMasterInfo", "ErrorAnalysis")', { material: code })
+                    .done(function (response) {
+                        $('input[name="PartName' + index + '"]').val(response && response.description ? response.description : '');
+                        populateSupplierSelect(index, response && response.vendors ? response.vendors : [], selectedSupplier);
+                    })
+                    .fail(function () {
+                        $('input[name="PartName' + index + '"]').val('');
+                        populateSupplierSelect(index, [], '');
+                    });
+            }
+
+            $('.iss-datetime-picker').on('change', 'input, select', calcHours);
+            $('#daysOff, #nightShift, #measurementWaitHours').on('change keyup input', calcHours);
+            $(document).on('input change keyup', '.part-code', updatePartRows);
+            $(document).on('input keyup', '.part-code', function () {
+                var index = $(this).data('part-index') || $(this).data('part_index');
+                clearTimeout(partLookupTimer);
+                partLookupTimer = setTimeout(function () {
+                    loadPartMasterInfo(index, true);
+                }, 350);
+            });
+            $(document).on('change blur', '.part-code', function () {
+                var index = $(this).data('part-index') || $(this).data('part_index');
+                loadPartMasterInfo(index, true);
+            });
+            $('#causeClassification').on('change', updateCauseNote);
+
+            $('form').on('submit', syncAllDateTimeValues);
+
+            calcHours();
+            updatePartRows();
+            updateCauseNote();
+
+            $('.part-code').each(function () {
+                var index = $(this).data('part-index') || $(this).data('part_index');
+                loadPartMasterInfo(index, true);
+            });
+        });
+    </script>
+}

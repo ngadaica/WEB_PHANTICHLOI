@@ -1,0 +1,272 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\controllers\\erroranalysiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:controllers\\erroranalysiscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|c:\\users\\anhpc\\downloads\\web_phantichloi-main - copy\\web_phantichloi-main - copy\\web_phantichloi-main\\views\\erroranalysis\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\erroranalysis\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\views\\erroranalysis\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\erroranalysis\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\views\\erroranalysis\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\erroranalysis\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\views\\erroranalysis\\chart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\erroranalysis\\chart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysischartviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysischartviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysisdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysisdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysisdisplayhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysisdisplayhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\partmasterlookupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\partmasterlookupservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysisindexviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysisindexviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\views\\shared\\_isslayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\shared\\_isslayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\models\\erroranalysisreferencedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:models\\erroranalysisreferencedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\views\\erroranalysis\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1FFCA782-521C-4415-AA9D-E9B4506DE8BB}|WEB_PHANTICHLOI.csproj|solutionrelative:views\\erroranalysis\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Views\\ErrorAnalysis\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Edit.cshtml",
+              "RelativeToolTip": "Views\\ErrorAnalysis\\Edit.cshtml",
+              "ViewState": "AgIAALQCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T10:24:09.002Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Details.cshtml",
+              "RelativeDocumentMoniker": "Views\\ErrorAnalysis\\Details.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Details.cshtml",
+              "RelativeToolTip": "Views\\ErrorAnalysis\\Details.cshtml",
+              "ViewState": "AgIAABkBAAAAAAAAAAAAADkAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-27T05:27:46.357Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ErrorAnalysisDisplayHelper.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisDisplayHelper.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysisDisplayHelper.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisDisplayHelper.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysisDisplayHelper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T04:25:04.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "PartMasterLookupService.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\PartMasterLookupService.cs",
+              "RelativeDocumentMoniker": "Models\\PartMasterLookupService.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\PartMasterLookupService.cs",
+              "RelativeToolTip": "Models\\PartMasterLookupService.cs",
+              "ViewState": "AgIAALYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T04:13:06.039Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ErrorAnalysisDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisDbContext.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysisDbContext.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisDbContext.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysisDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T04:13:02.184Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ErrorAnalysisChartViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisChartViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysisChartViewModel.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisChartViewModel.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysisChartViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-20T01:23:27.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\ErrorAnalysis\\Create.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Create.cshtml",
+              "RelativeToolTip": "Views\\ErrorAnalysis\\Create.cshtml",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAAAGsAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T01:52:50.556Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Chart.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Chart.cshtml",
+              "RelativeDocumentMoniker": "Views\\ErrorAnalysis\\Chart.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Chart.cshtml",
+              "RelativeToolTip": "Views\\ErrorAnalysis\\Chart.cshtml",
+              "ViewState": "AgIAAL8BAAAAAAAAAAAhwMgBAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-18T01:52:46.342Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ErrorAnalysisReferenceData.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisReferenceData.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysisReferenceData.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisReferenceData.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysisReferenceData.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T01:52:34.879Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ErrorAnalysisController.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Controllers\\ErrorAnalysisController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ErrorAnalysisController.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Controllers\\ErrorAnalysisController.cs",
+              "RelativeToolTip": "Controllers\\ErrorAnalysisController.cs",
+              "ViewState": "AgIAAP0FAAAAAAAAAAAAABAGAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T01:42:50.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ErrorAnalysis.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysis.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysis.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysis.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysis.cs",
+              "ViewState": "AgIAABoBAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T01:42:49.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ErrorAnalysisIndexViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisIndexViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\ErrorAnalysisIndexViewModel.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Models\\ErrorAnalysisIndexViewModel.cs",
+              "RelativeToolTip": "Models\\ErrorAnalysisIndexViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-18T01:42:18.373Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-13T02:03:48.122Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "_ISSLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\Shared\\_ISSLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_ISSLayout.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\Shared\\_ISSLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_ISSLayout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-13T01:24:18.649Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\ErrorAnalysis\\Index.cshtml",
+              "ToolTip": "C:\\Users\\anhpc\\Downloads\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main - Copy\\WEB_PHANTICHLOI-main\\Views\\ErrorAnalysis\\Index.cshtml",
+              "RelativeToolTip": "Views\\ErrorAnalysis\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-13T01:15:35.303Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,547 @@
+﻿@using WEB_PHANTICHLOI.Models
+@model WEB_PHANTICHLOI.Models.ErrorAnalysisIndexViewModel
+@{
+    ViewBag.Title = "Danh sách lỗi 問題一覧";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<style>
+    .clickable-row:hover {
+        background-color: #f5f5f5 !important;
+    }
+
+    .status-summary-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .status-summary-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border: 1px solid #000;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    button.status-summary-badge {
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+        button.status-summary-badge:hover {
+            transform: translateY(-1px);
+        }
+
+    .status-summary-badge.is-clickable {
+        cursor: pointer;
+    }
+
+    .status-summary-badge.is-active {
+        box-shadow: 0 0 0 2px #1d4ed8;
+    }
+
+    .status-summary-badge.total {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
+    .status-summary-badge.investigating {
+        background: yellow;
+    }
+
+    .status-summary-badge.countermeasure {
+        background: #00b0f0;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .status-summary-badge.close {
+        background: #00b050;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .baction-status-badge {
+        display: inline-block;
+        min-width: 54px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        border: 1px solid transparent;
+    }
+
+    .baction-status-open {
+        background: #fff3cd;
+        color: #92400e;
+        border-color: #facc15;
+    }
+
+    .baction-status-close {
+        background: #dcfce7;
+        color: #166534;
+        border-color: #22c55e;
+    }
+
+    .iss-table thead tr:first-child th {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 12 !important;
+    }
+
+    .index-filter-row th {
+        background: #dbeafe !important;
+        padding: 4px !important;
+        border: 1px solid #93c5fd !important;
+        position: sticky !important;
+        top: 33px !important; /* Chiều cao xấp xỉ của dòng header đầu tiên */
+        z-index: 11 !important;
+        box-shadow: 0 1px 0 #93c5fd;
+    }
+
+    .index-filter-row .form-control {
+        padding: 4px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+        min-width: 100%;
+        background: #fff;
+        height: 26px;
+    }
+
+    .photo-preview-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 28px;
+        border: 1px solid #94a3b8;
+        border-radius: 4px;
+        background: #ffffff;
+        color: #334155;
+        cursor: pointer;
+        font-size: 18px;
+    }
+
+        .photo-preview-trigger:hover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+    .image-preview-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.7);
+        z-index: 9999;
+        padding: 24px;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .image-preview-modal.is-open {
+            display: flex;
+        }
+
+    .image-preview-dialog {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        width: 960px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        overflow: auto;
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35);
+    }
+
+    .image-preview-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        border: none;
+        background: #ef4444;
+        color: #ffffff;
+        border-radius: 999px;
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .image-preview-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    .image-preview-item {
+        flex: 1 1 280px;
+        text-align: center;
+    }
+
+        .image-preview-item img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+        }
+
+    .image-preview-caption {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #475569;
+        word-break: break-word;
+    }
+
+    .iss-wrap-cell {
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        line-height: 1.45;
+        vertical-align: top;
+    }
+
+    .iss-table tbody td {
+        font-size: 14px;
+    }
+</style>
+
+<div class="iss-card">
+    <div class="iss-card-header">
+        <div class="status-summary-badges" style="font-weight:400; font-size:12px; opacity:0.95;">
+            <button type="button" class="status-summary-badge total is-clickable @(string.IsNullOrWhiteSpace(Model.FilterStatusGroup) ? "is-active" : string.Empty)" data-status-group="">
+                <span class="lang-vi">Tổng:</span><span class="lang-jp">合計:</span>&nbsp;@Model.TotalCount <span class="lang-vi"> bản ghi</span><span class="lang-jp">件</span>
+            </button>
+            <button type="button" class="status-summary-badge investigating is-clickable @(string.Equals(Model.FilterStatusGroup, "investigating", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty)" data-status-group="investigating">
+                <span class="lang-vi">Đang điều tra:</span><span class="lang-jp">調査中:</span>&nbsp;@Model.InvestigatingCount
+            </button>
+            <button type="button" class="status-summary-badge countermeasure is-clickable @(string.Equals(Model.FilterStatusGroup, "countermeasure", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty)" data-status-group="countermeasure">
+                <span class="lang-vi">Đang thảo luận đối sách cố hữu:</span><span class="lang-jp">恒久対策検討中:</span>&nbsp;@Model.CountermeasureDiscussionCount
+            </button>
+            <button type="button" class="status-summary-badge close is-clickable @(string.Equals(Model.FilterStatusGroup, "close", StringComparison.OrdinalIgnoreCase) ? "is-active" : string.Empty)" data-status-group="close">
+                Close:&nbsp;@Model.CloseCount
+            </button>
+        </div>
+    </div>
+    <div class="iss-card-body" style="padding:0;">
+
+        <div class="iss-table-wrapper" style="max-height:70vh; overflow-y:auto;">
+            @using (Html.BeginForm("Index", "ErrorAnalysis", FormMethod.Get, new { id = "indexFilterForm" }))
+            {
+                @Html.HiddenFor(m => m.CurrentPage, new { id = "currentPage" })
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.FilterStatusGroup, new { id = "filterStatusGroup" })
+                <table class="iss-table">
+                    <thead>
+                        <tr>
+                            <th style="min-width:70px;"><span class="lang-vi">Số quản lý</span><span class="lang-jp">番号</span></th>
+                            <th style="min-width:240px;"><span class="lang-vi">Nội dung vấn đề</span><span class="lang-jp">問題内容</span></th>
+                            <th style="min-width:80px;"><span class="lang-vi">Ảnh</span><span class="lang-jp">Photo</span></th>
+                            <th style="min-width:100px;"><span class="lang-vi">Phân loại nguyên nhân</span><span class="lang-jp">原因分離</span></th>
+                            <th style="min-width:110px;"><span class="lang-vi">Thời gian phát sinh</span><span class="lang-jp">発生日</span></th>
+                            <th style="min-width:110px;"><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></th>
+                            <th style="min-width:90px;"><span class="lang-vi">Model</span><span class="lang-jp">機種</span></th>
+                            <th style="min-width:90px;"><span class="lang-vi">Chủng loại</span><span class="lang-jp">不良分類</span></th>
+                            <th style="min-width:90px;"><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></th>
+                            <th class="iss-wrap-cell" style="min-width:390px;"><span class="lang-vi">Nguyên nhân, nội dung điều tra</span><span class="lang-jp">解析内容原因</span></th>
+                            <th class="iss-wrap-cell" style="min-width:330px;"><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のアクション</span></th>
+                            <th style="min-width:220px;"><span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span></th>
+                            <th style="min-width:220px;"><span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span></th>
+                            <th style="min-width:120px;"><span class="lang-vi">Xác nhận hiệu quả</span><span class="lang-jp">効果確認</span></th>
+                            <th style="min-width:110px;"><span class="lang-vi">Thời gian điều tra</span><span class="lang-jp">調査時間(hour)</span></th>
+                            <th style="min-width:80px;"><span class="lang-vi">B-act</span><span class="lang-jp">B-act</span></th>
+                            <th style="min-width:70px;"><span class="lang-vi">Trạng thái B-action</span><span class="lang-jp">状態 B-action</span></th>
+                            <th style="min-width:80px;"><span class="lang-vi">Dừng xuất hàng</span><span class="lang-jp">出荷停止</span></th>
+                            <th style="min-width:80px;"><span class="lang-vi">レポート</span><span class="lang-jp">レポート</span></th>
+                            <th style="min-width:110px;"><span class="lang-vi">Tài liệu</span><span class="lang-jp">添付ファイル</span></th>
+                            <th style="min-width:90px;"><span class="lang-vi">Lỗi mãn tính</span><span class="lang-jp">慢性不良</span></th>
+                            <th style="min-width:130px;"><span class="lang-vi">Thao tác</span><span class="lang-jp">操作</span></th>
+                        </tr>
+                        <tr class="index-filter-row">
+                            <th>@Html.TextBoxFor(m => m.FilterManagementNumber, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterProblemContent, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th></th>
+                            <th>@Html.DropDownListFor(m => m.FilterCauseClassification, Model.CauseOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterOccurrencePeriod, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterOccurrenceProcess, Model.ProcessOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterModel, Model.ModelOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterDefectClassification, Model.DefectOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterPersonInCharge, Model.PersonInChargeOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterDetailedCause, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterNextAction, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterTemporaryMeasure, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterPermanentMeasure, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterEffectConfirmation, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterInvestigationHours, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterBAction, Model.BActionOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterBActionStatus, Model.BActionStatusOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterShipmentStop, Model.ShipmentStopOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterReport, Model.ReportOptions, new { @class = "form-control index-filter" })</th>
+                            <th>@Html.TextBoxFor(m => m.FilterAttachments, new { @class = "form-control index-filter", placeholder = "Lọc..." })</th>
+                            <th>@Html.DropDownListFor(m => m.FilterChronicDefect, Model.ChronicDefectOptions, new { @class = "form-control index-filter" })</th>
+                            <th><button type="button" id="clearIndexFilters" class="btn-iss btn-iss-secondary" style="padding:6px 10px; font-size:11px; white-space:nowrap;">Xóa lọc</button></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            string badgeClass = "badge-open";
+                            string mgmtColor = "";
+                            var imageAttachmentPath = !string.IsNullOrWhiteSpace(item.ImagePath)
+                                ? ErrorAnalysisDisplayHelper.GetFirstImageAttachmentPath(item.ImagePath)
+                                : ErrorAnalysisDisplayHelper.GetFirstImageAttachmentPath(item.AttachmentPath);
+                            if (item.Status != null)
+                            {
+                                if (item.Status.Contains("Close"))
+                                {
+                                    badgeClass = "badge-close";
+                                    mgmtColor = "#00b050";
+                                }
+                                else if (item.Status.Contains("Đang thảo luận") || item.Status.Contains("対策") || item.Status.Contains("cố hữu"))
+                                {
+                                    badgeClass = "badge-countermeasure";
+                                    mgmtColor = "#00b0f0";
+                                }
+                                else if (item.Status.Contains("調査中") || item.Status.Contains("Đang") || item.Status.Contains("điều tra"))
+                                {
+                                    badgeClass = "badge-investigating";
+                                    mgmtColor = "yellow";
+                                }
+                            }
+
+                            <tr data-details-url="@Url.Action("Details", new { id = item.Id })" style="cursor: pointer;" class="clickable-row">
+                                <td style="@(!string.IsNullOrEmpty(mgmtColor) ? "background-color:" + mgmtColor + ";" : "")">
+                                    <span style="color:#000; font-weight:700;">
+                                        @(string.IsNullOrWhiteSpace(item.ManagementNumber) ? item.Id.ToString() : item.ManagementNumber)
+                                    </span>
+                                </td>
+                                <td>@item.ProblemContent</td>
+                                <td style="text-align:center;">
+                                    @if (!string.IsNullOrWhiteSpace(imageAttachmentPath))
+                                    {
+                                        <button type="button"
+                                                class="photo-preview-trigger"
+                                                data-image-path="@Url.Content(imageAttachmentPath)"
+                                                data-image-name="@ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(imageAttachmentPath, 200)"
+                                                title="Xem ảnh"
+                                                onclick="event.stopPropagation();">
+                                            &#128247;
+                                        </button>
+                                    }
+                                </td>
+                                <td>@item.CauseClassification</td>
+                                <td>@item.OccurrencePeriod</td>
+                                <td>@item.OccurrenceProcess</td>
+                                <td><strong>@item.Model</strong></td>
+                                <td>@(string.IsNullOrWhiteSpace(item.DefectClassification) ? item.Category : item.DefectClassification)</td>
+                                <td>@item.PersonInCharge</td>
+                                <td class="iss-wrap-cell">@item.DetailedCause</td>
+                                <td class="iss-wrap-cell">@item.NextActionSummary</td>
+                                <td>@item.TemporaryMeasureSummary</td>
+                                <td>@item.PermanentMeasureSummary</td>
+                                <td>@(string.IsNullOrWhiteSpace(item.MeasureCompletionTime) ? item.Sharing : item.MeasureCompletionTime)</td>
+                                <td>@item.InvestigationHours</td>
+                                <td>
+                                    @if (ErrorAnalysisDisplayHelper.IsAbsoluteUrl(item.BAction))
+                                    {
+                                        <a href="@item.BAction" target="_blank" style="color:#1565c0; text-decoration:underline; word-break:break-all;" onclick="event.stopPropagation();">@item.BAction</a>
+                                    }
+                                    else
+                                    {
+                                        @item.BAction
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(item.BActionStatus))
+                                    {
+                                        var bActionStatusClass = string.Equals(item.BActionStatus, "Close", StringComparison.OrdinalIgnoreCase)
+                                            ? "baction-status-badge baction-status-close"
+                                            : string.Equals(item.BActionStatus, "Open", StringComparison.OrdinalIgnoreCase)
+                                                ? "baction-status-badge baction-status-open"
+                                                : string.Empty;
+
+                                        if (!string.IsNullOrWhiteSpace(bActionStatusClass))
+                                        {
+                                            <span class="@bActionStatusClass">@item.BActionStatus</span>
+                                        }
+                                        else
+                                        {
+                                            @item.BActionStatus
+                                        }
+                                    }
+                                </td>
+                                <td>@item.ShipmentStop</td>
+                                <td>@item.Report</td>
+                                <td>
+                                    @foreach (var attachmentPath in ErrorAnalysisDisplayHelper.GetAttachmentPaths(item.AttachmentPath))
+                                    {
+                                        <div>
+                                            <a href="@Url.Content(attachmentPath)" target="_blank" title="@ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath, 200)" style="color:#1565c0; text-decoration:none;" onclick="event.stopPropagation();">
+                                                &#128206; @ErrorAnalysisDisplayHelper.GetAttachmentDisplayName(attachmentPath)
+                                            </a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>@item.ChronicDefect</td>
+                                <td style="text-align:center; white-space:nowrap;" class="action-cell">
+                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn-iss btn-iss-warning" style="padding:3px 8px;" onclick="event.stopPropagation();">
+                                        &#9998; <span class="lang-vi">Sửa</span><span class="lang-jp">編集</span>
+                                    </a>
+                                    <button type="button" class="btn-iss btn-iss-danger delete-error-btn" data-id="@item.Id" style="padding:3px 8px; margin-left:4px;" onclick="event.stopPropagation();">
+                                        &#128465; <span class="lang-vi">Xóa</span><span class="lang-jp">削除</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        @using (Html.BeginForm("Delete", "ErrorAnalysis", FormMethod.Post, new { id = "deleteErrorForm", style = "display:none;" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("id", string.Empty, new { id = "deleteErrorId" })
+        }
+
+        <div id="imagePreviewModal" class="image-preview-modal">
+            <div class="image-preview-dialog">
+                <button type="button" class="image-preview-close" id="closeImagePreview">&times;</button>
+                <div style="font-size:18px; font-weight:700; color:#0f172a;">Preview ảnh</div>
+                <div class="image-preview-gallery" id="imagePreviewGallery"></div>
+            </div>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <div style="background:#2f67bd; padding:8px 10px; overflow-x:auto; white-space:nowrap;">
+                @for (var page = 1; page <= Model.TotalPages; page++)
+                {
+                    if (page <= 10 || page == Model.CurrentPage || page == Model.TotalPages)
+                    {
+                        <a href="#" class="index-page-link" data-page="@page" style="display:inline-block; margin-right:10px; color:red; font-size:18px; font-weight:700; text-decoration:underline;">@page</a>
+                    }
+                    else if (page == 11)
+                    {
+                        <span style="display:inline-block; margin-right:10px; color:red; font-size:18px; font-weight:700;">...</span>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+    <div class="note-bubble">
+        &#128161; <span class="lang-vi">Các thông tin sẽ tự động cập nhật lên danh sách lỗi khi thêm mới hoặc chỉnh sửa.</span><span class="lang-jp">追加や編集を行うと、問題一覧に自動的に更新されます。</span>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var filterSubmitTimer;
+
+            function submitIndexFilterForm(page) {
+                if (page) {
+                    $('#currentPage').val(page);
+                }
+                $('#indexFilterForm').submit();
+            }
+
+            $('.index-filter').on('change', function () {
+                submitIndexFilterForm(1);
+            });
+
+            $('.index-filter').on('keyup', function () {
+                clearTimeout(filterSubmitTimer);
+                filterSubmitTimer = setTimeout(function () {
+                    submitIndexFilterForm(1);
+                }, 400);
+            });
+
+            $('.index-page-link').on('click', function (e) {
+                e.preventDefault();
+                submitIndexFilterForm($(this).data('page'));
+            });
+
+            $('.status-summary-badge.is-clickable').on('click', function () {
+                $('#filterStatusGroup').val($(this).data('status-group') || '');
+                submitIndexFilterForm(1);
+            });
+
+            $('table.iss-table tbody').on('click', '.clickable-row', function (e) {
+                if ($(e.target).closest('.action-cell, a, button, input, select, textarea, label').length) {
+                    return;
+                }
+
+                var detailsUrl = $(this).attr('data-details-url') || $(this).data('details-url');
+                if (detailsUrl) {
+                    window.location.href = detailsUrl;
+                }
+            });
+
+            $('.delete-error-btn').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (!confirm('Bạn có chắc muốn xóa bản ghi này?')) {
+                    return;
+                }
+
+                $('#deleteErrorId').val($(this).data('id'));
+                $('#deleteErrorForm').submit();
+            });
+
+            $('.photo-preview-trigger').on('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var imagePath = $(this).data('image-path') || '';
+                var imageName = $(this).data('image-name') || 'Photo';
+                if (!imagePath) {
+                    return;
+                }
+
+                $('#imagePreviewGallery').html(
+                    '<div class="image-preview-item">'
+                    + '<img src="' + imagePath + '" alt="' + imageName + '" />'
+                    + '<div class="image-preview-caption">' + imageName + '</div>'
+                    + '</div>');
+                $('#imagePreviewModal').addClass('is-open');
+            });
+
+            $('#closeImagePreview, #imagePreviewModal').on('click', function (e) {
+                if (e.target !== this && !$(e.target).is('#closeImagePreview')) {
+                    return;
+                }
+
+                $('#imagePreviewModal').removeClass('is-open');
+                $('#imagePreviewGallery').html('');
+            });
+
+            $(document).on('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    $('#imagePreviewModal').removeClass('is-open');
+                    $('#imagePreviewGallery').html('');
+                }
+            });
+
+            $('#clearIndexFilters').on('click', function () {
+                $('.index-filter').each(function () {
+                    $(this).val('');
+                });
+                $('#filterStatusGroup').val('');
+                submitIndexFilterForm(1);
+            });
+        });
+    </script>
+}

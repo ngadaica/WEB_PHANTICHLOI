@@ -1,0 +1,403 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysis
+@{
+    ViewBag.Title = "Chỉnh sửa lỗi #" + (string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber);
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; <span class="lang-vi">Quay lại danh sách</span><span class="lang-jp">一覧に戻る</span>
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a; margin-left:10px;"><span class="lang-vi">Chỉnh sửa lỗi</span><span class="lang-jp">不良編集</span> #@(string.IsNullOrWhiteSpace(Model.ManagementNumber) ? Model.Id.ToString() : Model.ManagementNumber)</span>
+</div>
+
+@using (Html.BeginForm("Edit", "ErrorAnalysis", FormMethod.Post, new { enctype = "multipart/form-data", @class = "iss-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <!-- SECTION 1: Thông tin cơ bản 基本情報 -->
+    <div class="iss-card">
+        <div class="iss-card-header blue">
+            <input type="checkbox" checked="checked" /> <span>&#128203;</span> <span class="lang-vi">Thông tin cơ bản</span><span class="lang-jp">基本情報</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Hiện tượng</span><span class="lang-jp">現象</span></label>
+                    @Html.DropDownListFor(m => m.Phenomenon, (List<SelectListItem>)ViewBag.PhenomenonOptions, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Nội dung vấn đề</span><span class="lang-jp">問題内容</span></label>
+                    @Html.TextAreaFor(m => m.ProblemContent, new { @class = "form-control", style = "width:100%;", rows = 3 })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Chủng loại</span><span class="lang-jp">種類</span></label>
+                    @Html.DropDownListFor(m => m.Category, (List<SelectListItem>)ViewBag.CategoryOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Model</span><span class="lang-jp">機種</span></label>
+                    @Html.TextBoxFor(m => m.Model, new { @class = "form-control", list = "modelOptions", placeholder = "Nhập model..." })
+                    <datalist id="modelOptions">
+                        @foreach (var item in (List<SelectListItem>)ViewBag.ModelOptions)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.Value))
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </datalist>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Dừng xuất xưởng</span><span class="lang-jp">出荷停止</span></label>
+                    @Html.DropDownListFor(m => m.ShipmentStop, (List<SelectListItem>)ViewBag.ShipmentStopOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Người điều tra</span><span class="lang-jp">調査担当</span></label>
+                    @Html.TextBoxFor(m => m.Investigator, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                    <div class="form-hint"><span class="lang-vi">Tự động lấy theo user đang đăng nhập.</span><span class="lang-jp">ログインユーザーから自動取得。</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></label>
+                    @Html.TextBoxFor(m => m.PersonInCharge, new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                    <div class="form-hint"><span class="lang-vi">Tự động điền theo user đang đăng nhập.</span><span class="lang-jp">ログインユーザーから自動入力。</span></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Phân loại giai đoạn</span><span class="lang-jp">ステージ種別</span></label>
+                    @Html.DropDownListFor(m => m.StageClassification, (List<SelectListItem>)ViewBag.StageOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></label>
+                    @Html.DropDownListFor(m => m.OccurrenceProcess, (List<SelectListItem>)ViewBag.ProcessOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>B-action</label>
+                    @Html.TextBoxFor(m => m.BAction, new { @class = "form-control", placeholder = "Nhập B-action..." })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Nhà máy</span><span class="lang-jp">工場</span></label>
+                    @Html.DropDownListFor(m => m.Factory, (List<SelectListItem>)ViewBag.FactoryOptions, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Chuyền</span><span class="lang-jp">ライン</span></label>
+                    @Html.TextBoxFor(m => m.Line, new { @class = "form-control" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Số máy phát sinh</span><span class="lang-jp">発生台数</span></label>
+                    @Html.TextBoxFor(m => m.OccurrenceCount, new { @class = "form-control", type = "number" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Ngày giờ phát sinh</span><span class="lang-jp">発生日</span></label>
+                    @Html.TextBoxFor(m => m.OccurrenceDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Lỗi mãn tính</span><span class="lang-jp">慢性不良</span></label>
+                    @Html.DropDownListFor(m => m.ChronicDefect, (List<SelectListItem>)ViewBag.ChronicDefectOptions, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label><span class="lang-vi">Thời gian dừng chuyền</span><span class="lang-jp">ライン停止時間</span></label>
+                    @Html.TextBoxFor(m => m.LineStopTime, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Thông tin linh kiện liên quan 関係部品の情報 -->
+    <div class="iss-card">
+        <div class="iss-card-header green">
+            <input type="checkbox" checked="checked" /> <span class="lang-vi">Thông tin linh kiện liên quan</span><span class="lang-jp">関係部品の情報</span>
+        </div>
+        <div class="iss-card-body">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:15px;">
+                @for (var i = 1; i <= 5; i++)
+                {
+                    var codeValue = ViewData.Eval("PartCode" + i) as string;
+                    var rowStyle = i == 1 || !string.IsNullOrWhiteSpace(codeValue) ? string.Empty : "display:none;";
+                    <div class="part-row" data-part-row="@i" style="@rowStyle">
+                        <div class="row">
+                            <div class="col-md-2 form-group">
+                                <label><span class="lang-vi">Mã linh kiện @i</span><span class="lang-jp">部品コード@i</span></label>
+                                @Html.TextBox("PartCode" + i, ViewData.Eval("PartCode" + i), new { @class = "form-control part-code", data_part_index = i })
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label><span class="lang-vi">Tên linh kiện</span><span class="lang-jp">部品名前</span></label>
+                                @Html.TextBox("PartName" + i, ViewData.Eval("PartName" + i), new { @class = "form-control form-control-readonly", @readonly = "readonly" })
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label><span class="lang-vi">Nhà cung cấp</span><span class="lang-jp">仕入先</span></label>
+                                @Html.TextBox("PartSupplier" + i, ViewData.Eval("PartSupplier" + i), new { @class = "form-control", list = "supplierOptions", placeholder = "Nhập nhà cung cấp..." })
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label>CAV</label>
+                                @Html.TextBox("PartCav" + i, ViewData.Eval("PartCav" + i), new { @class = "form-control", placeholder = "Nhập CAV..." })
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label><span class="lang-vi">Lot linh kiện</span><span class="lang-jp">部品ロット</span></label>
+                                @Html.TextBox("PartLot" + i, ViewData.Eval("PartLot" + i), new { @class = "form-control", placeholder = "Nhập lot..." })
+                            </div>
+                        </div>
+                    </div>
+                }
+                <datalist id="supplierOptions"></datalist>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Tiến độ điều tra</span><span class="lang-jp">調査進捗</span></label>
+                    @Html.DropDownListFor(m => m.InvestigationProgress, (List<SelectListItem>)ViewBag.ProgressOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Phân loại nguyên nhân</span><span class="lang-jp">原因分離</span></label>
+                    @Html.DropDownListFor(m => m.CauseClassification, (List<SelectListItem>)ViewBag.CauseOptions, new { @class = "form-control", id = "causeClassification" })
+                </div>
+                <div class="col-md-4 form-group" id="causeNoteGroup" style="display:none;">
+                    <label>Note</label>
+                    @Html.TextBoxFor(m => m.CauseDescription, new { @class = "form-control", placeholder = "Nhập ghi chú..." })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: Nguyên nhân -->
+    <div class="iss-card">
+        <div class="iss-card-header orange">
+            <span>&#128269;</span> <span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Nguyên nhân</span><span class="lang-jp">解析内容原因</span></label>
+                    @Html.TextAreaFor(m => m.DetailedCause, new { @class = "form-control", style = "width:100%;", rows = 3 })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Thời gian bắt đầu điều tra</span><span class="lang-jp">調査開始時間</span></label>
+                    @Html.TextBoxFor(m => m.InvestigationStartTime, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Thời gian kết thúc điều tra</span><span class="lang-jp">原因決定時間</span></label>
+                    @Html.TextBoxFor(m => m.InvestigationEndTime, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Số ngày nghỉ</span><span class="lang-jp">休日数</span></label>
+                    @Html.TextBoxFor(m => m.DaysOff, new { @class = "form-control", type = "number", id = "daysOff" })
+                </div>
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Số ngày ca đêm</span><span class="lang-jp">夜勤日数</span></label>
+                    @Html.TextBoxFor(m => m.NightShiftDays, new { @class = "form-control", type = "number", id = "nightShift" })
+                </div>
+                <div class="col-md-6 form-group">
+                    <label><span class="lang-vi">Thời gian điều tra</span><span class="lang-jp">調査時間</span> (h)</label>
+                    @Html.TextBoxFor(m => m.InvestigationHours, new { @class = "form-control form-control-readonly", @readonly = "readonly", id = "investigationHours" })
+                    <div class="formula-display" style="margin-top:5px;">
+                        &#128202; = (Số ngày điều tra - Số ngày nghỉ) x 24 - (Số ngày ca đêm - Số ngày nghỉ) x 15.4
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Hành động -->
+    <div class="iss-card">
+        <div class="iss-card-header purple">
+            <span>&#128300;</span> <span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span></label>
+                    @Html.TextAreaFor(m => m.NextAction, new { @class = "form-control", style = "width:100%;", rows = 2 })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Đối sách tạm thời -->
+    <div class="iss-card">
+        <div class="iss-card-header teal">
+            <input type="checkbox" checked="checked" /> <span>&#128736;</span> <span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Phân loại đối sách tạm thời</span><span class="lang-jp">暫定対策分類</span></label>
+                    @Html.DropDownListFor(m => m.TemporaryMeasureClassification, (List<SelectListItem>)ViewBag.TempMeasureOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Thời gian thực hiện ĐSTT</span><span class="lang-jp">暫定対策実施時</span></label>
+                    @Html.TextBoxFor(m => m.TemporaryMeasureDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Chi tiết đối sách tạm thời</span><span class="lang-jp">暫定対策内容</span></label>
+                    @Html.TextAreaFor(m => m.TemporaryMeasureDetail, new { @class = "form-control", style = "width:100%;", rows = 3 })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: Đối sách cố hữu -->
+    <div class="iss-card">
+        <div class="iss-card-header red">
+            <input type="checkbox" checked="checked" /> <span>&#128681;</span> <span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Phân loại đối sách cố hữu</span><span class="lang-jp">恒久対策分類</span></label>
+                    @Html.DropDownListFor(m => m.PermanentMeasureClassification, (List<SelectListItem>)ViewBag.PermMeasureOptions, new { @class = "form-control" })
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Thời gian thực hiện ĐSCH</span><span class="lang-jp">恒久対策実施時</span></label>
+                    @Html.TextBoxFor(m => m.PermanentMeasureDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label><span class="lang-vi">Chi tiết đối sách cố hữu</span><span class="lang-jp">恒久対策内容</span></label>
+                    @Html.TextAreaFor(m => m.PermanentMeasureDetail, new { @class = "form-control", style = "width:100%;", rows = 3 })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attachment -->
+    <div class="iss-card">
+        <div class="iss-card-header brown">
+            <span>&#128206;</span> <span class="lang-vi">Báo cáo đính kèm</span><span class="lang-jp">添付レポート</span>
+        </div>
+        <div class="iss-card-body">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label><span class="lang-vi">Chọn file đính kèm</span><span class="lang-jp">添付ファイル選択</span></label>
+                    <input type="file" name="attachments" class="form-control" style="background:#fff; padding:5px;" multiple />
+                    @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                    {
+                        <div class="form-hint" style="margin-top:5px;">
+                            &#128206; <span class="lang-vi">File hiện tại:</span><span class="lang-jp">現在のファイル:</span>
+                            @foreach (var attachmentPath in Model.AttachmentPath.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                <div><strong>@System.IO.Path.GetFileName(attachmentPath)</strong></div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="btn-group-iss">
+        <button type="submit" class="btn-iss btn-iss-primary" style="font-size:14px; padding:10px 30px;">
+            &#128190; <span class="lang-vi">Lưu</span><span class="lang-jp">保存</span>
+        </button>
+        <button type="submit" name="action" value="edit" class="btn-iss btn-iss-warning" style="font-size:14px; padding:10px 30px;">
+            &#9998; <span class="lang-vi">Biên soạn</span><span class="lang-jp">編集</span>
+        </button>
+        <a href="@Url.Action("Index")" class="btn-iss btn-iss-secondary" style="font-size:14px; padding:10px 30px; text-decoration:none;">
+            &#10006; <span class="lang-vi">Hủy biên soạn</span><span class="lang-jp">キャンセル</span>
+        </a>
+        <button type="button" class="btn-iss btn-iss-danger" style="font-size:14px; padding:10px 30px;" onclick="if(confirm('Bạn có chắc muốn xóa bản ghi #@Model.Id?')) document.getElementById('deleteForm').submit();">
+            &#128465; <span class="lang-vi">Xóa</span><span class="lang-jp">削除</span>
+        </button>
+    </div>
+}
+
+@using (Html.BeginForm("Delete", "ErrorAnalysis", new { id = Model.Id }, FormMethod.Post, new { id = "deleteForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+<div style="margin-bottom:20px;"></div>
+
+@section scripts {
+<script>
+    $(document).ready(function () {
+        function calcHours() {
+            var startEl = $('input[name="InvestigationStartTime"]');
+            var endEl = $('input[name="InvestigationEndTime"]');
+            var daysOff = parseInt($('#daysOff').val()) || 0;
+            var nightShift = parseInt($('#nightShift').val()) || 0;
+
+            if (startEl.val() && endEl.val()) {
+                var start = new Date(startEl.val());
+                var end = new Date(endEl.val());
+                var diffDays = (end - start) / (1000 * 60 * 60 * 24);
+                var hours = (diffDays - daysOff) * 24 - (nightShift - daysOff) * 15.4;
+                $('#investigationHours').val(hours.toFixed(1));
+            } else {
+                $('#investigationHours').val('');
+            }
+        }
+
+        function updatePartRows() {
+            $('.part-row').each(function () {
+                var index = parseInt($(this).data('part-row'));
+                if (index === 1) {
+                    $(this).show();
+                    return;
+                }
+
+                var previousCode = $.trim($('input[name="PartCode' + (index - 1) + '"]').val());
+                var currentCode = $.trim($('input[name="PartCode' + index + '"]').val());
+                if (previousCode || currentCode) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                    $(this).find('input[type="text"]').val('');
+                }
+            });
+        }
+
+        function updateCauseNote() {
+            var value = ($('#causeClassification').val() || '').toLowerCase();
+            if (value.indexOf('khác') >= 0 || value.indexOf('その他') >= 0) {
+                $('#causeNoteGroup').show();
+            } else {
+                $('#causeNoteGroup').hide();
+                $('input[name="CauseDescription"]').val('');
+            }
+        }
+
+        function refreshSupplierOptions() {
+            var uniqueValues = [];
+            $('input[name^="PartSupplier"]').each(function () {
+                var value = $.trim($(this).val());
+                if (value && $.inArray(value, uniqueValues) === -1) {
+                    uniqueValues.push(value);
+                }
+            });
+
+            var options = '';
+            for (var i = 0; i < uniqueValues.length; i++) {
+                options += '<option value="' + $('<div/>').text(uniqueValues[i]).html() + '"></option>';
+            }
+            $('#supplierOptions').html(options);
+        }
+
+        $('input[name="InvestigationStartTime"], input[name="InvestigationEndTime"], #daysOff, #nightShift').on('change keyup', calcHours);
+        $(document).on('change keyup', '.part-code', updatePartRows);
+        $('#causeClassification').on('change', updateCauseNote);
+        $(document).on('change keyup', 'input[name^="PartSupplier"]', refreshSupplierOptions);
+        calcHours();
+        updatePartRows();
+        updateCauseNote();
+        refreshSupplierOptions();
+    });
+</script>
+}

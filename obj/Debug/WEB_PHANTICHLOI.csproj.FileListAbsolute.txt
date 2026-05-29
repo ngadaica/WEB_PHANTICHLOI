@@ -1,0 +1,397 @@
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\WEB_PHANTICHLOI.dll.config
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csc.exe
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csc.exe.config
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csc.rsp
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csi.exe
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csi.exe.config
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\csi.rsp
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.Managed.Core.targets
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.AppContext.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Console.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.IO.Compression.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Net.Http.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Net.Sockets.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Text.Encoding.CodePages.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Threading.Tasks.Extensions.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.ValueTuple.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Xml.ReaderWriter.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Xml.XmlDocument.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Xml.XPath.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\System.Xml.XPath.XDocument.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\vbc.exe
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\vbc.exe.config
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\vbc.rsp
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\VBCSCompiler.exe
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Antlr3.Runtime.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Newtonsoft.Json.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Helpers.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Mvc.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Optimization.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Razor.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.Deployment.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.Razor.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\WebGrease.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Helpers.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Mvc.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Optimization.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.Razor.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.Deployment.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\System.Web.WebPages.Razor.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Newtonsoft.Json.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Antlr3.Runtime.pdb
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.csproj.AssemblyReference.cache
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.csproj.CoreCompileInputs.cache
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHAN.1EEB4C73.Up2Date
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\EntityFramework.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\EntityFramework.SqlServer.dll
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\EntityFramework.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\bin\EntityFramework.SqlServer.xml
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.Migrations.InitialCreate.resources
+C:\Users\anhpc\source\repos\WEB_PHANTICHLOI\obj\Debug\WEB_PHANTICHLOI.csproj.GenerateResource.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\csi.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Managed.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.AppContext.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Console.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Http.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Sockets.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Encoding.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Text.Encoding.CodePages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Threading.Tasks.Extensions.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.ValueTuple.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.ReaderWriter.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XmlDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.XDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\vbc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EntityFramework.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\WebGrease.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EntityFramework.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.AssemblyReference.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.InitialCreate.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.GenerateResource.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.CoreCompileInputs.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHAN.1EEB4C73.Up2Date
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddExtendedPartFields.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EPPlus.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EPPlus.Interfaces.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Buffers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.ComponentModel.Annotations.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Memory.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\EPPlus.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Buffers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Memory.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddMeasurementWaitHours.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddImagePath.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Managed.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.AppContext.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Console.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Http.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Sockets.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Encoding.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Text.Encoding.CodePages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Threading.Tasks.Extensions.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.ValueTuple.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.ReaderWriter.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XmlDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.XDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.Interfaces.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Buffers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.ComponentModel.Annotations.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Memory.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WebGrease.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Buffers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Memory.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.AssemblyReference.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.InitialCreate.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddExtendedPartFields.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddMeasurementWaitHours.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddImagePath.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.GenerateResource.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.CoreCompileInputs.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHAN.1EEB4C73.Up2Date
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WEB_PHANTICHLOI.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\csi.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Managed.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.AppContext.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Console.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Http.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Net.Sockets.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Encoding.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.Primitives.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Text.Encoding.CodePages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Threading.Tasks.Extensions.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.ValueTuple.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.ReaderWriter.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XmlDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\System.Xml.XPath.XDocument.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\vbc.rsp
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.Interfaces.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Buffers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.ComponentModel.Annotations.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Memory.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\WebGrease.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EntityFramework.SqlServer.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\EPPlus.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.IO.RecyclableMemoryStream.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Buffers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Memory.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Numerics.Vectors.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Security.Cryptography.Xml.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Helpers.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Mvc.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Optimization.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Deployment.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\System.Web.WebPages.Razor.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Newtonsoft.Json.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Antlr3.Runtime.pdb
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.AssemblyReference.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.InitialCreate.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddExtendedPartFields.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddMeasurementWaitHours.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.Migrations.AddImagePath.resources
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.GenerateResource.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.csproj.CoreCompileInputs.cache
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHAN.1EEB4C73.Up2Date
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.dll
+C:\Users\anhpc\Downloads\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main - Copy\WEB_PHANTICHLOI-main\obj\Debug\WEB_PHANTICHLOI.pdb

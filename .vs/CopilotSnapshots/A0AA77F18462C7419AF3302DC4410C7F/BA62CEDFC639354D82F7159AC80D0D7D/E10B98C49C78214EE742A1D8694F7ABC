@@ -1,0 +1,160 @@
+﻿@model List<WEB_PHANTICHLOI.Models.ErrorAnalysis>
+@{
+    ViewBag.Title = "Danh sách lỗi 問題一覧";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<style>
+    .clickable-row:hover {
+        background-color: #f5f5f5 !important;
+    }
+</style>
+
+<div class="iss-card">
+    <div class="iss-card-header">
+        <span>&#128203;</span> <span class="lang-vi">Danh sách lỗi</span><span class="lang-jp">問題一覧</span> &nbsp;
+        <span style="font-weight:400; font-size:12px; opacity:0.8;">| <span class="lang-vi">Tổng:</span><span class="lang-jp">合計:</span> @Model.Count <span class="lang-vi">bản ghi</span><span class="lang-jp">件</span></span>
+        <div style="margin-left:auto;">
+            <a href="@Url.Action("Create")" class="btn-iss btn-iss-success" style="font-size:12px; padding:5px 14px;">
+                &#10010; <span class="lang-vi">Thêm mới</span><span class="lang-jp">追加</span>
+            </a>
+        </div>
+    </div>
+    <div class="iss-card-body" style="padding:0;">
+        <div style="padding: 10px 15px;">
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: yellow; border: 1px solid black;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Đang điều tra</span><span class="lang-jp">調査中</span></span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: #00b0f0; border: 1px solid black; border-top: none;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Đang thảo luận đối sách cố hữu</span><span class="lang-jp">恒久対策検討中</span></span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 100px; height: 22px; background-color: #00b050; border: 1px solid black; border-top: none;"></div>
+                    <span style="margin-left: 8px; font-size: 13px; font-weight: 500;"><span class="lang-vi">Close</span><span class="lang-jp">クローズ</span></span>
+                </div>
+            </div>
+        </div>
+        <div class="iss-table-wrapper" style="max-height:70vh; overflow-y:auto;">
+            <table class="iss-table">
+                <thead>
+                    <tr>
+                        <th style="min-width:40px;"><span class="lang-vi">Số quản lý</span><span class="lang-jp">管理No</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">Nhà máy</span><span class="lang-jp">工場</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Tiến độ điều tra</span><span class="lang-jp">調査進捗</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Thời gian phát sinh</span><span class="lang-jp">発生日</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Nhóm</span><span class="lang-jp">チーム</span></th>
+                        <th style="min-width:70px;"><span class="lang-vi">Đảm nhiệm</span><span class="lang-jp">担当者</span></th>
+                        <th style="min-width:60px;"><span class="lang-vi">Model</span><span class="lang-jp">機種</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Công đoạn phát sinh</span><span class="lang-jp">発生工程</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">Phân loại</span><span class="lang-jp">分類</span></th>
+                        <th style="min-width:120px;"><span class="lang-vi">Hiện tượng</span><span class="lang-jp">現象</span></th>
+                        <th style="min-width:100px;"><span class="lang-vi">Nguyên nhân</span><span class="lang-jp">原因</span></th>
+                        <th style="min-width:120px;"><span class="lang-vi">Hành động tiếp theo</span><span class="lang-jp">次のACTION</span></th>
+                        <th style="min-width:100px;"><span class="lang-vi">Phân loại lỗi</span><span class="lang-jp">不良分類</span></th>
+                        <th style="min-width:120px;"><span class="lang-vi">Đối sách tạm thời</span><span class="lang-jp">暫定対策</span></th>
+                        <th style="min-width:120px;"><span class="lang-vi">Đối sách cố hữu</span><span class="lang-jp">恒久対策</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Thời gian HT điều tra</span><span class="lang-jp">調査完了時間</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Thời gian HT đối sách</span><span class="lang-jp">対策完了時間</span></th>
+                        <th style="min-width:70px;"><span class="lang-vi">B-action</span><span class="lang-jp">B-action</span></th>
+                        <th style="min-width:60px;"><span class="lang-vi">Trạng thái</span><span class="lang-jp">状態</span></th>
+                        <th style="min-width:60px;"><span class="lang-vi">Chia sẻ</span><span class="lang-jp">共有</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">Báo cáo</span><span class="lang-jp">レポート</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Tài liệu đính kèm</span><span class="lang-jp">添付ファイル</span></th>
+                        <th style="min-width:90px;"><span class="lang-vi">Ngày cập nhật</span><span class="lang-jp">更新日時</span></th>
+                        <th style="min-width:70px;"><span class="lang-vi">Người cập nhật</span><span class="lang-jp">更新者</span></th>
+                        <th style="min-width:80px;"><span class="lang-vi">Thao tác</span><span class="lang-jp">操作</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        string badgeClass = "badge-open";
+                        string mgmtColor = "";
+                        if (item.Status != null)
+                        {
+                            if (item.Status.Contains("Close"))
+                            {
+                                badgeClass = "badge-close";
+                                mgmtColor = "#00b050";
+                            }
+                            else if (item.Status.Contains("Đang thảo luận") || item.Status.Contains("対策") || item.Status.Contains("cố hữu"))
+                            {
+                                badgeClass = "badge-countermeasure";
+                                mgmtColor = "#00b0f0";
+                            }
+                            else if (item.Status.Contains("調査中") || item.Status.Contains("Đang") || item.Status.Contains("điều tra"))
+                            {
+                                badgeClass = "badge-investigating";
+                                mgmtColor = "yellow";
+                            }
+                        }
+
+                        <tr onclick="window.location.href='@Url.Action("Details", new { id = item.Id })';" style="cursor: pointer;" class="clickable-row">
+                            <td style="@(!string.IsNullOrEmpty(mgmtColor) ? "background-color:" + mgmtColor + ";" : "")">
+                                <span style="color:#000; font-weight:700;">
+                                    @(string.IsNullOrWhiteSpace(item.ManagementNumber) ? item.Id.ToString() : item.ManagementNumber)
+                                </span>
+                            </td>
+                            <td>@item.Factory</td>
+                            <td><span class="badge-status @badgeClass">@item.Status</span></td>
+                            <td>@item.OccurrencePeriod</td>
+                            <td>@item.Team</td>
+                            <td>@item.PersonInCharge</td>
+                            <td><strong>@item.Model</strong></td>
+                            <td>@item.OccurrenceProcess</td>
+                            <td>@item.Category</td>
+                            <td>@item.ImageStatus</td>
+                            <td>@item.CauseClassification</td>
+                            <td>@item.NextActionSummary</td>
+                            <td style="font-size:11px;">@item.DefectClassification</td>
+                            <td style="font-size:11px;">@item.TemporaryMeasureSummary</td>
+                            <td style="font-size:11px;">@item.PermanentMeasureSummary</td>
+                            <td>@item.InvestigationCompletionTime</td>
+                            <td>@item.MeasureCompletionTime</td>
+                            <td>@item.BActionStatus</td>
+                            <td>
+                                @if (item.Sharing == "CLOSE")
+                                {
+                                    <span class="badge-status badge-close"><span class="lang-vi">CLOSE</span><span class="lang-jp">クローズ</span></span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-open"><span class="lang-vi">OPEN</span><span class="lang-jp">オープン</span></span>
+                                }
+                            </td>
+                            <td>@item.Sharing</td>
+                            <td style="font-size:10px;">@item.Report</td>
+                            <td style="text-align:center;">
+                                @if (!string.IsNullOrEmpty(item.AttachmentPath))
+                                {
+                                    <a href="@Url.Content(item.AttachmentPath)" target="_blank" style="color:#1565c0; text-decoration:none;" onclick="event.stopPropagation();">&#128206; @System.IO.Path.GetFileName(item.AttachmentPath)</a>
+                                }
+                            </td>
+                            <td style="font-size:11px;">
+                                @if (item.UpdatedDate.HasValue)
+                                {
+                                    @item.UpdatedDate.Value.ToString("M/d/yyyy")
+                                }
+                            </td>
+                            <td>@item.UpdatedBy</td>
+                            <td style="text-align:center; white-space:nowrap;">
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn-iss btn-iss-warning" style="padding:3px 8px; font-size:11px;" onclick="event.stopPropagation();">
+                                    &#9998; <span class="lang-vi">Sửa</span><span class="lang-jp">編集</span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="text-align:center; margin-top:10px;">
+    <div class="note-bubble">
+        &#128161; <span class="lang-vi">Các thông tin sẽ tự động cập nhật lên danh sách lỗi khi thêm mới hoặc chỉnh sửa.</span><span class="lang-jp">追加や編集を行うと、問題一覧に自動的に更新されます。</span>
+    </div>
+</div>

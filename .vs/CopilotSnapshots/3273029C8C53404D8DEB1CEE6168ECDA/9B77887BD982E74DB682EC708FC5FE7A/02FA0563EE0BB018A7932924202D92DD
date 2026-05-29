@@ -1,0 +1,254 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WEB_PHANTICHLOI.Models;
+
+namespace WEB_PHANTICHLOI.Controllers
+{
+    public class ErrorAnalysisController : Controller
+    {
+        // GET: ErrorAnalysis - Danh sách lỗi 問題一覧
+        public ActionResult Index()
+        {
+            var errors = ErrorAnalysisData.GetAll();
+            return View(errors);
+        }
+
+        // GET: ErrorAnalysis/Create - Thêm mới 追加
+        public ActionResult Create()
+        {
+            ViewBag.StageOptions = GetStageOptions();
+            ViewBag.ProcessOptions = GetProcessOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+            ViewBag.CauseOptions = GetCauseOptions();
+            ViewBag.TempMeasureOptions = GetTempMeasureOptions();
+            ViewBag.PermMeasureOptions = GetPermMeasureOptions();
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.BActionOptions = GetBActionOptions();
+            ViewBag.ShipmentStopOptions = GetShipmentStopOptions();
+            return View(new ErrorAnalysis());
+        }
+
+        // POST: ErrorAnalysis/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(ErrorAnalysis model, HttpPostedFileBase attachment)
+        {
+            if (attachment != null && attachment.ContentLength > 0)
+            {
+                var fileName = System.IO.Path.GetFileName(attachment.FileName);
+                var path = System.IO.Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                if (!System.IO.Directory.Exists(Server.MapPath("~/Uploads")))
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads"));
+                attachment.SaveAs(path);
+                model.AttachmentPath = "~/Uploads/" + fileName;
+            }
+
+            model.UpdatedBy = "User";
+            model.UpdatedDate = DateTime.Now;
+            ErrorAnalysisData.Add(model);
+            return RedirectToAction("Index");
+        }
+
+        // GET: ErrorAnalysis/Edit/5
+        public ActionResult Edit(int id)
+        {
+            var error = ErrorAnalysisData.GetById(id);
+            if (error == null)
+                return HttpNotFound();
+
+            ViewBag.StageOptions = GetStageOptions();
+            ViewBag.ProcessOptions = GetProcessOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+            ViewBag.CauseOptions = GetCauseOptions();
+            ViewBag.TempMeasureOptions = GetTempMeasureOptions();
+            ViewBag.PermMeasureOptions = GetPermMeasureOptions();
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.BActionOptions = GetBActionOptions();
+            ViewBag.ShipmentStopOptions = GetShipmentStopOptions();
+            return View(error);
+        }
+
+        // POST: ErrorAnalysis/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ErrorAnalysis model, HttpPostedFileBase attachment)
+        {
+            if (attachment != null && attachment.ContentLength > 0)
+            {
+                var fileName = System.IO.Path.GetFileName(attachment.FileName);
+                var path = System.IO.Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                if (!System.IO.Directory.Exists(Server.MapPath("~/Uploads")))
+                    System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads"));
+                attachment.SaveAs(path);
+                model.AttachmentPath = "~/Uploads/" + fileName;
+            }
+
+            model.UpdatedBy = "User";
+            ErrorAnalysisData.Update(model);
+            return RedirectToAction("Index");
+        }
+
+        // POST: ErrorAnalysis/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            ErrorAnalysisData.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        // GET: ErrorAnalysis/Details/5
+        public ActionResult Details(int id)
+        {
+            var error = ErrorAnalysisData.GetById(id);
+            if (error == null)
+                return HttpNotFound();
+            return View(error);
+        }
+
+        // GET: ErrorAnalysis/Search - Tìm kiếm 検索
+        public ActionResult Search(string keyword, string factory, string status, string model)
+        {
+            var errors = ErrorAnalysisData.GetAll().AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                keyword = keyword.ToLower();
+                errors = errors.Where(e =>
+                    (e.ProblemContent ?? "").ToLower().Contains(keyword) ||
+                    (e.Phenomenon ?? "").ToLower().Contains(keyword) ||
+                    (e.PersonInCharge ?? "").ToLower().Contains(keyword) ||
+                    (e.Team ?? "").ToLower().Contains(keyword) ||
+                    (e.CauseClassification ?? "").ToLower().Contains(keyword));
+            }
+
+            if (!string.IsNullOrWhiteSpace(factory))
+                errors = errors.Where(e => e.Factory == factory);
+
+            if (!string.IsNullOrWhiteSpace(status))
+                errors = errors.Where(e => e.Status == status);
+
+            if (!string.IsNullOrWhiteSpace(model))
+                errors = errors.Where(e => (e.Model ?? "").Contains(model));
+
+            ViewBag.Keyword = keyword;
+            ViewBag.FactoryFilter = factory;
+            ViewBag.StatusFilter = status;
+            ViewBag.ModelFilter = model;
+            ViewBag.FactoryOptions = GetFactoryOptions();
+            ViewBag.ProgressOptions = GetProgressOptions();
+
+            return View("Search", errors.ToList());
+        }
+
+        private List<SelectListItem> GetStageOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "量産段階", Text = "量産段階 - Giai đoạn sản xuất hàng loạt" },
+                new SelectListItem { Value = "試作段階", Text = "試作段階 - Giai đoạn thử nghiệm" },
+                new SelectListItem { Value = "設計段階", Text = "設計段階 - Giai đoạn thiết kế" }
+            };
+        }
+
+        private List<SelectListItem> GetProcessOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "Chất lượng hình ảnh_画質", Text = "Chất lượng hình ảnh 画質" },
+                new SelectListItem { Value = "Ngoài quan_外観", Text = "Ngoài quan 外観" },
+                new SelectListItem { Value = "Cơ cấu_機構", Text = "Cơ cấu 機構" },
+                new SelectListItem { Value = "Điện_電気", Text = "Điện 電気" },
+                new SelectListItem { Value = "Phần mềm_ソフト", Text = "Phần mềm ソフト" },
+                new SelectListItem { Value = "Khác_その他", Text = "Khác その他" }
+            };
+        }
+
+        private List<SelectListItem> GetProgressOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "Close", Text = "Close - Đã đóng" },
+                new SelectListItem { Value = "調査中_Đang điều tra", Text = "調査中 - Đang điều tra" },
+                new SelectListItem { Value = "対策中", Text = "対策中 - Đang đối sách" },
+                new SelectListItem { Value = "OPEN", Text = "OPEN - Mở" }
+            };
+        }
+
+        private List<SelectListItem> GetCauseOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "設計_Thiết kế", Text = "設計 - Thiết kế" },
+                new SelectListItem { Value = "部品_Linh kiện", Text = "部品 - Linh kiện" },
+                new SelectListItem { Value = "製造_Sản xuất", Text = "製造 - Sản xuất" },
+                new SelectListItem { Value = "周囲不明", Text = "周囲不明 - Không rõ nguyên nhân" },
+                new SelectListItem { Value = "Khác", Text = "その他 - Khác" }
+            };
+        }
+
+        private List<SelectListItem> GetTempMeasureOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "暫定対策分類A", Text = "暫定対策分類A" },
+                new SelectListItem { Value = "暫定対策分類B", Text = "暫定対策分類B" },
+                new SelectListItem { Value = "暫定対策分類C", Text = "暫定対策分類C" },
+                new SelectListItem { Value = "そのまま", Text = "そのまま - Giữ nguyên" }
+            };
+        }
+
+        private List<SelectListItem> GetPermMeasureOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "恒久対策分類A", Text = "恒久対策分類A" },
+                new SelectListItem { Value = "恒久対策分類B", Text = "恒久対策分類B" },
+                new SelectListItem { Value = "恒久対策分類C", Text = "恒久対策分類C" },
+                new SelectListItem { Value = "そのまま", Text = "そのまま - Giữ nguyên" }
+            };
+        }
+
+        private List<SelectListItem> GetFactoryOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Tất cả --" },
+                new SelectListItem { Value = "Factory 2", Text = "Factory 2" },
+                new SelectListItem { Value = "Factory 4", Text = "Factory 4" },
+                new SelectListItem { Value = "TTF", Text = "TTF" }
+            };
+        }
+
+        private List<SelectListItem> GetBActionOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "QA SYS LSPM", Text = "QA SYS LSPM" },
+                new SelectListItem { Value = "QA", Text = "QA" },
+                new SelectListItem { Value = "SYS", Text = "SYS" },
+                new SelectListItem { Value = "LSPM", Text = "LSPM" }
+            };
+        }
+
+        private List<SelectListItem> GetShipmentStopOptions()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "", Text = "-- Chọn --" },
+                new SelectListItem { Value = "停止_Ngừng xuất xưởng", Text = "停止 - Ngừng xuất xưởng" },
+                new SelectListItem { Value = "継続_Tiếp tục", Text = "継続 - Tiếp tục" }
+            };
+        }
+    }
+}

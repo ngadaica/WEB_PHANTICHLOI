@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Linq;
+using System.Runtime.Caching;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class PartMasterLookupResult
+    {
+        public string Material { get; set; }
+        public string Description { get; set; }
+        public List<string> Vendors { get; set; }
+    }
+
+    public static class PartMasterLookupService
+    {
+        private const string ExcelPath = @"\\apbivnsh15\COMMON\90_Temporary\R&D-DE\Phan tich tieng keu_異音解析\TOTAL LIST PART 08.04.2026.xls";
+        private const string SheetName = "Sheet1$";
+        private const string CacheKey = "PartMasterLookupService.Rows";
+
+        public static PartMasterLookupResult GetPartInfo(string material)
+        {
+            var code = (material ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(code) || !File.Exists(ExcelPath))
+            {
+                return new PartMasterLookupResult
+                {
+                    Material = code,
+                    Description = string.Empty,
+                    Vendors = new List<string>()
+                };
+            }
+
+            var rows = GetCachedPartRows()
+                .Where(x => string.Equals(x.Material, code, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return new PartMasterLookupResult
+            {
+                Material = code,
+                Description = rows.Select(x => x.Description).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x)) ?? string.Empty,
+                Vendors = rows.Select(x => x.Vendor)
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(x => x)
+                    .ToList()
+            };
+        }
+
+        private static List<PartMasterRow> GetCachedPartRows()
+        {
+            var cache = MemoryCache.Default;
+            var cachedRows = cache.Get(CacheKey) as List<PartMasterRow>;
+            if (cachedRows != null)
+            {
+                return cachedRows;
+            }
+
+            var rows = ReadPartRows();
+            cache.Set(CacheKey, rows, DateTimeOffset.Now.AddMinutes(10));
+            return rows;
+        }
+
+        private static List<PartMasterRow> ReadPartRows()
+        {
+            var rows = new List<PartMasterRow>();
+            var providers = new[]
+            {
+                "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\";",
+                "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\";"
+            };
+
+            Exception lastException = null;
+
+            foreach (var provider in providers)
+            {
+                try
+                {
+                    var connectionString = string.Format(provider, ExcelPath);
+                    using (var connection = new OleDbConnection(connectionString))
+                    using (var command = new OleDbCommand(string.Format("SELECT [MATERIAL], [DESCRIPTION (EN)], [VENDOR NAME] FROM [{0}]", SheetName), connection))
+                    using (var adapter = new OleDbDataAdapter(command))
+                    {
+                        var table = new DataTable();
+                        connection.Open();
+                        adapter.Fill(table);
+
+                        foreach (DataRow row in table.Rows)
+                        {
+                            rows.Add(new PartMasterRow
+                            {
+                                Material = Convert.ToString(row["MATERIAL"]).Trim(),
+                                Description = Convert.ToString(row["DESCRIPTION (EN)"]).Trim(),
+                                Vendor = Convert.ToString(row["VENDOR NAME"]).Trim()
+                            });
+                        }
+                    }
+
+                    return rows;
+                }
+                catch (Exception ex)
+                {
+                    lastException = ex;
+                }
+            }
+
+            if (lastException != null)
+            {
+                return new List<PartMasterRow>();
+            }
+
+            return rows;
+        }
+
+        private class PartMasterRow
+        {
+            public string Material { get; set; }
+            public string Description { get; set; }
+            public string Vendor { get; set; }
+        }
+    }
+}

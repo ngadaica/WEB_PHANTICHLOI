@@ -1,0 +1,656 @@
+﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WEB_PHANTICHLOI.Models;
+
+namespace WEB_PHANTICHLOI.Controllers
+{
+    public class ErrorAnalysisController : Controller
+    {
+        private readonly ErrorAnalysisSqlRepository _repository = new ErrorAnalysisSqlRepository();
+
+        public ActionResult Index(ErrorAnalysisIndexViewModel model)
+        {
+            model = model ?? new ErrorAnalysisIndexViewModel();
+
+            var allErrors = _repository.GetAll() ?? new List<ErrorAnalysis>();
+            PopulateManagementNumbers(allErrors);
+
+            var filteredErrors = ApplyIndexFilters(allErrors, model).ToList();
+            var pageSize = model.PageSize > 0 ? model.PageSize : 50;
+            var totalCount = filteredErrors.Count;
+            var totalPages = totalCount == 0 ? 1 : (int)Math.Ceiling(totalCount / (double)pageSize);
+            var currentPage = model.CurrentPage > 0 ? model.CurrentPage : 1;
+
+            if (currentPage > totalPages)
+            {
+                currentPage = totalPages;
+            }
+
+            model.Items = filteredErrors
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            model.PageSize = pageSize;
+            model.CurrentPage = currentPage;
+            model.TotalCount = totalCount;
+            model.TotalPages = totalPages;
+
+            PopulateIndexFilterData(model, allErrors);
+            return View(model);
+        }
+
+        public ActionResult Create()
+        {
+            PopulateLookupData();
+
+            var currentUser = GetCurrentUserDisplayName();
+            ViewBag.CurrentUser = currentUser;
+
+            return View(new ErrorAnalysis
+            {
+                Investigator = currentUser,
+                PersonInCharge = currentUser,
+                UpdatedBy = currentUser
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(ErrorAnalysis errorAnalysis, IEnumerable<HttpPostedFileBase> attachments)
+        {
+            PopulateLookupData();
+            var currentUser = GetCurrentUserDisplayName();
+            ViewBag.CurrentUser = currentUser;
+
+            if (errorAnalysis == null)
+            {
+                ModelState.AddModelError(string.Empty, "Không đọc được dữ liệu từ form gửi lên.");
+                return View(new ErrorAnalysis());
+            }
+
+            SaveAttachments(errorAnalysis, attachments);
+            PrepareDerivedFields(errorAnalysis, currentUser);
+
+            errorAnalysis.UpdatedBy = currentUser;
+            errorAnalysis.UpdatedDate = DateTime.Now;
+
+            _repository.Add(errorAnalysis);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var errorAnalysis = _repository.GetById(id);
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            PopulateLookupData();
+            var currentUser = GetCurrentUserDisplayName();
+            ViewBag.CurrentUser = currentUser;
+            errorAnalysis.Investigator = currentUser;
+            errorAnalysis.PersonInCharge = currentUser;
+            PopulateManagementNumbers(new List<ErrorAnalysis> { errorAnalysis });
+            return View(errorAnalysis);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ErrorAnalysis errorAnalysis, IEnumerable<HttpPostedFileBase> attachments)
+        {
+            PopulateLookupData();
+            var currentUser = GetCurrentUserDisplayName();
+            ViewBag.CurrentUser = currentUser;
+
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            var existing = _repository.GetById(errorAnalysis.Id);
+            if (existing == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (attachments != null && attachments.Any(x => x != null && x.ContentLength > 0))
+            {
+                SaveAttachments(errorAnalysis, attachments);
+            }
+            else
+            {
+                errorAnalysis.AttachmentPath = existing.AttachmentPath;
+            }
+
+            PrepareDerivedFields(errorAnalysis, currentUser);
+
+            errorAnalysis.UpdatedBy = currentUser;
+            errorAnalysis.UpdatedDate = DateTime.Now;
+
+            _repository.Update(errorAnalysis);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            _repository.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Details(int id)
+        {
+            var errorAnalysis = _repository.GetById(id);
+            if (errorAnalysis == null)
+            {
+                return HttpNotFound();
+            }
+
+            PopulateManagementNumbers(new List<ErrorAnalysis> { errorAnalysis });
+            return View(errorAnalysis);
+        }
+
+        public ActionResult Search(string keyword, string factory, string status, string model)
+        {
+            var errors = _repository.Search(keyword, factory, status, model);
+            PopulateManagementNumbers(errors);
+            ViewBag.Keyword = keyword;
+            ViewBag.FactoryFilter = factory;
+            ViewBag.StatusFilter = status;
+            ViewBag.ModelFilter = model;
+            ViewBag.FactoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Factory, "-- Tất cả --");
+            ViewBag.ProgressOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.InvestigationProgress, "-- Tất cả --");
+
+            return View("Search", errors);
+        }
+
+        private static IEnumerable<ErrorAnalysis> ApplyIndexFilters(IEnumerable<ErrorAnalysis> errors, ErrorAnalysisIndexViewModel model)
+        {
+            var query = errors ?? Enumerable.Empty<ErrorAnalysis>();
+
+            query = query.Where(x => ContainsText(x.ManagementNumber, model.FilterManagementNumber));
+            query = query.Where(x => ContainsText(x.ProblemContent, model.FilterProblemContent));
+            query = query.Where(x => EqualsText(x.CauseClassification, model.FilterCauseClassification));
+            query = query.Where(x => ContainsText(x.OccurrencePeriod, model.FilterOccurrencePeriod));
+            query = query.Where(x => EqualsText(x.OccurrenceProcess, model.FilterOccurrenceProcess));
+            query = query.Where(x => EqualsText(x.Model, model.FilterModel));
+            query = query.Where(x => EqualsText(GetDefectDisplayValue(x), model.FilterDefectClassification));
+            query = query.Where(x => EqualsText(x.PersonInCharge, model.FilterPersonInCharge));
+            query = query.Where(x => ContainsText(x.DetailedCause, model.FilterDetailedCause));
+            query = query.Where(x => ContainsText(x.NextActionSummary, model.FilterNextAction));
+            query = query.Where(x => ContainsText(x.TemporaryMeasureSummary, model.FilterTemporaryMeasure));
+            query = query.Where(x => ContainsText(x.PermanentMeasureSummary, model.FilterPermanentMeasure));
+            query = query.Where(x => ContainsText(GetEffectConfirmationValue(x), model.FilterEffectConfirmation));
+            query = query.Where(x => ContainsText(GetInvestigationHoursValue(x), model.FilterInvestigationHours));
+            query = query.Where(x => EqualsText(x.BAction, model.FilterBAction));
+            query = query.Where(x => EqualsText(x.BActionStatus, model.FilterBActionStatus));
+            query = query.Where(x => EqualsText(x.ShipmentStop, model.FilterShipmentStop));
+            query = query.Where(x => EqualsText(x.Report, model.FilterReport));
+            query = query.Where(x => EqualsText(x.ChronicDefect, model.FilterChronicDefect));
+
+            return query;
+        }
+
+        private void PopulateIndexFilterData(ErrorAnalysisIndexViewModel model, IEnumerable<ErrorAnalysis> errors)
+        {
+            var list = errors ?? Enumerable.Empty<ErrorAnalysis>();
+
+            model.CauseOptions = BuildFilterOptions(ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.CauseClassification, "-- tất cả --"));
+            model.ProcessOptions = BuildFilterOptions(ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.OccurrenceProcess, "-- tất cả --"));
+            model.ModelOptions = BuildFilterOptions(ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Model, "-- tất cả --"));
+            model.PersonInChargeOptions = BuildFilterOptions(list.Select(x => x.PersonInCharge));
+            model.DefectOptions = BuildFilterOptions(list.Select(GetDefectDisplayValue));
+            model.BActionOptions = BuildFilterOptions(list.Select(x => x.BAction));
+            model.BActionStatusOptions = BuildFilterOptions(list.Select(x => x.BActionStatus));
+            model.ShipmentStopOptions = BuildFilterOptions(ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ShipmentStop, "-- tất cả --"));
+            model.ReportOptions = BuildFilterOptions(list.Select(x => x.Report));
+            model.ChronicDefectOptions = BuildFilterOptions(ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ChronicDefect, "-- tất cả --"));
+        }
+
+        private static string GetDefectDisplayValue(ErrorAnalysis error)
+        {
+            return string.IsNullOrWhiteSpace(error.DefectClassification) ? error.Category : error.DefectClassification;
+        }
+
+        private static string GetEffectConfirmationValue(ErrorAnalysis error)
+        {
+            return string.IsNullOrWhiteSpace(error.MeasureCompletionTime) ? error.Sharing : error.MeasureCompletionTime;
+        }
+
+        private static string GetInvestigationHoursValue(ErrorAnalysis error)
+        {
+            return error.InvestigationHours.HasValue ? error.InvestigationHours.Value.ToString("0.0") : string.Empty;
+        }
+
+        private static bool ContainsText(string source, string filter)
+        {
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return true;
+            }
+
+            return (source ?? string.Empty).IndexOf(filter.Trim(), StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private static bool EqualsText(string source, string filter)
+        {
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return true;
+            }
+
+            return string.Equals((source ?? string.Empty).Trim(), filter.Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static List<SelectListItem> BuildFilterOptions(IEnumerable<SelectListItem> items)
+        {
+            return items
+                .Where(x => x != null)
+                .GroupBy(x => x.Value ?? string.Empty)
+                .Select(g => g.First())
+                .ToList();
+        }
+
+        private static List<SelectListItem> BuildFilterOptions(IEnumerable<string> values)
+        {
+            var items = new List<SelectListItem>
+            {
+                new SelectListItem { Value = string.Empty, Text = "-- tất cả --" }
+            };
+
+            items.AddRange(values
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(x => x)
+                .Select(x => new SelectListItem { Value = x, Text = x }));
+
+            return items;
+        }
+
+        public ActionResult Chart()
+        {
+            var errors = _repository.GetAll() ?? new List<ErrorAnalysis>();
+
+            var progressItems = BuildChartItems(errors, x => x.InvestigationProgress);
+            var causeItems = BuildChartItems(errors, x => x.CauseClassification);
+            var investigatorItems = BuildChartItems(errors, x => x.Investigator, 10);
+            var factoryItems = BuildChartItems(errors, x => x.Factory);
+            var modelItems = BuildChartItems(errors, x => x.Model, 10);
+            var monthlyItems = BuildMonthlyItems(errors);
+
+            var viewModel = new ErrorAnalysisChartViewModel
+            {
+                TotalCount = errors.Count,
+
+                ProgressLabels = progressItems.Select(x => x.Label).ToList(),
+                ProgressData = progressItems.Select(x => x.Value).ToList(),
+
+                CauseLabels = causeItems.Select(x => x.Label).ToList(),
+                CauseData = causeItems.Select(x => x.Value).ToList(),
+
+                InvestigatorLabels = investigatorItems.Select(x => x.Label).ToList(),
+                InvestigatorData = investigatorItems.Select(x => x.Value).ToList(),
+
+                FactoryLabels = factoryItems.Select(x => x.Label).ToList(),
+                FactoryData = factoryItems.Select(x => x.Value).ToList(),
+
+                ModelLabels = modelItems.Select(x => x.Label).ToList(),
+                ModelData = modelItems.Select(x => x.Value).ToList(),
+
+                MonthlyLabels = monthlyItems.Select(x => x.Label).ToList(),
+                MonthlyData = monthlyItems.Select(x => x.Value).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        private void PopulateLookupData()
+        {
+            ViewBag.StageOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.StageClassification, "-- Chọn --");
+            ViewBag.ProcessOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.OccurrenceProcess, "-- Chọn --");
+            ViewBag.ProgressOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.InvestigationProgress, "-- Chọn --");
+            ViewBag.CauseOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.CauseClassification, "-- Chọn --");
+            ViewBag.TempMeasureOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.TemporaryMeasureClassification, "-- Chọn --");
+            ViewBag.PermMeasureOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.PermanentMeasureClassification, "-- Chọn --");
+            ViewBag.FactoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Factory, "-- Chọn --");
+            ViewBag.ShipmentStopOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ShipmentStop, "-- Chọn --");
+            ViewBag.InvestigatorOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Investigator, "-- Chọn --");
+            ViewBag.CategoryOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Category, "-- Chọn --");
+            ViewBag.ModelOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Model, "-- Chọn --");
+            ViewBag.SupplierOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Supplier, "-- Chọn --");
+            ViewBag.PhenomenonOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.Phenomenon, "-- Chọn --");
+            ViewBag.ChronicDefectOptions = ErrorAnalysisReferenceData.GetSelectList(ErrorAnalysisLookupGroups.ChronicDefect, "-- Chọn --");
+        }
+
+        private void SaveAttachments(ErrorAnalysis errorAnalysis, IEnumerable<HttpPostedFileBase> attachments)
+        {
+            if (attachments == null)
+            {
+                return;
+            }
+
+            var uploadFolder = Server.MapPath("~/Uploads");
+
+            if (!System.IO.Directory.Exists(uploadFolder))
+            {
+                System.IO.Directory.CreateDirectory(uploadFolder);
+            }
+
+            var savedFiles = new List<string>();
+
+            foreach (var attachment in attachments.Where(x => x != null && x.ContentLength > 0))
+            {
+                var originalFileName = System.IO.Path.GetFileName(attachment.FileName);
+                var uniqueFileName = Guid.NewGuid().ToString("N") + "_" + originalFileName;
+                var path = System.IO.Path.Combine(uploadFolder, uniqueFileName);
+                attachment.SaveAs(path);
+                savedFiles.Add("~/Uploads/" + uniqueFileName);
+            }
+
+            if (savedFiles.Any())
+            {
+                errorAnalysis.AttachmentPath = string.Join("|", savedFiles);
+            }
+        }
+
+        private void PrepareDerivedFields(ErrorAnalysis errorAnalysis, string currentUser)
+        {
+            errorAnalysis.Status = errorAnalysis.InvestigationProgress;
+            errorAnalysis.OccurrencePeriod = errorAnalysis.OccurrenceDate.HasValue
+                ? errorAnalysis.OccurrenceDate.Value.ToString("dd/MM/yyyy HH:mm")
+                : null;
+
+            errorAnalysis.Investigator = currentUser;
+            errorAnalysis.PersonInCharge = currentUser;
+            errorAnalysis.ImageStatus = errorAnalysis.Phenomenon;
+            errorAnalysis.NextActionSummary = errorAnalysis.NextAction;
+            errorAnalysis.TemporaryMeasureSummary = errorAnalysis.TemporaryMeasureDetail;
+            errorAnalysis.PermanentMeasureSummary = errorAnalysis.PermanentMeasureDetail;
+            errorAnalysis.BActionStatus = errorAnalysis.BAction;
+        }
+
+        private void PopulateManagementNumbers(IList<ErrorAnalysis> errors)
+        {
+            if (errors == null || errors.Count == 0)
+            {
+                return;
+            }
+
+            var allErrors = _repository.GetAll() ?? new List<ErrorAnalysis>();
+            var sequenceMap = allErrors
+                .Where(x => x != null)
+                .OrderBy(x => x.Id)
+                .GroupBy(x => NormalizeModelCode(x.Model))
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select((item, index) => new { item.Id, Sequence = index + 1 })
+                          .ToDictionary(x => x.Id, x => x.Sequence));
+
+            foreach (var error in errors)
+            {
+                if (error == null)
+                {
+                    continue;
+                }
+
+                var modelCode = NormalizeModelCode(error.Model);
+                int sequence;
+                if (sequenceMap.ContainsKey(modelCode) && sequenceMap[modelCode].TryGetValue(error.Id, out sequence))
+                {
+                    error.ManagementNumber = string.Format("{0}_{1:000}", modelCode, sequence);
+                }
+                else
+                {
+                    error.ManagementNumber = string.Format("{0}_{1:000}", modelCode, error.Id);
+                }
+            }
+        }
+
+        private static string NormalizeModelCode(string model)
+        {
+            return string.IsNullOrWhiteSpace(model) ? "NA" : model.Trim();
+        }
+
+        private static string GetCurrentUserDisplayName()
+        {
+            var identity = System.Web.HttpContext.Current?.User?.Identity;
+            if (identity == null)
+            {
+                var logonIdentity = System.Web.HttpContext.Current?.Request?.LogonUserIdentity;
+                if (logonIdentity == null || string.IsNullOrWhiteSpace(logonIdentity.Name))
+                {
+                    return "Unknown";
+                }
+
+                return ExtractUserName(logonIdentity.Name);
+            }
+
+            var name = identity.Name;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                var logonIdentity = System.Web.HttpContext.Current?.Request?.LogonUserIdentity;
+                return logonIdentity == null || string.IsNullOrWhiteSpace(logonIdentity.Name)
+                    ? "Unknown"
+                    : ExtractUserName(logonIdentity.Name);
+            }
+
+            return ExtractUserName(name);
+        }
+
+        private static string ExtractUserName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "Unknown";
+            }
+
+            var separatorIndex = name.LastIndexOf('\\');
+            return separatorIndex >= 0 && separatorIndex < name.Length - 1
+                ? name.Substring(separatorIndex + 1)
+                : name;
+        }
+
+        private static List<ChartItem> BuildChartItems(IEnumerable<ErrorAnalysis> errors, Func<ErrorAnalysis, string> selector, int take = 0)
+        {
+            IEnumerable<ChartItem> query = errors
+                .GroupBy(x => NormalizeLabel(selector(x)))
+                .Select(x => new ChartItem
+                {
+                    Label = x.Key,
+                    Value = x.Count()
+                })
+                .OrderByDescending(x => x.Value)
+                .ThenBy(x => x.Label);
+
+            if (take > 0)
+            {
+                query = query.Take(take);
+            }
+
+            return query.ToList();
+        }
+
+        private static List<ChartItem> BuildMonthlyItems(IEnumerable<ErrorAnalysis> errors)
+        {
+            return errors
+                .Where(x => x.OccurrenceDate.HasValue)
+                .GroupBy(x => new
+                {
+                    x.OccurrenceDate.Value.Year,
+                    x.OccurrenceDate.Value.Month
+                })
+                .OrderBy(x => x.Key.Year)
+                .ThenBy(x => x.Key.Month)
+                .Select(x => new ChartItem
+                {
+                    Label = x.Key.Month.ToString("00") + "/" + x.Key.Year,
+                    Value = x.Count()
+                })
+                .ToList();
+        }
+
+        private static string NormalizeLabel(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? "Chưa cập nhật" : value;
+        }
+        public ActionResult LookupManagement()
+        {
+            return View(BuildLookupManagementViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLookup(string groupCode, string value, string displayText, int? sortOrder)
+        {
+            if (!IsSupportedLookupGroup(groupCode))
+            {
+                return HttpNotFound();
+            }
+
+            value = (value ?? string.Empty).Trim();
+            displayText = string.IsNullOrWhiteSpace(displayText) ? value : displayText.Trim();
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                TempData["LookupError"] = "Giá trị không được để trống.";
+                return RedirectToAction("LookupManagement");
+            }
+
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                var exists = context.ErrorAnalysisLookups.Any(x =>
+                    x.GroupCode == groupCode &&
+                    x.Value == value);
+
+                if (exists)
+                {
+                    TempData["LookupError"] = "Dữ liệu đã tồn tại.";
+                    return RedirectToAction("LookupManagement");
+                }
+
+                var nextSortOrder = sortOrder ?? context.ErrorAnalysisLookups
+                    .Where(x => x.GroupCode == groupCode)
+                    .Select(x => (int?)x.SortOrder)
+                    .Max().GetValueOrDefault() + 1;
+
+                context.ErrorAnalysisLookups.Add(new ErrorAnalysisLookup
+                {
+                    GroupCode = groupCode,
+                    Value = value,
+                    DisplayText = displayText,
+                    SortOrder = nextSortOrder,
+                    IsActive = true
+                });
+
+                context.SaveChanges();
+            }
+
+            TempData["LookupMessage"] = "Đã thêm danh mục.";
+            return RedirectToAction("LookupManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateLookup(int id, string value, string displayText, int sortOrder, bool isActive)
+        {
+            value = (value ?? string.Empty).Trim();
+            displayText = string.IsNullOrWhiteSpace(displayText) ? value : displayText.Trim();
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                TempData["LookupError"] = "Giá trị không được để trống.";
+                return RedirectToAction("LookupManagement");
+            }
+
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                var item = context.ErrorAnalysisLookups.FirstOrDefault(x => x.Id == id);
+                if (item == null || !IsSupportedLookupGroup(item.GroupCode))
+                {
+                    return HttpNotFound();
+                }
+
+                var exists = context.ErrorAnalysisLookups.Any(x =>
+                    x.Id != id &&
+                    x.GroupCode == item.GroupCode &&
+                    x.Value == value);
+
+                if (exists)
+                {
+                    TempData["LookupError"] = "Dữ liệu đã tồn tại.";
+                    return RedirectToAction("LookupManagement");
+                }
+
+                item.Value = value;
+                item.DisplayText = displayText;
+                item.SortOrder = sortOrder;
+                item.IsActive = isActive;
+
+                context.SaveChanges();
+            }
+
+            TempData["LookupMessage"] = "Đã cập nhật danh mục.";
+            return RedirectToAction("LookupManagement");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteLookup(int id)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                var item = context.ErrorAnalysisLookups.FirstOrDefault(x => x.Id == id);
+                if (item == null || !IsSupportedLookupGroup(item.GroupCode))
+                {
+                    return HttpNotFound();
+                }
+
+                context.ErrorAnalysisLookups.Remove(item);
+                context.SaveChanges();
+            }
+
+            TempData["LookupMessage"] = "Đã xóa danh mục.";
+            return RedirectToAction("LookupManagement");
+        }
+
+        private static ErrorAnalysisLookupManagementViewModel BuildLookupManagementViewModel()
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                return new ErrorAnalysisLookupManagementViewModel
+                {
+                    Models = context.ErrorAnalysisLookups
+                        .Where(x => x.GroupCode == ErrorAnalysisLookupGroups.Model)
+                        .OrderBy(x => x.SortOrder)
+                        .ThenBy(x => x.DisplayText)
+                        .ToList(),
+
+                    Suppliers = context.ErrorAnalysisLookups
+                        .Where(x => x.GroupCode == ErrorAnalysisLookupGroups.Supplier)
+                        .OrderBy(x => x.SortOrder)
+                        .ThenBy(x => x.DisplayText)
+                        .ToList()
+                };
+            }
+        }
+
+        private static bool IsSupportedLookupGroup(string groupCode)
+        {
+            return groupCode == ErrorAnalysisLookupGroups.Model
+                || groupCode == ErrorAnalysisLookupGroups.Supplier;
+        }
+
+        private class ChartItem
+        {
+            public string Label { get; set; }
+            public int Value { get; set; }
+        }
+    }
+}

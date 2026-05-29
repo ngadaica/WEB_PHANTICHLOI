@@ -1,0 +1,694 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysisChartViewModel
+@using System
+@using System.Linq
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Biểu đồ phân tích lỗi 統計グラフ";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+
+    var chartCards = Model.Charts ?? new List<WEB_PHANTICHLOI.Models.ErrorAnalysisChartCardViewModel>();
+    var selectedFilterCount =
+        (Model.SelectedProgresses ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedCategories ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedModels ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedCauseClassifications ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedPersonInCharges ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedDefectClassifications ?? Enumerable.Empty<string>()).Count() +
+        (Model.SelectedChronicDefects ?? Enumerable.Empty<string>()).Count();
+    var hasAnyFilter = selectedFilterCount > 0;
+}
+
+@helper RenderFilterGroup(string title, string inputName, IEnumerable<string> options, IEnumerable<string> selectedValues)
+{
+    var optionList = (options ?? Enumerable.Empty<string>()).ToList();
+    var selectedSet = new HashSet<string>(selectedValues ?? Enumerable.Empty<string>(), StringComparer.OrdinalIgnoreCase);
+
+    <div class="ea-filter-group">
+        <div class="ea-filter-group-title">
+            <span>@title</span>
+            <span class="ea-filter-group-count">@optionList.Count</span>
+        </div>
+        <div class="ea-filter-options">
+            @foreach (var option in optionList)
+            {
+                var optionId = inputName + "_" + option.GetHashCode().ToString().Replace("-", "N");
+                <label class="ea-filter-option @(selectedSet.Contains(option) ? "selected" : string.Empty)" for="@optionId">
+                    <input type="checkbox"
+                           id="@optionId"
+                           name="@inputName"
+                           value="@option"
+                           class="ea-filter-check"
+                           @(selectedSet.Contains(option) ? "checked" : null) />
+                    <span>@option</span>
+                </label>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .ea-chart-page {
+        min-width: 0;
+    }
+
+    .ea-chart-layout {
+        display: grid;
+        grid-template-columns: 340px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    .ea-chart-sidebar {
+        position: sticky;
+        top: 16px;
+        background: linear-gradient(180deg, #fbfdf7 0%, #f1f7e8 100%);
+        border: 1px solid #d6e7c2;
+        border-radius: 20px;
+        box-shadow: 0 14px 34px rgba(56, 84, 32, 0.08);
+        padding: 20px;
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+    }
+
+    .ea-filter-panel-head {
+        padding-bottom: 16px;
+        border-bottom: 1px solid #d9e8c9;
+        margin-bottom: 18px;
+    }
+
+    .ea-filter-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+    }
+
+    .ea-filter-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1f2937;
+        line-height: 1.3;
+    }
+
+    .ea-filter-subtitle {
+        color: #6b7280;
+        font-size: 12px;
+        line-height: 1.55;
+        margin: 0;
+    }
+
+    .ea-filter-summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .ea-filter-summary-item {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid #d4e5c0;
+        border-radius: 14px;
+        padding: 12px 14px;
+    }
+
+    .ea-filter-summary-label {
+        display: block;
+        color: #6b7280;
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+
+    .ea-filter-summary-value {
+        color: #1f2937;
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .ea-filter-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .ea-filter-reset {
+        padding: 8px 14px !important;
+        font-size: 12px !important;
+        border-radius: 12px !important;
+        border-color: #cfe0bb !important;
+        background: #ffffff !important;
+        color: #4b5563 !important;
+    }
+
+    .ea-filter-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ea-filter-status.active {
+        background: linear-gradient(180deg, #ddecce 0%, #d2e6bc 100%);
+        color: #3f6212;
+        border: 1px solid #a8c97c;
+    }
+
+    .ea-filter-status.idle {
+        background: rgba(255, 255, 255, 0.92);
+        color: #5b6b41;
+        border: 1px solid #d6e7c2;
+    }
+
+    .ea-filter-group + .ea-filter-group {
+        margin-top: 18px;
+    }
+
+    .ea-filter-group {
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid #d8e7c8;
+        border-radius: 18px;
+        padding: 14px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .ea-filter-group-title {
+        font-size: 14px;
+        font-weight: 800;
+        color: #24311d;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .ea-filter-group-count {
+        color: #597438;
+        font-size: 11px;
+        font-weight: 700;
+        background: #f2f8e8;
+        border: 1px solid #d6e7c2;
+        border-radius: 999px;
+        padding: 4px 9px;
+    }
+
+    .ea-filter-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 320px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+
+    .ea-filter-option {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border: 1px solid #c4dca8;
+        background: linear-gradient(180deg, #f6fbef 0%, #edf6e2 100%);
+        color: #374151;
+        border-radius: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 1.45;
+        transition: all 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .ea-filter-option span {
+        display: block;
+        width: 100%;
+        word-break: break-word;
+    }
+
+    .ea-filter-option:hover {
+        border-color: #a9c67f;
+        background: linear-gradient(180deg, #f1f8e4 0%, #e8f2d8 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(120, 150, 80, 0.12);
+    }
+
+    .ea-filter-option.selected {
+        background: linear-gradient(180deg, #e0efcb 0%, #d2e6b7 100%);
+        border-color: #94b86b;
+        color: #1f2937;
+        font-weight: 700;
+        box-shadow: 0 10px 20px rgba(137, 173, 92, 0.18);
+    }
+
+    .ea-filter-option input {
+        display: none;
+    }
+
+    .ea-chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .ea-chart-card {
+        background: #ffffff;
+        border: 1px solid #e5eadf;
+        border-radius: 16px;
+        box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+        min-width: 0;
+    }
+
+    .ea-chart-card.wide {
+        grid-column: span 2;
+    }
+
+    .ea-chart-card-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid #eef2ea;
+        font-size: 15px;
+        font-weight: 800;
+        color: #1f2937;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfcf8 100%);
+    }
+
+    .ea-chart-card-body {
+        padding: 18px;
+    }
+
+    .ea-chart-canvas-wrap {
+        position: relative;
+        height: 340px;
+    }
+
+    .ea-chart-card.wide .ea-chart-canvas-wrap {
+        height: 400px;
+    }
+
+    .ea-empty-state {
+        text-align: center;
+        padding: 42px 24px;
+        background: #ffffff;
+        border: 1px dashed #cfe0bb;
+        border-radius: 16px;
+        color: #667085;
+        font-size: 14px;
+    }
+
+    @@media (max-width: 1200px) {
+        .ea-chart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .ea-chart-sidebar {
+            position: static;
+            max-height: none;
+        }
+
+    }
+
+    @@media (max-width: 992px) {
+        .ea-chart-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ea-chart-card.wide {
+            grid-column: auto;
+        }
+
+        .ea-chart-card.wide .ea-chart-canvas-wrap {
+            height: 340px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .ea-filter-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+@using (Html.BeginForm("Chart", "ErrorAnalysis", FormMethod.Get, new { id = "chartFilterForm" }))
+{
+    <div class="ea-chart-layout">
+        <div class="ea-chart-sidebar">
+            <div class="ea-filter-panel-head">
+                <div class="ea-filter-header">
+                    <div>
+                        <div class="ea-filter-title"><span class="lang-vi">Bộ lọc chart</span><span class="lang-jp">チャートフィルター</span></div>
+                        <p class="ea-filter-subtitle">
+                            <span class="lang-vi">Chọn nhanh điều kiện để so sánh xu hướng lỗi, nguyên nhân và thời gian điều tra.</span>
+                            <span class="lang-jp">条件を選択して、不良傾向・原因・調査時間をすばやく比較できます。</span>
+                        </p>
+                    </div>
+                    <a href="@Url.Action("Chart")" class="btn-iss btn-iss-secondary ea-filter-reset" style="text-decoration:none;">
+                        <span class="lang-vi">Bỏ lọc</span><span class="lang-jp">クリア</span>
+                    </a>
+                </div>
+
+                <div class="ea-filter-summary">
+                    <div class="ea-filter-summary-item">
+                        <span class="ea-filter-summary-label"><span class="lang-vi">Tổng vụ lỗi</span><span class="lang-jp">不良件数合計</span></span>
+                        <span class="ea-filter-summary-value">@Model.TotalCount</span>
+                    </div>
+                    <div class="ea-filter-summary-item">
+                        <span class="ea-filter-summary-label"><span class="lang-vi">Bộ lọc đang dùng</span><span class="lang-jp">適用中の条件</span></span>
+                        <span class="ea-filter-summary-value">@selectedFilterCount</span>
+                    </div>
+                </div>
+
+                <div class="ea-filter-actions">
+                    <span class="ea-filter-status @(hasAnyFilter ? "active" : "idle")">
+                        <span class="lang-vi">@(hasAnyFilter ? "Đang lọc dữ liệu" : "Đang xem toàn bộ dữ liệu")</span>
+                        <span class="lang-jp">@(hasAnyFilter ? "絞り込み中" : "全データ表示中")</span>
+                    </span>
+                </div>
+            </div>
+
+            @RenderFilterGroup("Tiến độ điều tra", "SelectedProgresses", Model.ProgressOptions, Model.SelectedProgresses)
+            @RenderFilterGroup("Chủng loại", "SelectedCategories", Model.CategoryOptions, Model.SelectedCategories)
+            @RenderFilterGroup("Model", "SelectedModels", Model.ModelOptions, Model.SelectedModels)
+            @RenderFilterGroup("Phân loại nguyên nhân", "SelectedCauseClassifications", Model.CauseClassificationOptions, Model.SelectedCauseClassifications)
+            @RenderFilterGroup("Đảm nhiệm", "SelectedPersonInCharges", Model.PersonInChargeOptions, Model.SelectedPersonInCharges)
+            @RenderFilterGroup("Phân loại lỗi", "SelectedDefectClassifications", Model.DefectClassificationOptions, Model.SelectedDefectClassifications)
+            @RenderFilterGroup("Lỗi mãn tính", "SelectedChronicDefects", Model.ChronicDefectOptions, Model.SelectedChronicDefects)
+        </div>
+
+        <div class="ea-chart-page">
+            @if (chartCards.Any())
+            {
+                <div class="ea-chart-grid">
+                    @foreach (var chart in chartCards)
+                    {
+                        var isWide = chart != null && (
+                            string.Equals(chart.Id, "investigatorDefectChart", StringComparison.OrdinalIgnoreCase)
+                            || string.Equals(chart.Id, "causeRatioByCategoryChart", StringComparison.OrdinalIgnoreCase));
+
+                        <div class="ea-chart-card @(isWide ? "wide" : string.Empty)">
+                            <div class="ea-chart-card-header">@chart.Title</div>
+                            <div class="ea-chart-card-body">
+                                <div class="ea-chart-canvas-wrap">
+                                    <canvas id="@chart.Id"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="ea-empty-state">
+                    <span class="lang-vi">Không có dữ liệu phù hợp với bộ lọc hiện tại.</span>
+                    <span class="lang-jp">現在の条件に一致するデータがありません。</span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/chart.js")
+    <script>
+        $(function () {
+            $('.ea-filter-check').on('change', function () {
+                $('#chartFilterForm').submit();
+            });
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js chưa được load.');
+                return;
+            }
+
+            var piePercentageLabelPlugin = {
+                id: 'piePercentageLabelPlugin',
+                afterDatasetsDraw: function (chart) {
+                    if (!chart || chart.config.type !== 'pie') {
+                        return;
+                    }
+
+                    var options = chart.config.options || {};
+                    var plugins = options.plugins || {};
+                    if (!plugins.piePercentageLabelPlugin || !plugins.piePercentageLabelPlugin.enabled) {
+                        return;
+                    }
+
+                    var dataset = chart.data.datasets && chart.data.datasets.length ? chart.data.datasets[0] : null;
+                    if (!dataset || !dataset.data || !dataset.data.length) {
+                        return;
+                    }
+
+                    var total = 0;
+                    for (var i = 0; i < dataset.data.length; i++) {
+                        total += Number(dataset.data[i] || 0);
+                    }
+
+                    if (!total) {
+                        return;
+                    }
+
+                    var meta = chart.getDatasetMeta(0);
+                    var ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    for (var j = 0; j < meta.data.length; j++) {
+                        var value = Number(dataset.data[j] || 0);
+                        if (!value) {
+                            continue;
+                        }
+
+                        var percentage = (value * 100) / total;
+                        if (percentage < 4) {
+                            continue;
+                        }
+
+                        var arc = meta.data[j];
+                        var angle = (arc.startAngle + arc.endAngle) / 2;
+                        var radius = arc.innerRadius + ((arc.outerRadius - arc.innerRadius) * 0.62);
+                        var x = arc.x + Math.cos(angle) * radius;
+                        var y = arc.y + Math.sin(angle) * radius;
+                        var bg = dataset.backgroundColor;
+                        var fillColor = $.isArray(bg) ? bg[j] : bg;
+                        var textColor = fillColor === '#f59e0b' || fillColor === '#10b981' || fillColor === '#84cc16' ? '#111827' : '#ffffff';
+
+                        ctx.fillStyle = textColor;
+                        ctx.fillText(percentage.toFixed(1) + '%', x, y);
+                    }
+
+                    ctx.restore();
+                }
+            };
+
+            var chartValueLabelPlugin = {
+                id: 'chartValueLabelPlugin',
+                afterDatasetsDraw: function (chart) {
+                    if (!chart || chart.config.type === 'pie') {
+                        return;
+                    }
+
+                    var options = chart.config.options || {};
+                    var plugins = options.plugins || {};
+                    if (!plugins.chartValueLabelPlugin || !plugins.chartValueLabelPlugin.enabled) {
+                        return;
+                    }
+
+                    var ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = 'bold 11px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = '#111827';
+
+                    for (var datasetIndex = 0; datasetIndex < chart.data.datasets.length; datasetIndex++) {
+                        var dataset = chart.data.datasets[datasetIndex];
+                        var meta = chart.getDatasetMeta(datasetIndex);
+                        if (!meta || meta.hidden) {
+                            continue;
+                        }
+
+                        for (var dataIndex = 0; dataIndex < meta.data.length; dataIndex++) {
+                            var element = meta.data[dataIndex];
+                            var rawValue = dataset.data && dataset.data.length > dataIndex ? Number(dataset.data[dataIndex] || 0) : 0;
+                            if (!element || !rawValue) {
+                                continue;
+                            }
+
+                            var position = element.tooltipPosition ? element.tooltipPosition() : { x: element.x, y: element.y };
+                            var label = formatNumber(rawValue);
+                            var datasetType = dataset.type || chart.config.type;
+
+                            if (datasetType === 'line') {
+                                ctx.textBaseline = 'bottom';
+                                ctx.fillText(label, position.x, position.y - 10);
+                                continue;
+                            }
+
+                            var props = typeof element.getProps === 'function'
+                                ? element.getProps(['x', 'y', 'base', 'width', 'height'], true)
+                                : element;
+                            var centerX = props.x;
+                            var centerY = props.base;
+
+                            if (typeof props.y === 'number' && typeof props.base === 'number') {
+                                centerY = props.y + ((props.base - props.y) / 2);
+                            }
+
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText(label, centerX, centerY);
+                        }
+                    }
+
+                    ctx.restore();
+                }
+            };
+
+            Chart.register(piePercentageLabelPlugin);
+            Chart.register(chartValueLabelPlugin);
+
+            var charts = @Html.Raw(Json.Encode(Model.Charts ?? new List<WEB_PHANTICHLOI.Models.ErrorAnalysisChartCardViewModel>()));
+
+            function formatNumber(value) {
+                var number = Number(value || 0);
+                if (Math.abs(number - Math.round(number)) < 0.001) {
+                    return Math.round(number).toString();
+                }
+
+                return number.toFixed(2);
+            }
+
+            function createChart(chart) {
+                if (!chart || !chart.Id) {
+                    return;
+                }
+
+                var ctx = document.getElementById(chart.Id);
+                if (!ctx) {
+                    return;
+                }
+
+                var datasets = $.map(chart.Datasets || [], function (dataset) {
+                    return {
+                        label: dataset.Label,
+                        type: dataset.Type || chart.ChartType,
+                        data: dataset.Data || [],
+                        backgroundColor: dataset.BackgroundColor,
+                        borderColor: dataset.BorderColor,
+                        borderWidth: dataset.BorderWidth || 1,
+                        fill: dataset.Fill,
+                        tension: dataset.Tension || 0,
+                        yAxisID: dataset.YAxisId || 'y',
+                        stack: dataset.Stack || undefined,
+                        order: dataset.Order || 0,
+                        borderRadius: chart.ChartType === 'bar' ? 4 : 0,
+                        maxBarThickness: 34,
+                        pointRadius: (dataset.Type || chart.ChartType) === 'line' ? 4 : 0,
+                        pointBackgroundColor: dataset.BorderColor || dataset.BackgroundColor
+                    };
+                });
+
+                new Chart(ctx, {
+                    type: chart.ChartType || 'bar',
+                    data: {
+                        labels: chart.Labels || [],
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: chart.Horizontal ? 'y' : 'x',
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        layout: {
+                            padding: {
+                                top: chart.ChartType === 'line' ? 24 : 12,
+                                right: 12
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: chart.ShowLegend,
+                                position: chart.ChartType === 'pie' ? 'right' : 'top'
+                            },
+                            chartValueLabelPlugin: {
+                                enabled: chart.ChartType !== 'pie'
+                            },
+                            piePercentageLabelPlugin: {
+                                enabled: chart.ChartType === 'pie' && chart.ShowDataLabels
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        var label = context.dataset && context.dataset.label ? context.dataset.label + ': ' : '';
+                                        if (chart.ChartType === 'pie') {
+                                            var values = context.dataset && context.dataset.data ? context.dataset.data : [];
+                                            var total = 0;
+                                            for (var i = 0; i < values.length; i++) {
+                                                total += Number(values[i] || 0);
+                                            }
+
+                                            var raw = Number(context.raw || 0);
+                                            var percentage = total ? ((raw * 100) / total).toFixed(1) : '0.0';
+                                            return label + formatNumber(context.raw) + ' (' + percentage + '%)';
+                                        }
+
+                                        return label + formatNumber(context.raw);
+                                    }
+                                }
+                            }
+                        },
+                        scales: chart.ChartType === 'pie'
+                            ? {}
+                            : {
+                                x: {
+                                    stacked: chart.Stacked,
+                                    beginAtZero: true,
+                                    ticks: {
+                                        autoSkip: false,
+                                        maxRotation: 0,
+                                        minRotation: 0
+                                    }
+                                },
+                                y: {
+                                    stacked: chart.Stacked,
+                                    beginAtZero: true,
+                                    title: {
+                                        display: !!chart.YAxisTitle,
+                                        text: chart.YAxisTitle || ''
+                                    },
+                                    ticks: {
+                                        callback: function (value) {
+                                            return formatNumber(value);
+                                        }
+                                    }
+                                },
+                                y1: chart.SecondaryYAxisTitle ? {
+                                    position: 'right',
+                                    beginAtZero: true,
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: chart.SecondaryYAxisTitle
+                                    },
+                                    ticks: {
+                                        callback: function (value) {
+                                            return formatNumber(value);
+                                        }
+                                    }
+                                } : undefined
+                            }
+                    }
+                });
+            }
+
+            $.each(charts, function (_, chart) {
+                createChart(chart);
+            });
+        });
+    </script>
+}

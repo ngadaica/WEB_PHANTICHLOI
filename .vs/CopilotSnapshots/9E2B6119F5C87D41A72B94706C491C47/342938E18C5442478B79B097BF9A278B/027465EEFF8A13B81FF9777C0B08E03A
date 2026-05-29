@@ -1,0 +1,48 @@
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class ErrorAnalysisIndexViewModel
+    {
+        public List<ErrorAnalysis> Items { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
+        public int TotalCount { get; set; }
+        public int TotalPages { get; set; }
+        public int InvestigatingCount { get; set; }
+        public int CountermeasureDiscussionCount { get; set; }
+        public int CloseCount { get; set; }
+        public string FilterManagementNumber { get; set; }
+        public string FilterProblemContent { get; set; }
+        public string FilterCauseClassification { get; set; }
+        public string FilterOccurrencePeriod { get; set; }
+        public string FilterOccurrenceProcess { get; set; }
+        public string FilterModel { get; set; }
+        public string FilterDefectClassification { get; set; }
+        public string FilterPersonInCharge { get; set; }
+        public string FilterDetailedCause { get; set; }
+        public string FilterNextAction { get; set; }
+        public string FilterTemporaryMeasure { get; set; }
+        public string FilterPermanentMeasure { get; set; }
+        public string FilterEffectConfirmation { get; set; }
+        public string FilterInvestigationHours { get; set; }
+        public string FilterBAction { get; set; }
+        public string FilterBActionStatus { get; set; }
+        public string FilterShipmentStop { get; set; }
+        public string FilterReport { get; set; }
+        public string FilterChronicDefect { get; set; }
+        public string FilterAttachments { get; set; }
+
+        public List<SelectListItem> CauseOptions { get; set; }
+        public List<SelectListItem> ProcessOptions { get; set; }
+        public List<SelectListItem> ModelOptions { get; set; }
+        public List<SelectListItem> DefectOptions { get; set; }
+        public List<SelectListItem> PersonInChargeOptions { get; set; }
+        public List<SelectListItem> BActionOptions { get; set; }
+        public List<SelectListItem> BActionStatusOptions { get; set; }
+        public List<SelectListItem> ShipmentStopOptions { get; set; }
+        public List<SelectListItem> ReportOptions { get; set; }
+        public List<SelectListItem> ChronicDefectOptions { get; set; }
+    }
+}

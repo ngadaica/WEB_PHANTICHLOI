@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class ErrorAnalysisChartViewModel
+    {
+        public int TotalCount { get; set; }
+
+        public List<ErrorAnalysisChartCardViewModel> Charts { get; set; }
+
+        public List<string> ProgressLabels { get; set; }
+        public List<int> ProgressData { get; set; }
+
+        public List<string> CauseLabels { get; set; }
+        public List<int> CauseData { get; set; }
+
+        public List<string> InvestigatorLabels { get; set; }
+        public List<int> InvestigatorData { get; set; }
+
+        public List<string> FactoryLabels { get; set; }
+        public List<int> FactoryData { get; set; }
+
+        public List<string> ModelLabels { get; set; }
+        public List<int> ModelData { get; set; }
+
+        public List<string> MonthlyLabels { get; set; }
+        public List<int> MonthlyData { get; set; }
+
+        public List<string> SelectedProgresses { get; set; }
+        public List<string> SelectedCategories { get; set; }
+        public List<string> SelectedModels { get; set; }
+        public List<string> SelectedCauseClassifications { get; set; }
+
+        public List<string> ProgressOptions { get; set; }
+        public List<string> CategoryOptions { get; set; }
+        public List<string> ModelOptions { get; set; }
+        public List<string> CauseClassificationOptions { get; set; }
+    }
+
+    public class ErrorAnalysisChartCardViewModel
+    {
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string ChartType { get; set; }
+        public List<string> Labels { get; set; }
+        public List<ErrorAnalysisChartDatasetViewModel> Datasets { get; set; }
+        public bool Horizontal { get; set; }
+        public bool Stacked { get; set; }
+        public bool ShowLegend { get; set; }
+        public bool ShowDataLabels { get; set; }
+        public string YAxisTitle { get; set; }
+        public string SecondaryYAxisTitle { get; set; }
+    }
+
+    public class ErrorAnalysisChartDatasetViewModel
+    {
+        public string Label { get; set; }
+        public string Type { get; set; }
+        public List<double> Data { get; set; }
+        public object BackgroundColor { get; set; }
+        public string BorderColor { get; set; }
+        public int BorderWidth { get; set; }
+        public bool Fill { get; set; }
+        public double Tension { get; set; }
+        public string YAxisId { get; set; }
+        public string Stack { get; set; }
+        public int Order { get; set; }
+    }
+}

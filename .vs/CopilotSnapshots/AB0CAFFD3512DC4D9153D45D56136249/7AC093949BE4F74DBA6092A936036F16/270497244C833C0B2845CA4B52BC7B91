@@ -1,0 +1,269 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web.Mvc;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public static class ErrorAnalysisLookupGroups
+    {
+        public const string Investigator = "Investigator";
+        public const string Category = "Category";
+        public const string Model = "Model";
+        public const string Phenomenon = "Phenomenon";
+        public const string StageClassification = "StageClassification";
+        public const string OccurrenceProcess = "OccurrenceProcess";
+        public const string InvestigationProgress = "InvestigationProgress";
+        public const string CauseClassification = "CauseClassification";
+        public const string TemporaryMeasureClassification = "TemporaryMeasureClassification";
+        public const string PermanentMeasureClassification = "PermanentMeasureClassification";
+        public const string Factory = "Factory";
+        public const string ShipmentStop = "ShipmentStop";
+        public const string ChronicDefect = "ChronicDefect";
+        public const string BAction = "BAction";
+    }
+
+    [Table("ErrorAnalysisLookups")]
+    public class ErrorAnalysisLookup
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string GroupCode { get; set; }
+
+        [Required]
+        [StringLength(200)]
+        public string Value { get; set; }
+
+        [Required]
+        [StringLength(200)]
+        public string DisplayText { get; set; }
+
+        public int SortOrder { get; set; }
+
+        public bool IsActive { get; set; }
+    }
+
+    public static class ErrorAnalysisReferenceData
+    {
+        private class LookupSelectRow
+        {
+            public string Value { get; set; }
+            public string DisplayText { get; set; }
+        }
+
+        private static readonly Dictionary<string, List<ErrorAnalysisLookup>> LookupData =
+            new Dictionary<string, List<ErrorAnalysisLookup>>
+            {
+                {
+                    ErrorAnalysisLookupGroups.Investigator,
+                    CreateItems(ErrorAnalysisLookupGroups.Investigator,
+                        "Luận", "Mạnh", "Giang", "Đà", "Tứ", "Nghĩa", "Tự", "Chinh", "Đ.Quang", "Thắng",
+                        "Tính", "Quyền", "Hiếu", "H.Quân", "Thành", "Lâm", "B.Cường", "T.Quang", "Minh", "D.Cường",
+                        "Phong", "Phương", "Nhật", "Kiên", "Hào Quân", "H. Minh", "N.Anh", "Đức", "Toàn", "Nam", "Trung")
+                },
+                {
+                    ErrorAnalysisLookupGroups.Category,
+                    CreateItems(ErrorAnalysisLookupGroups.Category,
+                        "Mono (本体)",
+                        "Color (本体)",
+                        "Domino",
+                        "LM (TD2a, PD7, PJ8)",
+                        "Process (DRTN)")
+                },
+                {
+                    ErrorAnalysisLookupGroups.Model,
+                    CreateItems(ErrorAnalysisLookupGroups.Model,
+                        "DSL", "ESL", "ECL", "FCL", "ELLe", "ELL", "ELL PHE", "FC",
+                        "DLL DRTN", "DL DRTN", "BL DRTN", "FL DRTN", "ELL DRTN", "ELLe DRTN", "ESL DRTN", "DSL DRTN",
+                        "DCL DRTN", "ECL DRTN", "FCL DRTN", "BLL DRTN", "TD2a", "PD7", "BH17/19", "PIJ", "TIJ", "PJ8",
+                        "PD7 DASH", "BH21HT/SC")
+                },
+                {
+                    ErrorAnalysisLookupGroups.Phenomenon,
+                    CreateItems(ErrorAnalysisLookupGroups.Phenomenon,
+                        "Tiếng kêu 異音",
+                        "Ngoại quan 外観",
+                        "Vận chuyển giấy 搬送",
+                        "Chất lượng hình ảnh 品質",
+                        "Lắp ráp 組立",
+                        "Rò mực トナー漏れ",
+                        "Chuyển động 動作",
+                        "Lệch qui cách 規格ズレ",
+                        "An toàn 安全",
+                        "Khác その他")
+                },
+                {
+                    ErrorAnalysisLookupGroups.StageClassification,
+                    CreateItems(ErrorAnalysisLookupGroups.StageClassification,
+                        "Thử khuôn 型試",
+                        "Thử lượng 量試",
+                        "Sản xuất 生産")
+                },
+                {
+                    ErrorAnalysisLookupGroups.OccurrenceProcess,
+                    CreateItems(ErrorAnalysisLookupGroups.OccurrenceProcess,
+                        "QA mở hộp 箱割検査",
+                        "QA lấy mẫu Line 抜き取り検査",
+                        "QA độ bền tin cậy 信頼性試験",
+                        "QA môi trường QA 環境",
+                        "QA đặc biệt QA特別",
+                        "Shipping",
+                        "Packing",
+                        "Kiểm tra thành phẩm 完成品試験",
+                        "Hontai",
+                        "Unit",
+                        "Sparepart",
+                        "Sub line",
+                        "Thị trường 市場",
+                        "Máy số 0 0号機",
+                        "Đánh giá đặc biệt 特別評価")
+                },
+                {
+                    ErrorAnalysisLookupGroups.InvestigationProgress,
+                    CreateItems(ErrorAnalysisLookupGroups.InvestigationProgress,
+                        "Close",
+                        "Đang điều tra 調査中",
+                        "Đang thảo luận đối sách cố hữu 恒久対策検討中")
+                },
+                {
+                    ErrorAnalysisLookupGroups.CauseClassification,
+                    CreateItems(ErrorAnalysisLookupGroups.CauseClassification,
+                        "Không rõ NN 原因不明",
+                        "Linh kiện 部品",
+                        "Thao tác 作業",
+                        "Thiết kế 設計",
+                        "Thiết bị 設備",
+                        "Đồ gá 治具",
+                        "Thực lực của máy 実力",
+                        "Đánh giá OK OK判断",
+                        "Khác その他")
+                },
+                {
+                    ErrorAnalysisLookupGroups.TemporaryMeasureClassification,
+                    CreateItems(ErrorAnalysisLookupGroups.TemporaryMeasureClassification,
+                        "Linh kiện 部品",
+                        "Thao tác 作業",
+                        "Đồ gá 治具",
+                        "Đánh giá OK OK判断",
+                        "Thiết bị 設備",
+                        "Khác その他")
+                },
+                {
+                    ErrorAnalysisLookupGroups.PermanentMeasureClassification,
+                    CreateItems(ErrorAnalysisLookupGroups.PermanentMeasureClassification,
+                        "Linh kiện 部品",
+                        "Thao tác 作業",
+                        "Đồ gá 治具",
+                        "Đánh giá OK OK判断",
+                        "Thiết bị 設備",
+                        "Thiết kế 設計",
+                        "Khác その他")
+                },
+                {
+                    ErrorAnalysisLookupGroups.Factory,
+                    CreateItems(ErrorAnalysisLookupGroups.Factory,
+                        "Factory 1", "Factory 2", "Factory 3", "Factory 4", "Factory 5", "Factory TTF")
+                },
+                {
+                    ErrorAnalysisLookupGroups.ShipmentStop,
+                    CreateItems(ErrorAnalysisLookupGroups.ShipmentStop,
+                        "Bảo lưu xuất hàng 出荷保留",
+                        "Dừng xuất hàng 出荷停止")
+                },
+                {
+                    ErrorAnalysisLookupGroups.ChronicDefect,
+                    CreateItems(ErrorAnalysisLookupGroups.ChronicDefect,
+                        "Có 有",
+                        "Không 無")
+                },
+                {
+                    ErrorAnalysisLookupGroups.BAction,
+                    CreateItems(ErrorAnalysisLookupGroups.BAction,
+                        "QA SYS LSPM", "QA", "SYS", "LSPM")
+                }
+            };
+
+        public static List<SelectListItem> GetSelectList(string groupCode, string emptyText)
+        {
+            var items = new List<SelectListItem>();
+
+            if (!string.IsNullOrWhiteSpace(emptyText))
+            {
+                items.Add(new SelectListItem
+                {
+                    Value = string.Empty,
+                    Text = emptyText
+                });
+            }
+
+            try
+            {
+                using (var context = new ErrorAnalysisDbContext())
+                {
+                    const string sql = @"
+SELECT [Value], DisplayText
+FROM dbo.ErrorAnalysisLookups
+WHERE GroupCode = @p0 AND IsActive = 1
+ORDER BY SortOrder";
+
+                    var lookupItems = context.Database.SqlQuery<LookupSelectRow>(sql, groupCode).ToList();
+
+                    items.AddRange(lookupItems.Select(x => new SelectListItem
+                    {
+                        Value = x.Value,
+                        Text = x.DisplayText
+                    }));
+                }
+
+                return items;
+            }
+            catch
+            {
+                List<ErrorAnalysisLookup> fallbackItems;
+                if (LookupData.TryGetValue(groupCode, out fallbackItems))
+                {
+                    items.AddRange(fallbackItems.Select(x => new SelectListItem
+                    {
+                        Value = x.Value,
+                        Text = x.DisplayText
+                    }));
+                }
+
+                return items;
+            }
+        }
+
+        public static List<ErrorAnalysisLookup> GetLookupItems()
+        {
+            return LookupData.Values
+                .SelectMany(x => x)
+                .OrderBy(x => x.GroupCode)
+                .ThenBy(x => x.SortOrder)
+                .ToList();
+        }
+
+        private static List<ErrorAnalysisLookup> CreateItems(string groupCode, params string[] values)
+        {
+            var items = new List<ErrorAnalysisLookup>();
+
+            for (var i = 0; i < values.Length; i++)
+            {
+                items.Add(new ErrorAnalysisLookup
+                {
+                    GroupCode = groupCode,
+                    Value = values[i],
+                    DisplayText = values[i],
+                    SortOrder = i + 1,
+                    IsActive = true
+                });
+            }
+
+            return items;
+        }
+    }
+}

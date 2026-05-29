@@ -1,0 +1,293 @@
+﻿@model WEB_PHANTICHLOI.Models.ErrorAnalysisLookupManagementViewModel
+@using WEB_PHANTICHLOI.Models
+@{
+    ViewBag.Title = "Quản lý danh mục";
+    Layout = "~/Views/Shared/_ISSLayout.cshtml";
+}
+
+<div style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+    <a href="@Url.Action("Index", "ErrorAnalysis")" class="btn-iss btn-iss-secondary" style="font-size:12px; padding:5px 14px; text-decoration:none;">
+        &#8592; <span class="lang-vi">Quay lại danh sách</span><span class="lang-jp">一覧に戻る</span>
+    </a>
+    <span style="font-size:18px; font-weight:700; color:#0f172a;">
+        <span class="lang-vi">Quản lý danh mục</span><span class="lang-jp">マスタ管理</span>
+    </span>
+</div>
+
+@if (TempData["LookupMessage"] != null)
+{
+    <div class="note-bubble" style="display:block; margin-bottom:15px; background:#dcfce7; border-color:#16a34a; color:#166534;">
+        @TempData["LookupMessage"]
+    </div>
+}
+
+@if (TempData["LookupError"] != null)
+{
+    <div class="note-bubble" style="display:block; margin-bottom:15px; background:#fee2e2; border-color:#dc2626; color:#991b1b;">
+        @TempData["LookupError"]
+    </div>
+}
+
+<div class="iss-card">
+    <div class="iss-card-header blue">
+        <span>&#128736;</span> <span class="lang-vi">Danh mục Model</span><span class="lang-jp">機種マスタ</span>
+    </div>
+    <div class="iss-card-body">
+        @using (Html.BeginForm("CreateLookup", "ErrorAnalysis", FormMethod.Post, new { @class = "iss-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("groupCode", ErrorAnalysisLookupGroups.Model)
+
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></label>
+                    <input type="text" name="value" class="form-control" />
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></label>
+                    <input type="text" name="displayText" class="form-control" />
+                </div>
+                <div class="col-md-2 form-group">
+                    <label><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></label>
+                    <input type="number" name="sortOrder" class="form-control" value="@((Model.Models.Count > 0 ? Model.Models.Max(x => x.SortOrder) : 0) + 1)" />
+                </div>
+                <div class="col-md-3 form-group" style="display:flex; align-items:end;">
+                    <button type="submit" class="btn-iss btn-iss-success" style="width:100%;">
+                        &#10010; <span class="lang-vi">Thêm Model</span><span class="lang-jp">機種追加</span>
+                    </button>
+                </div>
+            </div>
+        }
+
+        <div class="iss-table-wrapper">
+            <table class="iss-table" style="min-width:900px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></th>
+                        <th><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></th>
+                        <th><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></th>
+                        <th><span class="lang-vi">Trạng thái</span><span class="lang-jp">状態</span></th>
+                        <th><span class="lang-vi">Thao tác</span><span class="lang-jp">操作</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Models)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Value</td>
+                            <td>@item.DisplayText</td>
+                            <td>@item.SortOrder</td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge-status badge-close">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-open">Inactive</span>
+                                }
+                            </td>
+                            <td style="white-space:nowrap;">
+                                <button type="button" class="btn-iss btn-iss-warning" style="padding:4px 10px; font-size:12px;" data-toggle="modal" data-target="#editModelModal_@item.Id">
+                                    &#9998; <span class="lang-vi">Sửa</span><span class="lang-jp">編集</span>
+                                </button>
+
+                                @using (Html.BeginForm("DeleteLookup", "ErrorAnalysis", FormMethod.Post, new { style = "display:inline-block; margin-left:6px;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", item.Id)
+                                    <button type="submit" class="btn-iss btn-iss-danger" style="padding:4px 10px; font-size:12px;" onclick="return confirm('Xóa danh mục này?');">
+                                        &#128465; <span class="lang-vi">Xóa</span><span class="lang-jp">削除</span>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="editModelModal_@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="border-radius:10px;">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            <span class="lang-vi">Sửa Model</span><span class="lang-jp">機種編集</span>
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    @using (Html.BeginForm("UpdateLookup", "ErrorAnalysis", FormMethod.Post, new { @class = "iss-form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("id", item.Id)
+
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></label>
+                                                <input type="text" name="value" value="@item.Value" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></label>
+                                                <input type="text" name="displayText" value="@item.DisplayText" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></label>
+                                                <input type="number" name="sortOrder" value="@item.SortOrder" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="display:flex; align-items:center; gap:8px;">
+                                                    <input type="checkbox" name="isActive" value="true" @(item.IsActive ? "checked=\"checked\"" : null) />
+                                                    <span><span class="lang-vi">Đang sử dụng</span><span class="lang-jp">使用中</span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn-iss btn-iss-secondary" data-dismiss="modal">
+                                                <span class="lang-vi">Đóng</span><span class="lang-jp">閉じる</span>
+                                            </button>
+                                            <button type="submit" class="btn-iss btn-iss-primary">
+                                                <span class="lang-vi">Lưu</span><span class="lang-jp">保存</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="iss-card">
+    <div class="iss-card-header green">
+        <span>&#128230;</span> <span class="lang-vi">Danh mục nhà cung cấp</span><span class="lang-jp">仕入先マスタ</span>
+    </div>
+    <div class="iss-card-body">
+        @using (Html.BeginForm("CreateLookup", "ErrorAnalysis", FormMethod.Post, new { @class = "iss-form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("groupCode", ErrorAnalysisLookupGroups.Supplier)
+
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></label>
+                    <input type="text" name="value" class="form-control" />
+                </div>
+                <div class="col-md-4 form-group">
+                    <label><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></label>
+                    <input type="text" name="displayText" class="form-control" />
+                </div>
+                <div class="col-md-2 form-group">
+                    <label><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></label>
+                    <input type="number" name="sortOrder" class="form-control" value="@((Model.Suppliers.Count > 0 ? Model.Suppliers.Max(x => x.SortOrder) : 0) + 1)" />
+                </div>
+                <div class="col-md-3 form-group" style="display:flex; align-items:end;">
+                    <button type="submit" class="btn-iss btn-iss-success" style="width:100%;">
+                        &#10010; <span class="lang-vi">Thêm nhà cung cấp</span><span class="lang-jp">仕入先追加</span>
+                    </button>
+                </div>
+            </div>
+        }
+
+        <div class="iss-table-wrapper">
+            <table class="iss-table" style="min-width:900px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></th>
+                        <th><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></th>
+                        <th><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></th>
+                        <th><span class="lang-vi">Trạng thái</span><span class="lang-jp">状態</span></th>
+                        <th><span class="lang-vi">Thao tác</span><span class="lang-jp">操作</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Suppliers)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Value</td>
+                            <td>@item.DisplayText</td>
+                            <td>@item.SortOrder</td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="badge-status badge-close">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status badge-open">Inactive</span>
+                                }
+                            </td>
+                            <td style="white-space:nowrap;">
+                                <button type="button" class="btn-iss btn-iss-warning" style="padding:4px 10px; font-size:12px;" data-toggle="modal" data-target="#editSupplierModal_@item.Id">
+                                    &#9998; <span class="lang-vi">Sửa</span><span class="lang-jp">編集</span>
+                                </button>
+
+                                @using (Html.BeginForm("DeleteLookup", "ErrorAnalysis", FormMethod.Post, new { style = "display:inline-block; margin-left:6px;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", item.Id)
+                                    <button type="submit" class="btn-iss btn-iss-danger" style="padding:4px 10px; font-size:12px;" onclick="return confirm('Xóa danh mục này?');">
+                                        &#128465; <span class="lang-vi">Xóa</span><span class="lang-jp">削除</span>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="editSupplierModal_@item.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="border-radius:10px;">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">
+                                            <span class="lang-vi">Sửa nhà cung cấp</span><span class="lang-jp">仕入先編集</span>
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    @using (Html.BeginForm("UpdateLookup", "ErrorAnalysis", FormMethod.Post, new { @class = "iss-form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("id", item.Id)
+
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Giá trị</span><span class="lang-jp">値</span></label>
+                                                <input type="text" name="value" value="@item.Value" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Tên hiển thị</span><span class="lang-jp">表示名</span></label>
+                                                <input type="text" name="displayText" value="@item.DisplayText" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label><span class="lang-vi">Thứ tự</span><span class="lang-jp">順番</span></label>
+                                                <input type="number" name="sortOrder" value="@item.SortOrder" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="display:flex; align-items:center; gap:8px;">
+                                                    <input type="checkbox" name="isActive" value="true" @(item.IsActive ? "checked=\"checked\"" : null) />
+                                                    <span><span class="lang-vi">Đang sử dụng</span><span class="lang-jp">使用中</span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn-iss btn-iss-secondary" data-dismiss="modal">
+                                                <span class="lang-vi">Đóng</span><span class="lang-jp">閉じる</span>
+                                            </button>
+                                            <button type="submit" class="btn-iss btn-iss-primary">
+                                                <span class="lang-vi">Lưu</span><span class="lang-jp">保存</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

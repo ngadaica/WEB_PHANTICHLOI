@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public static class ErrorAnalysisDisplayHelper
+    {
+        public static bool IsAbsoluteUrl(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            Uri uri;
+            return Uri.TryCreate(value, UriKind.Absolute, out uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+        }
+
+        public static List<string> GetAttachmentPaths(string attachmentPath)
+        {
+            return string.IsNullOrWhiteSpace(attachmentPath)
+                ? new List<string>()
+                : attachmentPath.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
+
+        public static string GetAttachmentDisplayName(string attachmentPath, int maxLength = 28)
+        {
+            var fileName = Path.GetFileName(attachmentPath) ?? string.Empty;
+            var underscoreIndex = fileName.IndexOf('_');
+            if (underscoreIndex > 0 && underscoreIndex < fileName.Length - 1)
+            {
+                fileName = fileName.Substring(underscoreIndex + 1);
+            }
+
+            if (fileName.Length <= maxLength)
+            {
+                return fileName;
+            }
+
+            return fileName.Substring(0, maxLength) + "...";
+        }
+    }
+}

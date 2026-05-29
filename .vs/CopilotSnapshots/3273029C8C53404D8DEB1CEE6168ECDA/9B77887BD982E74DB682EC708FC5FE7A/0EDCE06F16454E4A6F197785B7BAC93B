@@ -1,0 +1,376 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class ErrorAnalysis
+    {
+        public int Id { get; set; }
+
+        // Thông tin cơ bản 基本情報
+        [Display(Name = "Hiện tượng 現象")]
+        public string Phenomenon { get; set; }
+
+        [Display(Name = "Nội dung vấn đề 問題内容")]
+        public string ProblemContent { get; set; }
+
+        [Display(Name = "Chủng loại")]
+        public string Category { get; set; }
+
+        [Display(Name = "Model")]
+        public string Model { get; set; }
+
+        [Display(Name = "Phân loại giai đoạn ステージ種別")]
+        public string StageClassification { get; set; }
+
+        [Display(Name = "Công đoạn phát sinh 発生工程")]
+        public string OccurrenceProcess { get; set; }
+
+        [Display(Name = "Chuyền ライン")]
+        public string Line { get; set; }
+
+        [Display(Name = "Số máy phát sinh 発生台数")]
+        public int? OccurrenceCount { get; set; }
+
+        [Display(Name = "Ngày giờ phát sinh 発生日")]
+        [DataType(DataType.Date)]
+        public DateTime? OccurrenceDate { get; set; }
+
+        [Display(Name = "Dừng xuất xưởng 出荷停止")]
+        public string ShipmentStop { get; set; }
+
+        [Display(Name = "Người điều tra 調査担当")]
+        public string Investigator { get; set; }
+
+        [Display(Name = "B-action")]
+        public string BAction { get; set; }
+
+        [Display(Name = "Lỗi mãn tính 慢性不良")]
+        public string ChronicDefect { get; set; }
+
+        [Display(Name = "Thời gian dừng chuyền ライン停止時間")]
+        public string LineStopTime { get; set; }
+
+        // Nội dung điều tra 調査内容
+        [Display(Name = "Nội dung điều tra 調査内容")]
+        public string InvestigationContent { get; set; }
+
+        [Display(Name = "Mã linh kiện 1 部品コード1")]
+        public string PartCode1 { get; set; }
+
+        [Display(Name = "Tên linh kiện 1 部品名前")]
+        public string PartName1 { get; set; }
+
+        [Display(Name = "Mã linh kiện 2 部品コード2")]
+        public string PartCode2 { get; set; }
+
+        [Display(Name = "Tên linh kiện 2 部品名前")]
+        public string PartName2 { get; set; }
+
+        [Display(Name = "Mã linh kiện 3 部品コード3")]
+        public string PartCode3 { get; set; }
+
+        [Display(Name = "Tên linh kiện 3 部品名前")]
+        public string PartName3 { get; set; }
+
+        [Display(Name = "Tiến độ điều tra 調査進捗")]
+        public string InvestigationProgress { get; set; }
+
+        [Display(Name = "Phân loại nguyên nhân 原因分離")]
+        public string CauseClassification { get; set; }
+
+        // Chi tiết nguyên nhân 詳細原因
+        [Display(Name = "Chi tiết nguyên nhân 詳細原因")]
+        public string DetailedCause { get; set; }
+
+        [Display(Name = "Thời gian bắt đầu điều tra 調査開始時間")]
+        [DataType(DataType.DateTime)]
+        public DateTime? InvestigationStartTime { get; set; }
+
+        [Display(Name = "Thời gian kết thúc điều tra 原因決定時間")]
+        [DataType(DataType.DateTime)]
+        public DateTime? InvestigationEndTime { get; set; }
+
+        [Display(Name = "Số ngày nghỉ")]
+        public int? DaysOff { get; set; }
+
+        [Display(Name = "Số ngày ca đêm")]
+        public int? NightShiftDays { get; set; }
+
+        [Display(Name = "Thời gian điều tra 調査時間 (h)")]
+        public double? InvestigationHours { get; set; }
+
+        // Nội dung phân tích 解析内容
+        [Display(Name = "Nội dung phân tích 解析内容")]
+        public string AnalysisContent { get; set; }
+
+        // Hành động tiếp theo 次のACTION
+        [Display(Name = "Hành động tiếp theo 次のACTION")]
+        public string NextAction { get; set; }
+
+        // Đối sách tạm thời 暫定対策
+        [Display(Name = "Phân loại đối sách tạm thời 暫定対策分類")]
+        public string TemporaryMeasureClassification { get; set; }
+
+        [Display(Name = "Thời gian thực hiện ĐSTT 暫定対策実施時")]
+        [DataType(DataType.Date)]
+        public DateTime? TemporaryMeasureDate { get; set; }
+
+        [Display(Name = "Chi tiết đối sách tạm thời 暫定対策内容")]
+        public string TemporaryMeasureDetail { get; set; }
+
+        // Đối sách cố hữu 恒久対策
+        [Display(Name = "Phân loại đối sách cố hữu 恒久対策分類")]
+        public string PermanentMeasureClassification { get; set; }
+
+        [Display(Name = "Thời gian thực hiện ĐSCH 恒久対策実施時")]
+        [DataType(DataType.Date)]
+        public DateTime? PermanentMeasureDate { get; set; }
+
+        [Display(Name = "Chi tiết đối sách cố hữu 恒久対策内容")]
+        public string PermanentMeasureDetail { get; set; }
+
+        // Báo cáo đính kèm 添付レポート
+        [Display(Name = "Báo cáo đính kèm 添付レポート")]
+        public string AttachmentPath { get; set; }
+
+        // Additional list columns
+        [Display(Name = "Nhà máy 工場")]
+        public string Factory { get; set; }
+
+        [Display(Name = "Tiến độ điều tra")]
+        public string Status { get; set; }
+
+        [Display(Name = "Thời gian phát sinh")]
+        public string OccurrencePeriod { get; set; }
+
+        [Display(Name = "Nhóm チーム")]
+        public string Team { get; set; }
+
+        [Display(Name = "Đảm nhiệm 担当者")]
+        public string PersonInCharge { get; set; }
+
+        [Display(Name = "Hình trang 形象")]
+        public string ImageStatus { get; set; }
+
+        [Display(Name = "Nguyên nhân 原因")]
+        public string CauseDescription { get; set; }
+
+        [Display(Name = "Hành động tiếp theo")]
+        public string NextActionSummary { get; set; }
+
+        [Display(Name = "Phân loại lỗi 不良分類")]
+        public string DefectClassification { get; set; }
+
+        [Display(Name = "Đối sách tạm thời 暫定対策")]
+        public string TemporaryMeasureSummary { get; set; }
+
+        [Display(Name = "Đối sách cố hữu 恒久対策")]
+        public string PermanentMeasureSummary { get; set; }
+
+        [Display(Name = "Thời gian hoàn thành điều tra")]
+        public string InvestigationCompletionTime { get; set; }
+
+        [Display(Name = "Thời gian hoàn thành đối sách")]
+        public string MeasureCompletionTime { get; set; }
+
+        [Display(Name = "Trang thái B-action")]
+        public string BActionStatus { get; set; }
+
+        [Display(Name = "Chia sẻ 共有")]
+        public string Sharing { get; set; }
+
+        [Display(Name = "レポート")]
+        public string Report { get; set; }
+
+        [Display(Name = "Ngày, giờ cập nhật")]
+        [DataType(DataType.DateTime)]
+        public DateTime? UpdatedDate { get; set; }
+
+        [Display(Name = "Người cập nhật")]
+        public string UpdatedBy { get; set; }
+    }
+
+    public static class ErrorAnalysisData
+    {
+        private static List<ErrorAnalysis> _errors;
+
+        public static List<ErrorAnalysis> GetAll()
+        {
+            if (_errors == null)
+            {
+                _errors = new List<ErrorAnalysis>
+                {
+                    new ErrorAnalysis
+                    {
+                        Id = 13,
+                        Factory = "Factory 4",
+                        Status = "Close",
+                        OccurrencePeriod = "10/8/2024",
+                        OccurrenceDate = new DateTime(2024, 10, 8),
+                        Team = "Phân tích 2_F4",
+                        PersonInCharge = "Da",
+                        Model = "FCL",
+                        Category = "FCL",
+                        StageClassification = "量産段階",
+                        OccurrenceProcess = "Chất lượng hình ảnh_画質",
+                        ImageStatus = "双紙 Chim",
+                        CauseClassification = "D/R以代行 Ghi voi IGC",
+                        NextActionSummary = "Liên lực IGC, SGC cho NCC điều tra",
+                        DefectClassification = "周囲不明 問題顕し でそのまま Không rõ nguyên nhân",
+                        TemporaryMeasureSummary = "Không tái hiện giữ nguyên nhân",
+                        PermanentMeasureSummary = "メーが収取",
+                        BActionStatus = "FCL-***",
+                        Sharing = "CLOSE",
+                        Report = "展開 Bio lưu",
+                        UpdatedDate = new DateTime(2026, 3, 11),
+                        UpdatedBy = "Nghĩa",
+                        Phenomenon = "Vệt đen trên giấy in",
+                        ProblemContent = "Xuất hiện vệt đen trên giấy in khi in 2 mặt",
+                        BAction = "QA SYS LSPM"
+                    },
+                    new ErrorAnalysis
+                    {
+                        Id = 12,
+                        Factory = "Factory 2",
+                        Status = "調査中_Đang điều tra",
+                        OccurrencePeriod = "5/4/2024",
+                        OccurrenceDate = new DateTime(2024, 5, 4),
+                        Team = "Phân tích L_F2",
+                        PersonInCharge = "Thắng",
+                        Model = "ELLs FB",
+                        Category = "ELLs",
+                        StageClassification = "量産段階",
+                        OccurrenceProcess = "Ngoài quan_外観",
+                        ImageStatus = "ADFガラス 割れ Vỡ kính ADF",
+                        CauseClassification = "調査中 đang điều tra",
+                        NextActionSummary = "Đo kích thước LK DD33V001",
+                        DefectClassification = "周囲不明 rõ nguyên nhân",
+                        TemporaryMeasureSummary = "Không 分離周囲部 Linh kiện không vấn đề",
+                        PermanentMeasureSummary = "そのまま",
+                        BActionStatus = "ELLs-***",
+                        Sharing = "OPEN",
+                        Report = "展開 Bio lưu",
+                        UpdatedDate = new DateTime(2026, 3, 11),
+                        UpdatedBy = "Nghĩa",
+                        Phenomenon = "Vỡ kính ADF",
+                        ProblemContent = "Kính ADF bị vỡ trong quá trình sản xuất"
+                    },
+                    new ErrorAnalysis
+                    {
+                        Id = 11,
+                        Factory = "TTF",
+                        Status = "対策中",
+                        OccurrencePeriod = "20/11/2024",
+                        OccurrenceDate = new DateTime(2024, 11, 20),
+                        Team = "Phân tích 4_TTF",
+                        PersonInCharge = "Lam",
+                        Model = "FCL",
+                        Category = "FCL",
+                        StageClassification = "量産段階",
+                        OccurrenceProcess = "Chất lượng hình ảnh",
+                        ImageStatus = "スキャン下試験NG LY0597001 画像横並み Sr_Sai khi xuất hut",
+                        CauseClassification = "調査中 đang điều tra",
+                        NextActionSummary = "Đo kích thước LK DD33V001",
+                        DefectClassification = "周囲不明 rõ nguyên nhân",
+                        TemporaryMeasureSummary = "そのまま giữ nguyên nhân",
+                        PermanentMeasureSummary = "そのまま",
+                        BActionStatus = "FCL-***",
+                        Sharing = "CLOSE",
+                        Report = "展開 Bio lưu",
+                        UpdatedDate = new DateTime(2026, 3, 11),
+                        UpdatedBy = "Nghĩa",
+                        Phenomenon = "Lỗi scan hình ảnh",
+                        ProblemContent = "Hình ảnh scan bị lỗi ngang"
+                    },
+                    new ErrorAnalysis
+                    {
+                        Id = 10,
+                        Factory = "Factory 4",
+                        Status = "Close",
+                        OccurrencePeriod = "10/8/2024",
+                        OccurrenceDate = new DateTime(2024, 10, 8),
+                        Team = "Phân tích 3_Process",
+                        PersonInCharge = "Hiếu",
+                        Model = "FCL TN",
+                        Category = "FCL",
+                        StageClassification = "UNIT",
+                        OccurrenceProcess = "Chất lượng hình ảnh_画質 量",
+                        ImageStatus = "Dây harness bị tuột",
+                        CauseClassification = "D/R以代行 Ghi voi DR",
+                        NextActionSummary = "Liên lực IGC, SGC cho NCC điều tra 依来_Tháo tác",
+                        DefectClassification = "周囲顕し でそのまま Không tái hiện giữ nguyên nhân",
+                        TemporaryMeasureSummary = "設計中",
+                        PermanentMeasureSummary = "設計中",
+                        BActionStatus = "FCL-***",
+                        Sharing = "OPEN",
+                        Report = "展開 Bio lưu",
+                        UpdatedDate = new DateTime(2026, 3, 11),
+                        UpdatedBy = "Nghĩa",
+                        Phenomenon = "Tuột dây harness",
+                        ProblemContent = "Dây harness bị tuột trong quá trình lắp ráp"
+                    },
+                    new ErrorAnalysis
+                    {
+                        Id = 3,
+                        Factory = "Factory 4",
+                        Status = "Close",
+                        OccurrencePeriod = "10/8/2024",
+                        OccurrenceDate = new DateTime(2024, 10, 8),
+                        Team = "Phân tích 2_F4",
+                        PersonInCharge = "Nhật",
+                        Model = "FCL",
+                        Category = "FCL",
+                        StageClassification = "量産段階",
+                        OccurrenceProcess = "Ngoài quan_外観",
+                        ImageStatus = "床下試験機はがれ Sau khi roi tuot lo xo",
+                        CauseClassification = "設計投付不可 Thiếu thước luân thiết kế",
+                        NextActionSummary = "設計_Thiết kế",
+                        DefectClassification = "周囲顕し でそのまま Không tái hiện giữ nguyên nhân",
+                        TemporaryMeasureSummary = "設計中",
+                        PermanentMeasureSummary = "",
+                        BActionStatus = "FCL-***",
+                        Sharing = "OPEN",
+                        Report = "展開 Bio lưu",
+                        UpdatedDate = new DateTime(2026, 3, 11),
+                        UpdatedBy = "Nghĩa",
+                        Phenomenon = "Tuột lò xo sau khi test",
+                        ProblemContent = "Lò xo bị tuột sau khi chạy bed of nails test"
+                    }
+                };
+            }
+            return _errors;
+        }
+
+        public static ErrorAnalysis GetById(int id)
+        {
+            return GetAll().Find(e => e.Id == id);
+        }
+
+        public static void Add(ErrorAnalysis error)
+        {
+            var list = GetAll();
+            error.Id = list.Count > 0 ? list[0].Id + 1 : 1;
+            error.UpdatedDate = DateTime.Now;
+            list.Insert(0, error);
+        }
+
+        public static void Update(ErrorAnalysis error)
+        {
+            var list = GetAll();
+            var index = list.FindIndex(e => e.Id == error.Id);
+            if (index >= 0)
+            {
+                error.UpdatedDate = DateTime.Now;
+                list[index] = error;
+            }
+        }
+
+        public static void Delete(int id)
+        {
+            var list = GetAll();
+            list.RemoveAll(e => e.Id == id);
+        }
+    }
+}

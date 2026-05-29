@@ -1,0 +1,417 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.Entity;
+using System.Linq;
+
+namespace WEB_PHANTICHLOI.Models
+{
+    public class ErrorAnalysisSqlRepository
+    {
+        public List<ErrorAnalysis> GetAll()
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                const string sql = @"SELECT * FROM dbo.ErrorAnalyses ORDER BY Id DESC";
+                return context.Database.SqlQuery<ErrorAnalysis>(sql).ToList();
+            }
+        }
+
+        public ErrorAnalysis GetById(int id)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                const string sql = @"SELECT TOP 1 * FROM dbo.ErrorAnalyses WHERE Id = @Id";
+                return context.Database.SqlQuery<ErrorAnalysis>(sql, new SqlParameter("@Id", id)).FirstOrDefault();
+            }
+        }
+
+        public List<ErrorAnalysis> Search(string keyword, string factory, string status, string model)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                var sql = @"
+SELECT *
+FROM dbo.ErrorAnalyses
+WHERE 1 = 1";
+
+                var parameters = new List<SqlParameter>();
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    sql += @"
+AND
+(
+    ISNULL(ProblemContent, '') LIKE @Keyword OR
+    ISNULL(Phenomenon, '') LIKE @Keyword OR
+    ISNULL(PersonInCharge, '') LIKE @Keyword OR
+    ISNULL(Team, '') LIKE @Keyword OR
+    ISNULL(CauseClassification, '') LIKE @Keyword
+)";
+                    parameters.Add(new SqlParameter("@Keyword", "%" + keyword + "%"));
+                }
+
+                if (!string.IsNullOrWhiteSpace(factory))
+                {
+                    sql += @" AND Factory = @Factory";
+                    parameters.Add(new SqlParameter("@Factory", factory));
+                }
+
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    sql += @" AND Status = @Status";
+                    parameters.Add(new SqlParameter("@Status", status));
+                }
+
+                if (!string.IsNullOrWhiteSpace(model))
+                {
+                    sql += @" AND ISNULL(Model, '') LIKE @Model";
+                    parameters.Add(new SqlParameter("@Model", "%" + model + "%"));
+                }
+
+                sql += @" ORDER BY Id DESC";
+
+                return context.Database.SqlQuery<ErrorAnalysis>(sql, parameters.ToArray()).ToList();
+            }
+        }
+
+        public int Add(ErrorAnalysis model)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                const string sql = @"
+INSERT INTO dbo.ErrorAnalyses
+(
+    Phenomenon,
+    ProblemContent,
+    Category,
+    Model,
+    StageClassification,
+    OccurrenceProcess,
+    Line,
+    OccurrenceCount,
+    OccurrenceDate,
+    ShipmentStop,
+    Investigator,
+    BAction,
+    ChronicDefect,
+    LineStopTime,
+    InvestigationContent,
+    PartCode1,
+    PartName1,
+    PartSupplier1,
+    PartCav1,
+    PartLot1,
+    PartCode2,
+    PartName2,
+    PartSupplier2,
+    PartCav2,
+    PartLot2,
+    PartCode3,
+    PartName3,
+    PartSupplier3,
+    PartCav3,
+    PartLot3,
+    PartCode4,
+    PartName4,
+    PartSupplier4,
+    PartCav4,
+    PartLot4,
+    PartCode5,
+    PartName5,
+    PartSupplier5,
+    PartCav5,
+    PartLot5,
+    InvestigationProgress,
+    CauseClassification,
+    DetailedCause,
+    InvestigationStartTime,
+    InvestigationEndTime,
+    DaysOff,
+    NightShiftDays,
+    MeasurementWaitHours,
+    InvestigationHours,
+    AnalysisContent,
+    NextAction,
+    TemporaryMeasureClassification,
+    TemporaryMeasureDate,
+    TemporaryMeasureDetail,
+    PermanentMeasureClassification,
+    PermanentMeasureDate,
+    PermanentMeasureDetail,
+    AttachmentPath,
+    ImagePath,
+    Factory,
+    Status,
+    OccurrencePeriod,
+    PersonInCharge,
+    ImageStatus,
+    NextActionSummary,
+    TemporaryMeasureSummary,
+    PermanentMeasureSummary,
+    BActionStatus,
+    CauseDescription,
+    UpdatedDate,
+    UpdatedBy
+)
+VALUES
+(
+    @Phenomenon,
+    @ProblemContent,
+    @Category,
+    @Model,
+    @StageClassification,
+    @OccurrenceProcess,
+    @Line,
+    @OccurrenceCount,
+    @OccurrenceDate,
+    @ShipmentStop,
+    @Investigator,
+    @BAction,
+    @ChronicDefect,
+    @LineStopTime,
+    @InvestigationContent,
+    @PartCode1,
+    @PartName1,
+    @PartSupplier1,
+    @PartCav1,
+    @PartLot1,
+    @PartCode2,
+    @PartName2,
+    @PartSupplier2,
+    @PartCav2,
+    @PartLot2,
+    @PartCode3,
+    @PartName3,
+    @PartSupplier3,
+    @PartCav3,
+    @PartLot3,
+    @PartCode4,
+    @PartName4,
+    @PartSupplier4,
+    @PartCav4,
+    @PartLot4,
+    @PartCode5,
+    @PartName5,
+    @PartSupplier5,
+    @PartCav5,
+    @PartLot5,
+    @InvestigationProgress,
+    @CauseClassification,
+    @DetailedCause,
+    @InvestigationStartTime,
+    @InvestigationEndTime,
+    @DaysOff,
+    @NightShiftDays,
+    @MeasurementWaitHours,
+    @InvestigationHours,
+    @AnalysisContent,
+    @NextAction,
+    @TemporaryMeasureClassification,
+    @TemporaryMeasureDate,
+    @TemporaryMeasureDetail,
+    @PermanentMeasureClassification,
+    @PermanentMeasureDate,
+    @PermanentMeasureDetail,
+    @AttachmentPath,
+    @ImagePath,
+    @Factory,
+    @Status,
+    @OccurrencePeriod,
+    @PersonInCharge,
+    @ImageStatus,
+    @NextActionSummary,
+    @TemporaryMeasureSummary,
+    @PermanentMeasureSummary,
+    @BActionStatus,
+    @CauseDescription,
+    @UpdatedDate,
+    @UpdatedBy
+);
+
+SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+                return context.Database.SqlQuery<int>(sql, CreateParameters(model).ToArray()).Single();
+            }
+        }
+
+        public void Update(ErrorAnalysis model)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                const string sql = @"
+UPDATE dbo.ErrorAnalyses
+SET
+    Phenomenon = @Phenomenon,
+    ProblemContent = @ProblemContent,
+    Category = @Category,
+    Model = @Model,
+    StageClassification = @StageClassification,
+    OccurrenceProcess = @OccurrenceProcess,
+    Line = @Line,
+    OccurrenceCount = @OccurrenceCount,
+    OccurrenceDate = @OccurrenceDate,
+    ShipmentStop = @ShipmentStop,
+    Investigator = @Investigator,
+    BAction = @BAction,
+    ChronicDefect = @ChronicDefect,
+    LineStopTime = @LineStopTime,
+    InvestigationContent = @InvestigationContent,
+    PartCode1 = @PartCode1,
+    PartName1 = @PartName1,
+    PartSupplier1 = @PartSupplier1,
+    PartCav1 = @PartCav1,
+    PartLot1 = @PartLot1,
+    PartCode2 = @PartCode2,
+    PartName2 = @PartName2,
+    PartSupplier2 = @PartSupplier2,
+    PartCav2 = @PartCav2,
+    PartLot2 = @PartLot2,
+    PartCode3 = @PartCode3,
+    PartName3 = @PartName3,
+    PartSupplier3 = @PartSupplier3,
+    PartCav3 = @PartCav3,
+    PartLot3 = @PartLot3,
+    PartCode4 = @PartCode4,
+    PartName4 = @PartName4,
+    PartSupplier4 = @PartSupplier4,
+    PartCav4 = @PartCav4,
+    PartLot4 = @PartLot4,
+    PartCode5 = @PartCode5,
+    PartName5 = @PartName5,
+    PartSupplier5 = @PartSupplier5,
+    PartCav5 = @PartCav5,
+    PartLot5 = @PartLot5,
+    InvestigationProgress = @InvestigationProgress,
+    CauseClassification = @CauseClassification,
+    DetailedCause = @DetailedCause,
+    InvestigationStartTime = @InvestigationStartTime,
+    InvestigationEndTime = @InvestigationEndTime,
+    DaysOff = @DaysOff,
+    NightShiftDays = @NightShiftDays,
+    MeasurementWaitHours = @MeasurementWaitHours,
+    InvestigationHours = @InvestigationHours,
+    AnalysisContent = @AnalysisContent,
+    NextAction = @NextAction,
+    TemporaryMeasureClassification = @TemporaryMeasureClassification,
+    TemporaryMeasureDate = @TemporaryMeasureDate,
+    TemporaryMeasureDetail = @TemporaryMeasureDetail,
+    PermanentMeasureClassification = @PermanentMeasureClassification,
+    PermanentMeasureDate = @PermanentMeasureDate,
+    PermanentMeasureDetail = @PermanentMeasureDetail,
+    AttachmentPath = @AttachmentPath,
+    ImagePath = @ImagePath,
+    Factory = @Factory,
+    Status = @Status,
+    OccurrencePeriod = @OccurrencePeriod,
+    PersonInCharge = @PersonInCharge,
+    ImageStatus = @ImageStatus,
+    NextActionSummary = @NextActionSummary,
+    TemporaryMeasureSummary = @TemporaryMeasureSummary,
+    PermanentMeasureSummary = @PermanentMeasureSummary,
+    BActionStatus = @BActionStatus,
+    CauseDescription = @CauseDescription,
+    UpdatedDate = @UpdatedDate,
+    UpdatedBy = @UpdatedBy
+WHERE Id = @Id";
+
+                var parameters = CreateParameters(model);
+                parameters.Add(new SqlParameter("@Id", model.Id));
+
+                context.Database.ExecuteSqlCommand(sql, parameters.ToArray());
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var context = new ErrorAnalysisDbContext())
+            {
+                const string sql = @"DELETE FROM dbo.ErrorAnalyses WHERE Id = @Id";
+                context.Database.ExecuteSqlCommand(sql, new SqlParameter("@Id", id));
+            }
+        }
+
+        private static List<SqlParameter> CreateParameters(ErrorAnalysis model)
+        {
+            return new List<SqlParameter>
+            {
+                CreateParameter("@Phenomenon", model.Phenomenon),
+                CreateParameter("@ProblemContent", model.ProblemContent),
+                CreateParameter("@Category", model.Category),
+                CreateParameter("@Model", model.Model),
+                CreateParameter("@StageClassification", model.StageClassification),
+                CreateParameter("@OccurrenceProcess", model.OccurrenceProcess),
+                CreateParameter("@Line", model.Line),
+                CreateParameter("@OccurrenceCount", model.OccurrenceCount),
+                CreateParameter("@OccurrenceDate", model.OccurrenceDate),
+                CreateParameter("@ShipmentStop", model.ShipmentStop),
+                CreateParameter("@Investigator", model.Investigator),
+                CreateParameter("@BAction", model.BAction),
+                CreateParameter("@ChronicDefect", model.ChronicDefect),
+                CreateParameter("@LineStopTime", model.LineStopTime),
+                CreateParameter("@InvestigationContent", model.InvestigationContent),
+                CreateParameter("@PartCode1", model.PartCode1),
+                CreateParameter("@PartName1", model.PartName1),
+                CreateParameter("@PartSupplier1", model.PartSupplier1),
+                CreateParameter("@PartCav1", model.PartCav1),
+                CreateParameter("@PartLot1", model.PartLot1),
+                CreateParameter("@PartCode2", model.PartCode2),
+                CreateParameter("@PartName2", model.PartName2),
+                CreateParameter("@PartSupplier2", model.PartSupplier2),
+                CreateParameter("@PartCav2", model.PartCav2),
+                CreateParameter("@PartLot2", model.PartLot2),
+                CreateParameter("@PartCode3", model.PartCode3),
+                CreateParameter("@PartName3", model.PartName3),
+                CreateParameter("@PartSupplier3", model.PartSupplier3),
+                CreateParameter("@PartCav3", model.PartCav3),
+                CreateParameter("@PartLot3", model.PartLot3),
+                CreateParameter("@PartCode4", model.PartCode4),
+                CreateParameter("@PartName4", model.PartName4),
+                CreateParameter("@PartSupplier4", model.PartSupplier4),
+                CreateParameter("@PartCav4", model.PartCav4),
+                CreateParameter("@PartLot4", model.PartLot4),
+                CreateParameter("@PartCode5", model.PartCode5),
+                CreateParameter("@PartName5", model.PartName5),
+                CreateParameter("@PartSupplier5", model.PartSupplier5),
+                CreateParameter("@PartCav5", model.PartCav5),
+                CreateParameter("@PartLot5", model.PartLot5),
+                CreateParameter("@InvestigationProgress", model.InvestigationProgress),
+                CreateParameter("@CauseClassification", model.CauseClassification),
+                CreateParameter("@DetailedCause", model.DetailedCause),
+                CreateParameter("@InvestigationStartTime", model.InvestigationStartTime),
+                CreateParameter("@InvestigationEndTime", model.InvestigationEndTime),
+                CreateParameter("@DaysOff", model.DaysOff),
+                CreateParameter("@NightShiftDays", model.NightShiftDays),
+                CreateParameter("@MeasurementWaitHours", model.MeasurementWaitHours),
+                CreateParameter("@InvestigationHours", model.InvestigationHours),
+                CreateParameter("@AnalysisContent", model.AnalysisContent),
+                CreateParameter("@NextAction", model.NextAction),
+                CreateParameter("@TemporaryMeasureClassification", model.TemporaryMeasureClassification),
+                CreateParameter("@TemporaryMeasureDate", model.TemporaryMeasureDate),
+                CreateParameter("@TemporaryMeasureDetail", model.TemporaryMeasureDetail),
+                CreateParameter("@PermanentMeasureClassification", model.PermanentMeasureClassification),
+                CreateParameter("@PermanentMeasureDate", model.PermanentMeasureDate),
+                CreateParameter("@PermanentMeasureDetail", model.PermanentMeasureDetail),
+                CreateParameter("@AttachmentPath", model.AttachmentPath),
+                CreateParameter("@ImagePath", model.ImagePath),
+                CreateParameter("@Factory", model.Factory),
+                CreateParameter("@Status", model.Status),
+                CreateParameter("@OccurrencePeriod", model.OccurrencePeriod),
+                CreateParameter("@PersonInCharge", model.PersonInCharge),
+                CreateParameter("@ImageStatus", model.ImageStatus),
+                CreateParameter("@NextActionSummary", model.NextActionSummary),
+                CreateParameter("@TemporaryMeasureSummary", model.TemporaryMeasureSummary),
+                CreateParameter("@PermanentMeasureSummary", model.PermanentMeasureSummary),
+                CreateParameter("@BActionStatus", model.BActionStatus),
+                CreateParameter("@CauseDescription", model.CauseDescription),
+                CreateParameter("@UpdatedDate", model.UpdatedDate),
+                CreateParameter("@UpdatedBy", model.UpdatedBy)
+            };
+        }
+
+        private static SqlParameter CreateParameter(string name, object value)
+        {
+            return new SqlParameter(name, value ?? DBNull.Value);
+        }
+    }
+}
